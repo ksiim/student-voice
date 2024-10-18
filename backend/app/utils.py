@@ -18,7 +18,7 @@ class EmailData:
     subject: str
 
 
-def render_email_template(*, template_name: str, context: dict[str, Any]) -> str:
+async def render_email_template(*, template_name: str, context: dict[str, Any]) -> str:
     template_str = (
         Path(__file__).parent / "email-templates" / "build" / template_name
     ).read_text()
@@ -26,7 +26,7 @@ def render_email_template(*, template_name: str, context: dict[str, Any]) -> str
     return html_content
 
 
-def send_email(
+async def send_email(
     *,
     email_to: str,
     subject: str = "",
@@ -51,21 +51,21 @@ def send_email(
     logging.info(f"send email result: {response}")
 
 
-def generate_test_email(email_to: str) -> EmailData:
+async def generate_test_email(email_to: str) -> EmailData:
     project_name = settings.PROJECT_NAME
     subject = f"{project_name} - Test email"
-    html_content = render_email_template(
+    html_content = await render_email_template(
         template_name="test_email.html",
         context={"project_name": settings.PROJECT_NAME, "email": email_to},
     )
     return EmailData(html_content=html_content, subject=subject)
 
 
-def generate_reset_password_email(email_to: str, email: str, token: str) -> EmailData:
+async def generate_reset_password_email(email_to: str, email: str, token: str) -> EmailData:
     project_name = settings.PROJECT_NAME
     subject = f"{project_name} - Password recovery for user {email}"
     link = f"{settings.FRONTEND_HOST}/reset-password?token={token}"
-    html_content = render_email_template(
+    html_content = await render_email_template(
         template_name="reset_password.html",
         context={
             "project_name": settings.PROJECT_NAME,
@@ -78,12 +78,12 @@ def generate_reset_password_email(email_to: str, email: str, token: str) -> Emai
     return EmailData(html_content=html_content, subject=subject)
 
 
-def generate_new_account_email(
+async def generate_new_account_email(
     email_to: str, username: str, password: str
 ) -> EmailData:
     project_name = settings.PROJECT_NAME
     subject = f"{project_name} - New account for user {username}"
-    html_content = render_email_template(
+    html_content = await render_email_template(
         template_name="new_account.html",
         context={
             "project_name": settings.PROJECT_NAME,
@@ -96,7 +96,7 @@ def generate_new_account_email(
     return EmailData(html_content=html_content, subject=subject)
 
 
-def generate_password_reset_token(email: str) -> str:
+async def generate_password_reset_token(email: str) -> str:
     delta = timedelta(hours=settings.EMAIL_RESET_TOKEN_EXPIRE_HOURS)
     now = datetime.now(timezone.utc)
     expires = now + delta
@@ -109,7 +109,7 @@ def generate_password_reset_token(email: str) -> str:
     return encoded_jwt
 
 
-def verify_password_reset_token(token: str) -> str | None:
+async def verify_password_reset_token(token: str) -> str | None:
     try:
         decoded_token = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
         return str(decoded_token["sub"])

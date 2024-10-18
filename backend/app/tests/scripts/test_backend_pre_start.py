@@ -5,7 +5,7 @@ from sqlmodel import select
 from app.backend_pre_start import init, logger
 
 
-def test_init_successful_connection() -> None:
+async def test_init_successful_connection() -> None:
     engine_mock = MagicMock()
 
     session_mock = MagicMock()
