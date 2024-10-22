@@ -156,19 +156,41 @@ class Class(ClassBase, table=True):
     teacher_id: uuid.UUID = Field(
         foreign_key="user.id", nullable=False, ondelete="CASCADE"
     )
-    # subject_id: uuid.UUID = Field(
-    #     foreign_key="subject.id", nullable=False, ondelete="CASCADE"
-    # )
+    subject_id: uuid.UUID = Field(
+        foreign_key="subject.id", nullable=False, ondelete="CASCADE"
+    )
     location: str = Field(max_length=10)
     users: list["User"] = Relationship(back_populates="classes", cascade_delete=True)
-    # subject: Optional["Subject"] = Relationship(back_populates="classes")
+    subject: Optional["Subject"] = Relationship(back_populates="classes")
     teacher: Optional["User"] = Relationship(back_populates="classes")
     
 class ClassPublic(ClassBase):
     id: uuid.UUID
     teacher_id: uuid.UUID
-    # subject_id: uuid.UUID
+    subject_id: uuid.UUID
     
 class ClassesPublic(SQLModel):
     data: list[ClassPublic]
+    count: int
+    
+class SubjectBase(SQLModel):
+    name: str = Field(max_length=255)
+    
+class SubjectCreate(SubjectBase):
+    created_at: datetime = Field(default_factory=datetime.now)
+    updated_at: datetime = Field(default_factory=datetime.now)
+    
+class SubjectUpdate(SubjectBase):
+    name: str | None = Field(default=None, max_length=255)
+    updated_at: datetime = Field(default_factory=datetime.now)
+    
+class Subject(SubjectBase, table=True):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    classes: list["Class"] = Relationship(back_populates="subjects", cascade_delete=True)
+
+class SubjectPublic(SubjectBase):
+    id: uuid.UUID
+    
+class SubjectsPublic(SQLModel):
+    data: list[SubjectPublic]
     count: int
