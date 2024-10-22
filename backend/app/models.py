@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Optional, Union
+from typing import Optional
 import uuid
 
 from click import Option
@@ -48,6 +48,8 @@ class User(UserBase, table=True):
         foreign_key="role.id", nullable=False, ondelete="CASCADE"
     )
     role: Optional["Role"] = Relationship(back_populates="users")
+    classes: list["Class"] = Relationship(back_populates="users", cascade_delete=True)
+    
 
 
 class UserPublic(UserBase):
@@ -159,10 +161,15 @@ class Class(ClassBase, table=True):
     subject_id: uuid.UUID = Field(
         foreign_key="subject.id", nullable=False, ondelete="CASCADE"
     )
-    # location: 
+    room_id: uuid.UUID = Field(
+        foreign_key="room.id", nullable=False, ondelete="CASCADE"
+    )
+    location: Optional["Room"] = Relationship(back_populates="classes", cascade_delete=True)
     users: list["User"] = Relationship(back_populates="classes", cascade_delete=True)
     subject: Optional["Subject"] = Relationship(back_populates="classes")
     teacher: Optional["User"] = Relationship(back_populates="classes")
+    attendances: list["Attendance"] = Relationship(back_populates="class_", cascade_delete=True)
+    reviews: list["Review"] = Relationship(back_populates="class_", cascade_delete=True)
     
 class ClassPublic(ClassBase):
     id: uuid.UUID
@@ -238,6 +245,7 @@ class Room(RoomBase, table=True):
         foreign_key="building.id", nullable=False, ondelete="CASCADE"
     )
     building: Optional["Building"] = Relationship(back_populates="rooms")
+    classes: list["Class"] = Relationship(back_populates="location", cascade_delete=True)
     
 class RoomPublic(RoomBase):
     id: uuid.UUID
