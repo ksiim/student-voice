@@ -159,7 +159,7 @@ class Class(ClassBase, table=True):
     subject_id: uuid.UUID = Field(
         foreign_key="subject.id", nullable=False, ondelete="CASCADE"
     )
-    location: str = Field(max_length=10)
+    # location: 
     users: list["User"] = Relationship(back_populates="classes", cascade_delete=True)
     subject: Optional["Subject"] = Relationship(back_populates="classes")
     teacher: Optional["User"] = Relationship(back_populates="classes")
@@ -194,3 +194,47 @@ class SubjectPublic(SubjectBase):
 class SubjectsPublic(SQLModel):
     data: list[SubjectPublic]
     count: int
+    
+class BuildingBase(SQLModel):
+    name: str = Field(max_length=255)
+    address: str = Field(max_length=255)
+    
+class BuildingCreate(BuildingBase):
+    created_at: datetime = Field(default_factory=datetime.now)
+    updated_at: datetime = Field(default_factory=datetime.now)
+    
+class BuildingUpdate(BuildingBase):
+    name: str | None = Field(default=None, max_length=255)
+    address: str | None = Field(default=None, max_length=255)
+    updated_at: datetime = Field(default_factory=datetime.now)
+    
+class Building(BuildingBase, table=True):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    rooms: list["Room"] = Relationship(back_populates="buildings", cascade_delete=True)
+    
+class BuildingPublic(BuildingBase):
+    id: uuid.UUID
+    
+class BuildingsPublic(SQLModel):
+    data: list[BuildingPublic]
+    count: int
+    
+class RoomBase(SQLModel):
+    room_number: str = Field(max_length=50)
+    capacity: int
+    
+class RoomCreate(RoomBase):
+    created_at: datetime = Field(default_factory=datetime.now)
+    updated_at: datetime = Field(default_factory=datetime.now)
+    
+class RoomUpdate(RoomBase):
+    room_number: str | None = Field(default=None, max_length=50)
+    capacity: int | None = Field(default=None)
+    updated_at: datetime = Field(default_factory=datetime.now)
+    
+class Room(RoomBase, table=True):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    building_id: uuid.UUID = Field(
+        foreign_key="building.id", nullable=False, ondelete="CASCADE"
+    )
+    building: Optional["Building"] = Relationship(back_populates="rooms")
