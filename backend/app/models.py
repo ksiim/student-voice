@@ -246,3 +246,31 @@ class RoomPublic(RoomBase):
 class RoomsPublic(SQLModel):
     data: list[RoomPublic]
     count: int
+    
+class AttendanceBase(SQLModel):
+    student_full_name: str = Field(max_length=255)
+    
+class AttendanceCreate(AttendanceBase):
+    created_at: datetime = Field(default_factory=datetime.now)
+    updated_at: datetime = Field(default_factory=datetime.now)
+    
+class AttendanceUpdate(AttendanceBase):
+    student_full_name: str | None = Field(default=None, max_length=255)
+    updated_at: datetime = Field(default_factory=datetime.now)
+    
+class Attendance(AttendanceBase, table=True):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    class_id: uuid.UUID = Field(
+        foreign_key="class.id", nullable=False, ondelete="CASCADE"
+    )
+    class_: Optional["Class"] = Relationship(back_populates="attendances")
+    
+class AttendancePublic(AttendanceBase):
+    id: uuid.UUID
+    class_id: uuid.UUID
+    
+class AttendancesPublic(SQLModel):
+    data: list[AttendancePublic]
+    count: int
+    
+    
