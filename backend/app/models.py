@@ -44,6 +44,10 @@ class User(UserBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     hashed_password: str
     items: list["Item"] = Relationship(back_populates="owner", cascade_delete=True)
+    role_id: uuid.UUID = Field(
+        foreign_key="role.id", nullable=False, ondelete="CASCADE"
+    )
+    role: Optional["Role"] = Relationship(back_populates="users")
 
 
 class UserPublic(UserBase):
@@ -104,3 +108,67 @@ class NewPassword(SQLModel):
     token: str
     new_password: str = Field(min_length=8, max_length=40)
     
+class RoleBase(SQLModel):
+    name: str = Field(max_length=255)
+    
+
+class RoleCreate(RoleBase):
+    created_at: datetime = Field(default_factory=datetime.now)
+    updated_at: datetime = Field(default_factory=datetime.now)
+    
+class RoleUpdate(RoleBase):
+    name: str | None = Field(default=None, max_length=255)
+    updated_at: datetime = Field(default_factory=datetime.now)
+    
+class Role(RoleBase, table=True):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    users: list["User"] = Relationship(back_populates="roles", cascade_delete=True)
+    
+
+class RolePublic(RoleBase):
+    id: uuid.UUID
+    
+class RolesPublic(SQLModel):
+    data: list[RolePublic]
+    count: int
+    
+class ClassBase(SQLModel):
+    name: str = Field(max_length=255)
+    description: str | None = Field(default=None, max_length=255)
+    start_time: datetime | None = Field(default_factory=datetime.now)
+    end_time: datetime | None = Field(default_factory=datetime.now)
+    end_of_active_status: datetime | None = Field(default_factory=datetime.now)
+    
+class ClassCreate(ClassBase):
+    created_at: datetime = Field(default_factory=datetime.now)
+    updated_at: datetime = Field(default_factory=datetime.now)
+    
+class ClassUpdate(ClassBase):
+    name: str | None = Field(default=None, max_length=255)
+    description: str | None = Field(default=None, max_length=255)
+    start_time: datetime | None = Field(default_factory=datetime.now)
+    end_time: datetime | None = Field(default_factory=datetime.now)
+    end_of_active_status: datetime | None = Field(default_factory=datetime.now)
+    updated_at: datetime = Field(default_factory=datetime.now)
+    
+class Class(ClassBase, table=True):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    teacher_id: uuid.UUID = Field(
+        foreign_key="user.id", nullable=False, ondelete="CASCADE"
+    )
+    # subject_id: uuid.UUID = Field(
+    #     foreign_key="subject.id", nullable=False, ondelete="CASCADE"
+    # )
+    location: str = Field(max_length=10)
+    users: list["User"] = Relationship(back_populates="classes", cascade_delete=True)
+    # subject: Optional["Subject"] = Relationship(back_populates="classes")
+    teacher: Optional["User"] = Relationship(back_populates="classes")
+    
+class ClassPublic(ClassBase):
+    id: uuid.UUID
+    teacher_id: uuid.UUID
+    # subject_id: uuid.UUID
+    
+class ClassesPublic(SQLModel):
+    data: list[ClassPublic]
+    count: int
