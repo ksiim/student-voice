@@ -273,4 +273,34 @@ class AttendancesPublic(SQLModel):
     data: list[AttendancePublic]
     count: int
     
+class ReviewBase(SQLModel):
+    comment: str = Field(max_length=255)
+    teaching_quality: int
+    material_clarity: int
+    event_quality: int
     
+class ReviewCreate(ReviewBase):
+    created_at: datetime = Field(default_factory=datetime.now)
+    updated_at: datetime = Field(default_factory=datetime.now)
+    
+class ReviewUpdate(ReviewBase):
+    comment: str | None = Field(default=None, max_length=255)
+    teaching_quality: int | None = Field(default=None)
+    material_clarity: int | None = Field(default=None)
+    event_quality: int | None = Field(default=None)
+    updated_at: datetime = Field(default_factory=datetime.now)
+    
+class Review(ReviewBase, table=True):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    class_id: uuid.UUID = Field(
+        foreign_key="class.id", nullable=False, ondelete="CASCADE"
+    )
+    class_: Optional["Class"] = Relationship(back_populates="reviews")
+    
+class ReviewPublic(ReviewBase):
+    id: uuid.UUID
+    class_id: uuid.UUID
+    
+class ReviewsPublic(SQLModel):
+    data: list[ReviewPublic]
+    count: int
