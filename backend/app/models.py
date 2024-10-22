@@ -238,3 +238,11 @@ class Room(RoomBase, table=True):
         foreign_key="building.id", nullable=False, ondelete="CASCADE"
     )
     building: Optional["Building"] = Relationship(back_populates="rooms")
+    
+class RoomPublic(RoomBase):
+    id: uuid.UUID
+    building_id: uuid.UUID
+    
+class RoomsPublic(SQLModel):
+    data: list[RoomPublic]
+    count: int
