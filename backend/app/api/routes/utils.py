@@ -13,12 +13,12 @@ router = APIRouter()
     dependencies=[Depends(get_current_active_superuser)],
     status_code=201,
 )
-def test_email(email_to: EmailStr) -> Message:
+async def test_email(email_to: EmailStr) -> Message:
     """
     Test emails.
     """
-    email_data = generate_test_email(email_to=email_to)
-    send_email(
+    email_data = await generate_test_email(email_to=email_to)
+    await send_email(
         email_to=email_to,
         subject=email_data.subject,
         html_content=email_data.html_content,
