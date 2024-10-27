@@ -34,3 +34,4 @@ async def init_db(session: AsyncSession) -> None:
             is_superuser=True,
         )
         user = await create_user(session=session, user_create=user_in)
+        
