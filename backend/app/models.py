@@ -17,6 +17,9 @@ class UserBase(SQLModel):
 
 class UserCreate(UserBase):
     password: str = Field(min_length=8, max_length=40)
+    role_id: uuid.UUID = Field(
+        foreign_key="role.id", nullable=True, ondelete="SET NULL"
+    )
 
 
 class UserRegister(SQLModel):
@@ -43,13 +46,12 @@ class UpdatePassword(SQLModel):
 class User(UserBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     hashed_password: str
-    items: list["Item"] = Relationship(back_populates="owner", cascade_delete=True)
     role_id: uuid.UUID = Field(
-        foreign_key="role.id", nullable=False, ondelete="CASCADE"
+        foreign_key="role.id", nullable=True, ondelete="CASCADE"
     )
     role: Optional["Role"] = Relationship(back_populates="users")
-    classes: list["Class"] = Relationship(back_populates="users", cascade_delete=True)
-    
+    items: list["Item"] = Relationship(back_populates="owner", cascade_delete=True)
+    classes: list["Class"] = Relationship(back_populates="teacher")
 
 
 class UserPublic(UserBase):
@@ -124,7 +126,7 @@ class RoleUpdate(RoleBase):
     
 class Role(RoleBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    users: list["User"] = Relationship(back_populates="roles", cascade_delete=True)
+    users: list["User"] = Relationship(back_populates="role", cascade_delete=True)
     
 
 class RolePublic(RoleBase):
@@ -164,8 +166,7 @@ class Class(ClassBase, table=True):
     room_id: uuid.UUID = Field(
         foreign_key="room.id", nullable=False, ondelete="CASCADE"
     )
-    location: Optional["Room"] = Relationship(back_populates="classes", cascade_delete=True)
-    users: list["User"] = Relationship(back_populates="classes", cascade_delete=True)
+    location: Optional["Room"] = Relationship(back_populates="classes")
     subject: Optional["Subject"] = Relationship(back_populates="classes")
     teacher: Optional["User"] = Relationship(back_populates="classes")
     attendances: list["Attendance"] = Relationship(back_populates="class_", cascade_delete=True)
@@ -193,7 +194,7 @@ class SubjectUpdate(SubjectBase):
     
 class Subject(SubjectBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    classes: list["Class"] = Relationship(back_populates="subjects", cascade_delete=True)
+    classes: list["Class"] = Relationship(back_populates="subject", cascade_delete=True)
 
 class SubjectPublic(SubjectBase):
     id: uuid.UUID
@@ -217,7 +218,7 @@ class BuildingUpdate(BuildingBase):
     
 class Building(BuildingBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    rooms: list["Room"] = Relationship(back_populates="buildings", cascade_delete=True)
+    rooms: list["Room"] = Relationship(back_populates="building", cascade_delete=True)
     
 class BuildingPublic(BuildingBase):
     id: uuid.UUID
