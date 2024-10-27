@@ -1,14 +1,17 @@
-interface SubmitButtonProps {
+import React from 'react';
+
+interface SubmitButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   text: string;
 }
 
-export function SubmitButton({text}: SubmitButtonProps){
+export function SubmitButton({ text, ...props }: SubmitButtonProps) {
   return (
     <button
       type="submit"
-      className="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
+      {...props}
+      className="bg-white text-black font-normal py-1 px-6 rounded-lg border border-gray-200 hover:bg-gray-50 focus:outline-none min-w-[85px] flex items-center justify-center"
     >
       {text}
     </button>
   );
-};
+}
