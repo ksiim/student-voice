@@ -20,9 +20,9 @@ async def read_items(
 
     if current_user.is_superuser:
         count_statement = select(func.count()).select_from(Item)
-        count = (await session.execute(count_statement)).one()
+        count = (await session.execute(count_statement)).scalar()
         statement = select(Item).offset(skip).limit(limit)
-        items = (await session.execute(statement)).all()
+        items = (await session.execute(statement)).scalars().all()
     else:
         count_statement = (
             select(func.count())
