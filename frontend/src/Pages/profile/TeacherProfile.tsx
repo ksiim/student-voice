@@ -1,9 +1,10 @@
 import React from 'react';
+import styles from './TeacherProfile.module.scss';
 import Dropdown from './Components/Dropdown';
 import Table from './Components/Table';
 import DateRangePicker from './Components/DateRangePicker';
 import Button from './Components/Button';
-import {Logo} from '../../Components/Logo.tsx';
+import { Logo } from '../../Components/Logo.tsx';
 
 interface Row {
   code: string;
@@ -20,44 +21,55 @@ const rows: Row[] = [
   { code: '1.2.5.1', subject: 'Технологии программирования', group: 'АТ-10', time: '12:00-13:30 28.09.2024' },
 ];
 
+const subjects = [
+  { label: 'Option 1', value: '1' },
+  { label: 'Option 2', value: '2' },
+  { label: 'Option 3', value: '3' },
+];
+
 const TeacherProfile: React.FC = () => (
-  <div className="p-6 bg-gray-100 min-h-screen  items-center">
-    <header className="mb-8 p-4 flex justify-between items-center">
-      <Logo/>
-      <div className="flex space-x-2 ml-auto">
-        <Button text="Настроить выгрузку"/>
-        <Button text="Изменить пароль"/>
+  <div className={styles.container}>
+    <header className={styles.header}>
+      <Logo />
+      <div className={styles.headerButtons}>
+        <Button text="Настроить выгрузку" />
+        <Button text="Изменить пароль" />
       </div>
     </header>
     
-    <div className='flex justify-center'>
-      <div className="p-6 rounded-lg shadow-md w-full max-w-4xl">
-        <div className="flex justify-between mb-4 items-center">
-          <div className='flex gap-2 items-center'>
+    <div className={styles.contentWrapper}>
+      <div className={styles.content}>
+        <div className={styles.datePickerSection}>
+          <div className={styles.datePickerWrapper}>
             <p>Временной промежуток</p>
-            <DateRangePicker />
+            <DateRangePicker/>
           </div>
           
-          <Button text='Создать новую пару' />
+          <Button text='Создать новую пару'/>
         </div>
         
-        <div className="flex space-x-4 mb-4 items-center">
-          <div className=''>
-            <Dropdown label="Предмет" options={[{ label: 'Все', value: 'all' }]} />
-            <Dropdown label="Группа" options={[{ label: 'Все', value: 'all' }]} />
+        <div className={styles.tableWrapper}>
+          <div className={styles.filtersSection}>
+            <div className={styles.dropdownsWrapper}>
+              <Dropdown label="Предмет"
+                        options = {subjects}/>
+              <Dropdown label="Группа"
+                        options={[{label: 'Группа', value: 'all'}]}/>
+            </div>
+            <Button text="Найти"/>
           </div>
-          <Button text="Найти" />
+          
+          <div className={styles.tableContent}>
+            <Table rows={rows}/>
+          </div>
         </div>
         
-        <Table rows={rows} />
-        
-        <div className="flex justify-center mt-4">
-          <Button text="Показать еще" />
+        <div className={styles.loadMoreWrapper}>
+          <Button text="Показать еще"/>
         </div>
       </div>
     </div>
   </div>
 );
-
 
 export default TeacherProfile;

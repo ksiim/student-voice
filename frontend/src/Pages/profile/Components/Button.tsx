@@ -1,17 +1,18 @@
+// Button.tsx
 import React from 'react';
+import styles from './Button.module.scss';
 
 interface ButtonProps {
   text: string;
-  onClick?: () => void;
+  className?: string; // Для добавления дополнительных классов, если нужно
 }
 
-const Button: React.FC<ButtonProps> = ({ text, onClick }) => (
-  <button
-    onClick={onClick}
-    className="px-4 py-2 bg-blue-500 text-white rounded-[16px] hover:bg-blue-600 transition duration-200"
-  >
-    {text}
-  </button>
-);
+const Button: React.FC<ButtonProps> = ({ text, className }) => {
+  return (
+    <button className={`${styles.button} ${className}`}>
+      {text}
+    </button>
+  );
+};
 
 export default Button;

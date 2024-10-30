@@ -1,0 +1,43 @@
+
+@mixin default_header() {
+    margin-bottom: 2rem; // mb-8
+    padding: 1rem; // p-4
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+@mixin button(
+    $padding: 0.5rem 1rem,
+    $bg-color: #B8CDDA,
+    $text-color:#091931,
+    $border-radius: 16px,
+    $hover-bg-color: #82a3b8,
+    $transition-duration: 200ms
+) {
+    padding: $padding;
+    background-color: $bg-color;
+    color: $text-color;
+    border-radius: $border-radius;
+    transition: background-color $transition-duration;
+
+    &:hover {
+        background-color: $hover-bg-color;
+    }
+}
+
+@mixin dropdownWrapper {
+    display: flex;
+    flex-direction: column;
+
+    .label {
+        color: #4a5568; // equivalent to Tailwind's "text-gray-700"
+    }
+
+    .select {
+        border: 1px solid #d1d5db; // equivalent to Tailwind's "border-gray-300"
+        border-radius: 0.25rem; // rounded
+        padding: 0.5rem 0.75rem; // px-3 py-2
+    }
+}
