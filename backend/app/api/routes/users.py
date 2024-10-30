@@ -40,10 +40,9 @@ async def read_users(session: SessionDep, skip: int = 0, limit: int = 100) -> An
     """
 
     count_statement = select(func.count()).select_from(User)
-    count = await session.execute(count_statement).one()
-
+    count = (await session.execute(count_statement)).scalar()
     statement = select(User).offset(skip).limit(limit)
-    users = await session.execute(statement).all()
+    users = (await session.execute(statement)).scalars().all()
 
     return UsersPublic(data=users, count=count)
 
@@ -64,10 +63,10 @@ async def create_user(*, session: SessionDep, user_in: UserCreate) -> Any:
 
     user = await crud.create_user(session=session, user_create=user_in)
     if settings.emails_enabled and user_in.email:
-        email_data = generate_new_account_email(
+        email_data = await generate_new_account_email(
             email_to=user_in.email, username=user_in.email, password=user_in.password
         )
-        send_email(
+        await send_email(
             email_to=user_in.email,
             subject=email_data.subject,
             html_content=email_data.html_content,
