@@ -1,4 +1,5 @@
 from datetime import datetime
+from email.policy import default
 from typing import Optional
 import uuid
 
@@ -26,6 +27,9 @@ class UserRegister(SQLModel):
     email: EmailStr = Field(max_length=255)
     password: str = Field(min_length=8, max_length=40)
     full_name: str | None = Field(default=None, max_length=255)
+    role_id: uuid.UUID = Field(
+        foreign_key="role.id", nullable=True, ondelete="SET NULL"
+    )
 
 
 class UserUpdate(UserBase):
@@ -139,20 +143,29 @@ class RolesPublic(SQLModel):
 class ClassBase(SQLModel):
     name: str = Field(max_length=255)
     description: str | None = Field(default=None, max_length=255)
-    start_time: datetime | None = Field(default_factory=datetime.now)
-    end_time: datetime | None = Field(default_factory=datetime.now)
-    end_of_active_status: datetime | None = Field(default_factory=datetime.now)
+    start_time: datetime | None = Field(default=None)
+    end_time: datetime | None = Field(default=None)
+    end_of_active_status: datetime | None = Field(default=None)
     
 class ClassCreate(ClassBase):
     created_at: datetime = Field(default_factory=datetime.now)
     updated_at: datetime = Field(default_factory=datetime.now)
+    subject_id: uuid.UUID = Field(
+        foreign_key="subject.id", nullable=False, ondelete="CASCADE"
+    )
+    teacher_id: uuid.UUID = Field(
+        foreign_key="user.id", nullable=False, ondelete="CASCADE"
+    )
+    room_id: uuid.UUID = Field(
+        foreign_key="room.id", nullable=False, ondelete="CASCADE"
+    )
     
 class ClassUpdate(ClassBase):
     name: str | None = Field(default=None, max_length=255)
     description: str | None = Field(default=None, max_length=255)
-    start_time: datetime | None = Field(default_factory=datetime.now)
-    end_time: datetime | None = Field(default_factory=datetime.now)
-    end_of_active_status: datetime | None = Field(default_factory=datetime.now)
+    start_time: datetime | None = Field(default=None)
+    end_time: datetime | None = Field(default=None)
+    end_of_active_status: datetime | None = Field(default=None)
     updated_at: datetime = Field(default_factory=datetime.now)
     
 class Class(ClassBase, table=True):
