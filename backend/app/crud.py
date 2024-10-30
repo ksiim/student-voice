@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
 from app.core.security import get_password_hash, verify_password
-from app.models import Item, ItemCreate, Role, RoleCreate, User, UserCreate, UserUpdate
+from app.models import Class, ClassCreate, Item, ItemCreate, Role, RoleCreate, Subject, SubjectCreate, User, UserCreate, UserUpdate
 
 
 async def create_user(*, session: AsyncSession, user_create: UserCreate) -> User:
@@ -69,3 +69,28 @@ async def get_role_by_name(*, session: AsyncSession, name: str) -> Role | None:
     statement = select(Role).where(Role.name == name)
     session_role = (await session.execute(statement)).scalars().first()
     return session_role
+
+async def create_subject(*, session: AsyncSession, subject_create: SubjectCreate) -> Subject:
+    db_obj = Subject.model_validate(subject_create)
+    session.add(db_obj)
+    await session.commit()
+    await session.refresh(db_obj)
+    return db_obj
+
+async def get_subject_by_name(*, session: AsyncSession, name: str) -> Subject | None:
+    statement = select(Subject).where(Subject.name == name)
+    session_subject = (await session.execute(statement)).scalars().first()
+    return session_subject
+
+async def create_class(*, session: AsyncSession, class_create: ClassCreate) -> Class:
+    db_obj = Class.model_validate(
+        class_create,
+        update={
+            'created_at': class_create.created_at,
+            'updated_at': class_create.updated_at,
+        }
+    )
+    session.add(db_obj)
+    await session.commit()
+    await session.refresh(db_obj)
+    return db_obj
