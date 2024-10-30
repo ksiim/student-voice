@@ -6,7 +6,7 @@ from app.core.config import settings
 from app.models import RoleCreate, User, UserCreate
 from app.crud import create_role, create_user
 
-async_engine = create_async_engine(str(settings.SQLALCHEMY_DATABASE_URI))
+async_engine = create_async_engine(str(settings.SQLALCHEMY_DATABASE_URI), echo=True)
 
 
 # make sure all SQLModel models are imported (app.models) before initializing DB
