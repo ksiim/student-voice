@@ -1,0 +1,38 @@
+.container {
+  padding: 1.5rem;
+  background-color: #f3f4f6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.header {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.headerButtons {
+  display: flex;
+  gap: 0.5rem;
+  margin-left: auto;
+}
+
+.contentWrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.content {
+  width: 33.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/*# sourceMappingURL=UserCreation.module.css.map */

@@ -1,10 +1,17 @@
 import React from 'react';
+import styles from './DateRangePicker.module.scss';
 
 const DateRangePicker: React.FC = () => (
-  <div className="flex items-center space-x-2">
-    <input type="date" className="border border-gray-300 rounded px-3 py-2" />
-    <span>-</span>
-    <input type="date" className="border border-gray-300 rounded px-3 py-2" />
+  <div className={styles.container}>
+    <input
+      type="date"
+      className={styles.input}
+    />
+    <span className={styles.separator}>-</span>
+    <input
+      type="date"
+      className={styles.input}
+    />
   </div>
 );
 

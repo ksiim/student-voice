@@ -1,0 +1,34 @@
+.button {
+  padding: 0.5rem 1rem;
+  background-color: #B8CDDA;
+  color: #091931;
+  border-radius: 16px;
+  transition: background-color 200ms;
+}
+.button:hover {
+  background-color: #82a3b8;
+}
+
+.blue {
+  padding: 0.5rem 1rem;
+  background-color: #1d4ed8;
+  color: #091931;
+  border-radius: 16px;
+  transition: background-color 200ms;
+}
+.blue:hover {
+  background-color: #82a3b8;
+}
+
+.white {
+  padding: 0.5rem 1rem;
+  background-color: #ffffff;
+  color: #091931;
+  border-radius: 16px;
+  transition: background-color 200ms;
+}
+.white:hover {
+  background-color: #82a3b8;
+}
+
+/*# sourceMappingURL=Button.module.css.map */
