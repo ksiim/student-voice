@@ -28,16 +28,21 @@ async def init_db(session: AsyncSession) -> None:
         select(User).where(User.email == settings.FIRST_SUPERUSER)
     )).first()
     if not user:
-        role_in = RoleCreate(
+        admin_role_in = RoleCreate(
             name='admin'
         )
-        role = await create_role(session=session, role_create=role_in)
+        admin_role = await create_role(session=session, role_create=admin_role_in)
+        
+        teacher_role_in = RoleCreate(
+            name='teacher'
+        )
+        teacher_role = await create_role(session=session, role_create=teacher_role_in)
         
         user_in = UserCreate(
             email=settings.FIRST_SUPERUSER,
             password=settings.FIRST_SUPERUSER_PASSWORD,
             is_superuser=True,
-            role_id=role.id
+            role_id=admin_role.id
         )
         user = await create_user(session=session, user_create=user_in)
         

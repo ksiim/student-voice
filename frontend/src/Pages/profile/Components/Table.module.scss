@@ -1,0 +1,28 @@
+.wrapper {
+  overflow-x: auto;
+}
+
+.table {
+  min-width: 100%;
+  border: 1px solid #d1d5db; // border-gray-300
+  border-radius: 0.5rem; // rounded-lg
+}
+
+.headerCell {
+  padding: 0.5rem 1rem; // px-4 py-2
+  border-bottom: 1px solid #d1d5db; // border-b
+  text-align: center;
+}
+
+.row {
+  border-bottom: 1px solid #d1d5db; // border-b
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.cell {
+  padding: 0.5rem 1rem; // px-4 py-2
+  text-align: center;
+}

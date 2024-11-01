@@ -1,0 +1,15 @@
+.container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem; // space-x-2
+}
+
+.input {
+  border: 1px solid #d1d5db; // border-gray-300
+  border-radius: 0.25rem; // rounded
+  padding: 0.5rem 0.75rem; // px-3 py-2
+}
+
+.separator {
+  // Если нужны дополнительные стили для разделителя
+}
