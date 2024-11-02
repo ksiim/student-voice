@@ -2,6 +2,7 @@ import React from 'react';
 import { Logo } from '../../Components/Logo';
 import DateRangePicker from '../profile/Components/DateRangePicker';
 import styles from './AdminPanel.module.scss';
+import Button from '../profile/Components/Button.tsx';
 
 interface DropdownProps {
   label: string;
@@ -84,12 +85,10 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onSave, onPrint }) => {
   return (
     <div className={styles.root}>
       <header className={styles.header}>
-        <div className={styles.headerContent}>
-          <Logo />
-          <div className={styles.headerButtons}>
-            <button className={styles.headerButton}>Выгрузка отчетов</button>
-            <button className={styles.headerButton}>Пользователи</button>
-          </div>
+        <Logo/>
+        <div className={styles.headerButtons}>
+          <Button text="Выгрузка отчётов"/>
+          <Button text="Пользователи"/>
         </div>
       </header>
       

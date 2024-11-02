@@ -1,15 +1,18 @@
-// Button.tsx
 import React from 'react';
 import styles from './Button.module.scss';
 
 interface ButtonProps {
   text: string;
-  className?: string; // Для добавления дополнительных классов, если нужно
+  className?: string;
+  onClick?: () => void; // Добавляем опциональный обработчик onClick
 }
 
-const Button: React.FC<ButtonProps> = ({ text, className }) => {
+const Button: React.FC<ButtonProps> = ({ text, className, onClick }) => {
   return (
-    <button className={`${styles.button} ${className}`}>
+    <button
+      className={`${styles.button} ${className || ''}`}
+      onClick={onClick}
+    >
       {text}
     </button>
   );

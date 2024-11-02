@@ -1,6 +1,8 @@
 // FeedbackForm.tsx
 import React, { useState } from 'react';
 import styles from './FeedbackForm.module.scss';
+import Button from '../profile/Components/Button.tsx';
+import {useNavigate} from 'react-router-dom';
 
 interface FeedbackFormProps {
   teacherName: string;
@@ -8,6 +10,11 @@ interface FeedbackFormProps {
   date: string;
 }
 
+const navigate = useNavigate();
+
+const handleMain = () => {
+  navigate('/')
+}
 const FeedbackForm: React.FC<FeedbackFormProps> = ({ teacherName, groupId, date }) => {
   const [submitted, setSubmitted] = useState(false);
   const [formData, setFormData] = useState({
@@ -72,7 +79,7 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({ teacherName, groupId, date 
       <div className={styles.thankYouContainer}>
         <h2>Спасибо за ваш отзыв!</h2>
         <p>Узнайте больше о системе оценивания, перейдя на главную страницу.</p>
-        <button className={styles.button}>Перейти на главную</button>
+        <Button text='Перейти на главную' onClick={handleMain} className={styles['button']}/>
       </div>
     );
   }
