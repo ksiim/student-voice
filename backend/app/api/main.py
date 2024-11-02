@@ -9,4 +9,5 @@ api_router.include_router(utils.router, prefix="/utils", tags=["utils"])
 api_router.include_router(items.router, prefix="/items", tags=["items"])
 api_router.include_router(roles.router, prefix="/roles", tags=["roles"])
 api_router.include_router(classes.router, prefix="/classes", tags=["classes"])
-api_router.include_router(subjects.router, prefix="/subjects", tags=["subjects"])
+api_router.include_router(
+    subjects.router, prefix="/subjects", tags=["subjects"])
