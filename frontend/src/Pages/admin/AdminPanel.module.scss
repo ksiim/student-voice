@@ -8,22 +8,18 @@
 }
 
 .header {
-  background-color: white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  padding: 1rem 2rem;
-}
-
-.headerContent {
-  max-width: 1200px;
-  margin: 0 auto;
+  margin-bottom: 2rem; // mb-8
+  padding: 1rem; // p-4
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 100%;
 }
 
 .headerButtons {
   display: flex;
-  gap: 1rem;
+  gap: 0.5rem; // space-x-2
+  margin-left: auto; // ml-auto
 }
 
 .headerButton {

@@ -8,6 +8,21 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
+.header {
+  margin-bottom: 2rem; // mb-8
+  padding: 1rem; // p-4
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.headerButtons {
+  display: flex;
+  gap: 0.5rem; // space-x-2
+  margin-left: auto; // ml-auto
+}
+
 .title {
   font-size: 20px;
   font-weight: 500;
