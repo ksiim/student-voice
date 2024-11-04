@@ -33,17 +33,18 @@ const groups: Option[] = [
   { label: 'Группа', value: 'all' }
 ];
 
-const navigate = useNavigate();
 
-const handleLoadings = () => {
-  navigate('/load')
-}
-
-const handleChangePassword = () => {
-  navigate('/changePassword')
-}
 
 const TeacherProfile: React.FC = () => {
+  const navigate = useNavigate();
+  
+  const handleLoadings = () => {
+    navigate('/load')
+  }
+  
+  const handleChangePassword = () => {
+    navigate('/changePassword')
+  }
   const [selectedSubject, setSelectedSubject] = useState<Option | null>(null);
   const [selectedGroup, setSelectedGroup] = useState<Option | null>(null);
   

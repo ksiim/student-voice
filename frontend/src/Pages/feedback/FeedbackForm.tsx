@@ -10,12 +10,14 @@ interface FeedbackFormProps {
   date: string;
 }
 
-const navigate = useNavigate();
 
-const handleMain = () => {
-  navigate('/')
-}
 const FeedbackForm: React.FC<FeedbackFormProps> = ({ teacherName, groupId, date }) => {
+  const navigate = useNavigate();
+  
+  const handleMain = () => {
+    navigate('/')
+  };
+  
   const [submitted, setSubmitted] = useState(false);
   const [formData, setFormData] = useState({
     name: '',

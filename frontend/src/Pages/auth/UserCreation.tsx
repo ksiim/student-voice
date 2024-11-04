@@ -6,17 +6,18 @@ import RegistrationForm from './Components/RegistrationForm.tsx';
 import {useNavigate} from 'react-router-dom';
 
 
-const navigate = useNavigate();
 
-const handleMetrics = () => {
-  navigate('/adminPanel');
-}
-
-const handleReports = () => {
-  navigate('/reports')
-}
 
 const UserCreation: React.FC = () => {
+  const navigate = useNavigate();
+  
+  const handleMetrics = () => {
+    navigate('/adminPanel');
+  }
+  
+  const handleReports = () => {
+    navigate('/reports')
+  }
   return (
     <div className={styles.container}>
       <header className={styles.header}>
