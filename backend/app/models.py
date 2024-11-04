@@ -153,11 +153,12 @@ class RolesPublic(SQLModel):
 class ClassBase(SQLModel):
     name: str = Field(max_length=255)
     description: str | None = Field(default=None, max_length=255)
+    start_time: datetime = Field(default=datetime.now)
+    end_time: datetime = Field(default=datetime.now)
+    end_of_active_status: datetime = Field(default=datetime.now)
+
 
 class ClassCreate(ClassBase):
-    start_time: datetime | None = Field(default=datetime.now)
-    end_time: datetime | None = Field(default=datetime.now)
-    end_of_active_status: datetime | None = Field(default=datetime.now)
     created_at: datetime = Field(default_factory=datetime.now)
     updated_at: datetime = Field(default_factory=datetime.now)
     subject_id: uuid.UUID = Field(

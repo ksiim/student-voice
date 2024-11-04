@@ -93,6 +93,9 @@ async def create_class(*, session: AsyncSession, class_create: ClassCreate) -> C
         update={
             'created_at': class_create.created_at,
             'updated_at': class_create.updated_at,
+            'start_time': class_create.start_time.replace(tzinfo=None),
+            'end_time': class_create.end_time.replace(tzinfo=None),
+            'end_of_active_status': class_create.end_of_active_status.replace(tzinfo=None),
         }
     )
     session.add(db_obj)
