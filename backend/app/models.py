@@ -153,12 +153,11 @@ class RolesPublic(SQLModel):
 class ClassBase(SQLModel):
     name: str = Field(max_length=255)
     description: str | None = Field(default=None, max_length=255)
-    start_time: datetime | None = Field(default=None)
-    end_time: datetime | None = Field(default=None)
-    end_of_active_status: datetime | None = Field(default=None)
-
 
 class ClassCreate(ClassBase):
+    start_time: datetime | None = Field(default=datetime.now)
+    end_time: datetime | None = Field(default=datetime.now)
+    end_of_active_status: datetime | None = Field(default=datetime.now)
     created_at: datetime = Field(default_factory=datetime.now)
     updated_at: datetime = Field(default_factory=datetime.now)
     subject_id: uuid.UUID = Field(
@@ -273,17 +272,20 @@ class BuildingsPublic(SQLModel):
 
 
 class RoomBase(SQLModel):
-    room_number: str = Field(max_length=50)
+    number: str = Field(max_length=50)
     capacity: int
 
 
 class RoomCreate(RoomBase):
     created_at: datetime = Field(default_factory=datetime.now)
     updated_at: datetime = Field(default_factory=datetime.now)
+    building_id: uuid.UUID = Field(
+        foreign_key="building.id", nullable=False, ondelete="CASCADE"
+    )
 
 
 class RoomUpdate(RoomBase):
-    room_number: str | None = Field(default=None, max_length=50)
+    number: str | None = Field(default=None, max_length=50)
     capacity: int | None = Field(default=None)
     updated_at: datetime = Field(default_factory=datetime.now)
 
@@ -350,6 +352,9 @@ class ReviewBase(SQLModel):
 class ReviewCreate(ReviewBase):
     created_at: datetime = Field(default_factory=datetime.now)
     updated_at: datetime = Field(default_factory=datetime.now)
+    class_id: uuid.UUID = Field(
+        foreign_key="class.id", nullable=False, ondelete="CASCADE"
+    )
 
 
 class ReviewUpdate(ReviewBase):

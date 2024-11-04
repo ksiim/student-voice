@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
 from app.core.security import get_password_hash, verify_password
-from app.models import Class, ClassCreate, Item, ItemCreate, Role, RoleCreate, Subject, SubjectCreate, User, UserCreate, UserUpdate
+from app.models import Building, BuildingCreate, Class, ClassCreate, Item, ItemCreate, Review, ReviewCreate, Role, RoleCreate, Room, Subject, SubjectCreate, User, UserCreate, UserUpdate
 
 
 async def create_user(*, session: AsyncSession, user_create: UserCreate) -> User:
@@ -65,6 +65,11 @@ async def create_role(*, session: AsyncSession, role_create: RoleCreate) -> Role
     await session.refresh(db_obj)
     return db_obj
 
+async def get_role_by_id(*, session: AsyncSession, role_id: uuid.UUID) -> Role | None:
+    statement = select(Role).where(Role.id == role_id)
+    session_role = (await session.execute(statement)).scalars().first()
+    return session_role
+
 async def get_role_by_name(*, session: AsyncSession, name: str) -> Role | None:
     statement = select(Role).where(Role.name == name)
     session_role = (await session.execute(statement)).scalars().first()
@@ -90,6 +95,32 @@ async def create_class(*, session: AsyncSession, class_create: ClassCreate) -> C
             'updated_at': class_create.updated_at,
         }
     )
+    session.add(db_obj)
+    await session.commit()
+    await session.refresh(db_obj)
+    return db_obj
+
+async def create_review(*, session: AsyncSession, review_create: ReviewCreate) -> Review:
+    db_obj = Review.model_validate(review_create)
+    session.add(db_obj)
+    await session.commit()
+    await session.refresh(db_obj)
+    return db_obj
+
+async def get_room_by_number(*, session: AsyncSession, name: str) -> Room | None:
+    statement = select(Room).where(Room.number == name)
+    session_room = (await session.execute(statement)).scalars().first()
+    return session_room
+
+async def create_room(*, session: AsyncSession, room_create: Room) -> Room:
+    db_obj = Room.model_validate(room_create)
+    session.add(db_obj)
+    await session.commit()
+    await session.refresh(db_obj)
+    return db_obj
+
+async def create_building(*, session: AsyncSession, building_create: BuildingCreate) -> Building:
+    db_obj = Building.model_validate(building_create)
     session.add(db_obj)
     await session.commit()
     await session.refresh(db_obj)
