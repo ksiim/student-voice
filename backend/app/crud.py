@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
 from app.core.security import get_password_hash, verify_password
-from app.models import Building, BuildingCreate, Class, ClassCreate, Item, ItemCreate, Review, ReviewCreate, Role, RoleCreate, Room, Subject, SubjectCreate, User, UserCreate, UserUpdate
+from app.models import Attendance, AttendanceCreate, Building, BuildingCreate, Class, ClassCreate, Item, ItemCreate, Review, ReviewCreate, Role, RoleCreate, Room, Subject, SubjectCreate, User, UserCreate, UserUpdate
 
 
 async def create_user(*, session: AsyncSession, user_create: UserCreate) -> User:
@@ -124,6 +124,13 @@ async def create_room(*, session: AsyncSession, room_create: Room) -> Room:
 
 async def create_building(*, session: AsyncSession, building_create: BuildingCreate) -> Building:
     db_obj = Building.model_validate(building_create)
+    session.add(db_obj)
+    await session.commit()
+    await session.refresh(db_obj)
+    return db_obj
+
+async def create_attendance(*, session: AsyncSession, attendance_in: AttendanceCreate) -> Attendance:
+    db_obj = Attendance.model_validate(attendance_in)
     session.add(db_obj)
     await session.commit()
     await session.refresh(db_obj)
