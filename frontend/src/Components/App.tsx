@@ -10,8 +10,8 @@ import CreateLesson from '../Pages/creation/CreateLesson.tsx';
 import UploadReports from '../Pages/Reports/UploadReports.tsx';
 import ChangePassword from '../Pages/auth/changePassword.tsx';
 import CreateForm from '../Pages/creation/CreateForm.tsx';
-import AdditionalCriteriaList
-  from '../Pages/feedback/AdditionalCriteriaList.tsx';
+import StudentList
+  from '../Pages/feedback/StudentList.tsx';
 import LoadLesson from '../Pages/creation/LoadLesson.tsx';
 
 function App()  {
@@ -31,13 +31,7 @@ function App()  {
         <Route path='/createLesson' element={<CreateLesson />}/>
         <Route path='/reports' element={<UploadReports />}/>
         <Route path='/changePassword' element={
-          <ChangePassword
-            onSubmit={(oldPassword, newPassword) => {
-              // Здесь добавьте логику обработки смены пароля
-              console.log('Changing password:', { oldPassword, newPassword });
-            }}
-            userEmail="user@example.com" // Опционально
-          />
+          <ChangePassword/>
         }/>
         <Route path='/createForm' element={
           <CreateForm
@@ -48,24 +42,7 @@ function App()  {
           />
         }/>
         
-        <Route path='/list' element={<AdditionalCriteriaList items={[
-          { group: 'АТ-01', name: 'Иванов Иван Иванович'},
-          { group: 'АТ-02', name: 'Петров Петр Петрович'},
-          { group: 'АТ-02', name: 'Петров Петр Петрович'},
-          { group: 'АТ-02', name: 'Петров Петр Петрович'},
-          { group: 'АТ-02', name: 'Петров Петр Петрович'},
-          { group: 'АТ-02', name: 'Петров Петр Петрович'},
-          { group: 'АТ-02', name: 'Петров Петр Петрович'},
-          { group: 'АТ-02', name: 'Петров Петр Петрович'},
-          { group: 'АТ-02', name: 'Петров Петр Петрович'},
-          { group: 'АТ-02', name: 'Петров Петр Петрович'},
-          { group: 'АТ-02', name: 'Петров Петр Петрович'},
-          { group: 'АТ-02', name: 'Петров Петр Петрович'},
-          { group: 'АТ-02', name: 'Петров Петр Петрович'},
-          { group: 'АТ-02', name: 'Петров Петр Петрович'},
-          { group: 'АТ-02', name: 'Петров Петр Петрович'},
-          { group: 'АТ-25', name: 'Сидоров Сидор Сидорович' }
-        ]} />} />
+        <Route path='/list' element={<StudentList/>} />
         
         <Route path='/load' element={<LoadLesson items={[
           { subject: 'Арх эвм', group: 'АТ-01', time: '12:30-13:30', date: new Date(2024,10,30), place: 'Ирит-РТФ'},

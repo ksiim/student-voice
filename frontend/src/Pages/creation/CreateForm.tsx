@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styles from './createForm.module.scss';
+import styles from './CreateForm.module.scss'
 import { Logo } from '../../Components/Logo';
 import Button from '../profile/Components/Button';
 import {useNavigate} from 'react-router-dom';
@@ -38,6 +38,10 @@ const CreateForm: React.FC<CreateFormProps> = ({ onSubmit }) => {
     navigate('/list')
   }
   
+  const handleBack = () => {
+    navigate(-1)
+  }
+  
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit(formData);
@@ -48,7 +52,7 @@ const CreateForm: React.FC<CreateFormProps> = ({ onSubmit }) => {
       <header className={styles.header}>
         <Logo/>
         <div className={styles.headerButtons}>
-          <Button text="Назад"/>
+          <Button text="Назад" onClick={handleBack}/>
         </div>
       </header>
       

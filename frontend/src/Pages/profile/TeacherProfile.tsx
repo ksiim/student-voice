@@ -45,6 +45,10 @@ const TeacherProfile: React.FC = () => {
   const handleChangePassword = () => {
     navigate('/changePassword')
   }
+  
+  const handleLessonCreation = () => {
+    navigate('/createLesson')
+  }
   const [selectedSubject, setSelectedSubject] = useState<Option | null>(null);
   const [selectedGroup, setSelectedGroup] = useState<Option | null>(null);
   
@@ -66,7 +70,7 @@ const TeacherProfile: React.FC = () => {
               <DateRangePicker/>
             </div>
             
-            <Button text='Создать новую пару'/>
+            <Button text='Создать новую пару' onClick={handleLessonCreation}/>
           </div>
           
           <div className={styles.tableWrapper}>

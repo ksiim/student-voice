@@ -1,3 +1,4 @@
+// StudentList.module.scss
 .container {
   padding: 20px;
   background-color: #f0f0f0;
@@ -9,8 +10,8 @@
 }
 
 .header {
-  margin-bottom: 2rem;
-  padding: 1rem;
+  margin-bottom: 2rem; // mb-8
+  padding: 1rem; // p-4
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -19,14 +20,15 @@
 
 .headerButtons {
   display: flex;
-  gap: 0.5rem;
-  margin-left: auto;
+  gap: 0.5rem; // space-x-2
+  margin-left: auto; // ml-auto
 }
 
 .title {
   font-size: 20px;
   font-weight: bold;
 }
+
 
 .table {
   background-color: #ffffff;
@@ -43,12 +45,14 @@
   padding: 10px;
   text-align: center;
   vertical-align: center;
-}
-.tableHeader:first-child {
-  border-top-left-radius: 16px;
-}
-.tableHeader:last-child {
-  border-top-right-radius: 16px;
+
+  &:first-child {
+    border-top-left-radius: 16px;
+  }
+
+  &:last-child {
+    border-top-right-radius: 16px;
+  }
 }
 
 .tableRow {
@@ -62,9 +66,10 @@
   text-align: center;
   vertical-align: center;
   border-right: 3px solid #ccc;
-}
-.tableCell:last-child {
-  border-right: none;
+
+  &:last-child {
+    border-right: none;
+  }
 }
 
 .criteria {
@@ -98,10 +103,8 @@
 }
 
 .criteria {
-  width: 30%;
+  width:30%;
   padding: 24px 16px;
   background-color: #E0E9EF;
   text-align: left;
 }
-
-/*# sourceMappingURL=AdditionalCriteriaList.module.css.map */

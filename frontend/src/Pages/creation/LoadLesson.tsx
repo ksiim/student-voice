@@ -29,6 +29,10 @@ const LoadLesson: React.FC<LoadLessonProps> = ({items}) => {
     navigate('/createLesson');
   };
   
+  const handleBack = () => {
+    navigate('/profile');
+  };
+  
   const showMore = () => {
     setVisibleItems(prev => prev + 10);
   };
@@ -77,7 +81,7 @@ const LoadLesson: React.FC<LoadLessonProps> = ({items}) => {
         <Logo/>
         <div className={styles.headerButtons}>
           <Button text="Создать пару вручную" onClick={handleCreateLesson}/>
-          <Button text="Назад"/>
+          <Button text="Назад" onClick={handleBack}/>
         </div>
       </header>
       

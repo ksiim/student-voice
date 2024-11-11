@@ -35,6 +35,10 @@ const UploadReports: React.FC = () => {
     navigate('/adminPanel')
   }
   
+  const handleUsers = () => {
+    navigate('/createUser')
+  }
+  
   
   return (
     <div className={styles.container}>
@@ -42,7 +46,7 @@ const UploadReports: React.FC = () => {
         <Logo/>
         <div className={styles.headerButtons}>
           <Button text="Метрики" onClick={handleMetrics}/>
-          <Button text="Пользователи"/>
+          <Button text="Пользователи" onClick={handleUsers}/>
         </div>
       </header>
       

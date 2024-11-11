@@ -3,6 +3,7 @@ import { Logo } from '../../Components/Logo';
 import DateRangePicker from '../profile/Components/DateRangePicker';
 import styles from './AdminPanel.module.scss';
 import Button from '../profile/Components/Button.tsx';
+import {useNavigate} from 'react-router-dom';
 
 interface DropdownProps {
   label: string;
@@ -45,6 +46,15 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onSave, onPrint }) => {
     { name: 'CSI', perLesson: 'нет', perMonth: 3.014, perSemester: 'данных' },
     { name: 'NPS', perLesson: '-', perMonth: '-', perSemester: 7.863 },
   ];
+  const navigate = useNavigate();
+  
+  const handleUsers = () => {
+    navigate('/createUser')
+  }
+  
+  const handleLoad = () => {
+    navigate('/load')
+  }
   
   const teacherOptions = [
     { value: '1', label: 'Teacher 1' },
@@ -87,8 +97,8 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onSave, onPrint }) => {
       <header className={styles.header}>
         <Logo/>
         <div className={styles.headerButtons}>
-          <Button text="Выгрузка отчётов"/>
-          <Button text="Пользователи"/>
+          <Button text="Выгрузка отчётов" onClick={handleLoad}/>
+          <Button text="Пользователи" onClick={handleUsers}/>
         </div>
       </header>
       
