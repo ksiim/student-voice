@@ -313,6 +313,9 @@ class RoomsPublic(SQLModel):
 
 class AttendanceBase(SQLModel):
     student_full_name: str = Field(max_length=255)
+    class_id: uuid.UUID = Field(
+        foreign_key="class.id", nullable=False, ondelete="CASCADE"
+    )
 
 
 class AttendanceCreate(AttendanceBase):
@@ -327,9 +330,6 @@ class AttendanceUpdate(AttendanceBase):
 
 class Attendance(AttendanceBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    class_id: uuid.UUID = Field(
-        foreign_key="class.id", nullable=False, ondelete="CASCADE"
-    )
     class_: Optional["Class"] = Relationship(back_populates="attendances")
 
 
