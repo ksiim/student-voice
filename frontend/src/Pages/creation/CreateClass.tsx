@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { Trash2 } from 'lucide-react';
 import Dropdown, { Option } from '../profile/Components/Dropdown';
-import styles from './CreateLesson.module.scss';
+import styles from './CreateClass.module.scss';
 import { Logo } from '../../Components/Logo.tsx';
 import Button from '../profile/Components/Button.tsx';
 import { useNavigate } from 'react-router-dom';
 
-const CreateLesson: React.FC = () => {
+const CreateClass: React.FC = () => {
   const daysOfWeek = ['пн', 'вт', 'ср', 'чт', 'пт', 'сб'];
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
   const [selectedLocation, setSelectedLocation] = useState<Option | null>(null);
@@ -155,4 +155,4 @@ const CreateLesson: React.FC = () => {
   );
 };
 
-export default CreateLesson;
+export default CreateClass;

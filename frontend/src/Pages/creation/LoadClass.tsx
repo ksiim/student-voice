@@ -1,4 +1,4 @@
-import styles from './LoadLesson.module.scss';
+import styles from './LoadClass.module.scss';
 import React, {useState} from 'react';
 import {Logo} from '../../Components/Logo.tsx';
 import Button from '../profile/Components/Button.tsx';
@@ -17,7 +17,7 @@ interface LoadLessonProps {
   items: LoadLessonItem[];
 }
 
-const LoadLesson: React.FC<LoadLessonProps> = ({items}) => {
+const LoadClass: React.FC<LoadLessonProps> = ({items}) => {
   const [visibleItems, setVisibleItems] = useState<number>(10);
   const [lessonItems, setLessonItems] = useState<LoadLessonItem[]>(items);
   const [deleteIndex, setDeleteIndex] = useState<number | null>(null);
@@ -178,4 +178,4 @@ const LoadLesson: React.FC<LoadLessonProps> = ({items}) => {
   );
 };
 
-export default LoadLesson;
+export default LoadClass;

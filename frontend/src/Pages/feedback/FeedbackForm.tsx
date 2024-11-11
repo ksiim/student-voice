@@ -1,17 +1,26 @@
-// FeedbackForm.tsx
 import React, { useState } from 'react';
 import styles from './FeedbackForm.module.scss';
 import Button from '../profile/Components/Button.tsx';
-import {useNavigate} from 'react-router-dom';
+import { useNavigate} from 'react-router-dom';
 
 interface FeedbackFormProps {
   teacherName: string;
   groupId: string;
   date: string;
+  classId: string;
 }
 
+interface ReviewData {
+  comment: string;
+  teaching_quality: number;
+  material_clarity: number;
+  event_quality: number;
+  created_at: string;
+  updated_at: string;
+  class_id: string;
+}
 
-const FeedbackForm: React.FC<FeedbackFormProps> = ({ teacherName, groupId, date }) => {
+const FeedbackForm: React.FC<FeedbackFormProps> = ({ teacherName, groupId, date, classId }) => {
   const navigate = useNavigate();
   
   const handleMain = () => {
@@ -23,7 +32,7 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({ teacherName, groupId, date 
     name: '',
     group: '',
     teachingQuality: 0,
-    materialAccessibility: 0,
+    materialClarity: 0, // Изменено с materialAccessibility на materialClarity
     eventQuality: 0,
     comment: '',
     liked: '',
@@ -31,6 +40,7 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({ teacherName, groupId, date 
   });
   
   const [errors, setErrors] = useState<Record<string, boolean>>({});
+  const [submitError, setSubmitError] = useState<string>('');
   
   const handleStarRating = (field: string, rating: number) => {
     setFormData(prev => ({ ...prev, [field]: rating }));
@@ -42,20 +52,71 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({ teacherName, groupId, date 
     if (!formData.name) newErrors.name = true;
     if (!formData.group) newErrors.group = true;
     if (!formData.teachingQuality) newErrors.teachingQuality = true;
-    if (!formData.materialAccessibility) newErrors.materialAccessibility = true;
+    if (!formData.materialClarity) newErrors.materialClarity = true; // Изменено
     if (!formData.eventQuality) newErrors.eventQuality = true;
     
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
   
-  const handleSubmit = (e: React.FormEvent) => {
+  const prepareReviewData = (): ReviewData => {
+    const now = new Date().toISOString();
+    const fullComment = [
+      formData.comment,
+      formData.liked ? `\nПонравилось: ${formData.liked}` : '',
+      formData.contact ? `\nКонтакт: ${formData.contact}` : '',
+      `\nИмя: ${formData.name}`,
+      `\nГруппа: ${formData.group}`
+    ].filter(Boolean).join('');
+    
+    return {
+      comment: fullComment,
+      teaching_quality: formData.teachingQuality,
+      material_clarity: formData.materialClarity, // Используем то же имя что и в форме
+      event_quality: formData.eventQuality,
+      created_at: now,
+      updated_at: now,
+      class_id: classId || ''
+    };
+  };
+  
+  const submitReview = async (reviewData: ReviewData) => {
+    try {
+      const response = await fetch('http://localhost:8000/api/v1/reviews/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(reviewData),
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Server error details:', errorData);
+        throw new Error(`HTTP error! status: ${response.status}\nDetails: ${JSON.stringify(errorData)}`);
+      }
+      
+      return await response.json();
+    } catch (error) {
+      console.error('Error submitting review:', error);
+      throw error;
+    }
+  };
+  
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSubmitError('');
     
     if (validateForm()) {
-      // Here you would typically send the data to your backend
-      console.log('Form submitted:', formData);
-      setSubmitted(true);
+      try {
+        const reviewData = prepareReviewData();
+        console.log('Sending review data:', reviewData);
+        await submitReview(reviewData);
+        setSubmitted(true);
+      } catch (error) {
+        setSubmitError('Произошла ошибка при отправке отзыва. Пожалуйста, проверьте данные и попробуйте снова.');
+        console.error('Submit error:', error);
+      }
     }
   };
   
@@ -93,6 +154,12 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({ teacherName, groupId, date 
       <p>Группа: {groupId}</p>
       <p>от {date}</p>
       
+      {submitError && (
+        <div className={styles.errorMessage}>
+          {submitError}
+        </div>
+      )}
+      
       <div className={styles.formGroup}>
         <label>Ваше ФИО*</label>
         <input
@@ -121,7 +188,7 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({ teacherName, groupId, date 
       
       <div className={styles.formGroup}>
         <label>Оцените доступность материала*</label>
-        {renderStars('materialAccessibility', formData.materialAccessibility)}
+        {renderStars('materialClarity', formData.materialClarity)} {/* Изменено имя поля */}
       </div>
       
       <div className={styles.formGroup}>
