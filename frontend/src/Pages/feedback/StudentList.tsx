@@ -6,21 +6,23 @@ import Button from '../profile/Components/Button';
 import { useNavigate } from 'react-router-dom';
 import { getToken, setAuthHeader } from '../../../api/serviceToken';
 
-interface User {
-  email: string;
-  is_active: boolean;
-  is_superuser: boolean;
-  full_name: string;
-  id: string;
+interface StudentListProps{
+  classId: string;
+}
+
+interface Attendance {
+  "student_full_name": string,
+  "class_id": string,
+  "id": string
 }
 
 interface ApiResponse {
-  data: User[];
+  data: Attendance[];
   count: number;
 }
 
-const StudentList: React.FC = () => {
-  const [items, setItems] = useState<User[]>([]);
+const StudentList: React.FC<StudentListProps> = ({classId}) => {
+  const [items, setItems] = useState<Attendance[]>([]);
   const [visibleItems, setVisibleItems] = useState<number>(10);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -36,7 +38,7 @@ const StudentList: React.FC = () => {
     const fetchStudents = async () => {
       try {
         setLoading(true);
-        const response = await axios.get<ApiResponse>('http://localhost:8000/api/v1/users/');
+        const response = await axios.get<ApiResponse>(`http://localhost:8000/api/v1/attendances/${classId}/`);
         console.log('Ответ от API:', response.data);
         
         if (response.data?.data) {
@@ -106,8 +108,8 @@ const StudentList: React.FC = () => {
         {displayedItems.length > 0 ? (
           displayedItems.map((item) => (
             <tr key={item.id} className={styles.tableRow}>
-              <td className={styles.tableCell}>{item.email}</td>
-              <td className={styles.tableCell}>{item.full_name}</td>
+              <td className={styles.tableCell}>{'АТ-01'}</td>
+              <td className={styles.tableCell}>{item.student_full_name}</td>
             </tr>
           ))
         ) : (

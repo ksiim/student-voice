@@ -43,7 +43,7 @@ function App()  {
           />
         }/>
         
-        <Route path='/list' element={<StudentList/>} />
+        <Route path='/list' element={<StudentList classId = '06b0ca06-a22c-41d8-a5fb-a1234e661739'/>} />
         
         <Route path='/load' element={<LoadClass items={[
           { subject: 'Арх эвм', group: 'АТ-01', time: '12:30-13:30', date: new Date(2024,10,30), place: 'Ирит-РТФ'},

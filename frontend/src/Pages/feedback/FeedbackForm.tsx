@@ -82,7 +82,8 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({ teacherName, groupId, date,
   
   const submitReview = async (reviewData: ReviewData) => {
     try {
-      const response = await fetch('http://localhost:8000/api/v1/reviews/', {
+      // 1. Отправка отзыва
+      const reviewResponse = await fetch('http://localhost:8000/api/v1/reviews/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -90,15 +91,41 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({ teacherName, groupId, date,
         body: JSON.stringify(reviewData),
       });
       
-      if (!response.ok) {
-        const errorData = await response.json();
+      if (!reviewResponse.ok) {
+        const errorData = await reviewResponse.json();
         console.error('Server error details:', errorData);
-        throw new Error(`HTTP error! status: ${response.status}\nDetails: ${JSON.stringify(errorData)}`);
+        throw new Error(`HTTP error! status: ${reviewResponse.status}\nDetails: ${JSON.stringify(errorData)}`);
       }
       
-      return await response.json();
+      const reviewResult = await reviewResponse.json();
+      
+      // 2. Создание записи о посещении
+      const attendanceData = {
+        student_full_name: formData.name,
+        class_id: classId,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      };
+      
+      const attendanceResponse = await fetch('http://localhost:8000/api/v1/attendances/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(attendanceData),
+      });
+      
+      if (!attendanceResponse.ok) {
+        const errorData = await attendanceResponse.json();
+        console.error('Server error details:', errorData);
+        throw new Error(`HTTP error! status: ${attendanceResponse.status}\nDetails: ${JSON.stringify(errorData)}`);
+      }
+      
+      const attendanceResult = await attendanceResponse.json();
+      
+      return { reviewResult, attendanceResult };
     } catch (error) {
-      console.error('Error submitting review:', error);
+      console.error('Error submitting review and creating attendance:', error);
       throw error;
     }
   };
