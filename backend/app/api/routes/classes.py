@@ -37,7 +37,7 @@ async def read_classes(
     start_time: Optional[datetime] = Query(None),
     end_time: Optional[datetime] = Query(None),
     room_id: Optional[uuid.UUID] = Query(None),
-    teacher_id: Optional[uuid.UUID] = Query(None)
+    teacher_id: Optional[uuid.UUID] = Query(None),
 ) -> Any:
     """
     Retrieve classes.
