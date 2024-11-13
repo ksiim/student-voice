@@ -8,6 +8,7 @@ from fastapi import APIRouter, HTTPException, Query
 from app.api.deps import (
     SessionDep,
 )
+from sqlalchemy import delete
 from sqlmodel import select, func
 
 
@@ -60,3 +61,22 @@ async def read_classes(
     classes = (await session.execute(statement)).scalars().all()
 
     return ClassesPublic(data=classes, count=count)
+
+@router.delete(
+    "/{class_id}",
+    # dependencies=[Depends(get_current_active_superuser)],
+    response_model=ClassPublic
+)
+async def delete_class(*, session: SessionDep, class_id: uuid.UUID) -> Any:
+    """
+    Delete class.
+    """
+    class_ = await session.get(Class, class_id)
+    if not class_:
+        raise HTTPException(
+            status_code=404,
+            detail="The class with this id does not exist in the system.",
+        )
+    
+    await session.execute(delete(Class).where(Class.id == class_id))
+    await session.commit()

@@ -7,6 +7,7 @@ from fastapi import APIRouter, HTTPException
 from app.api.deps import (
     SessionDep,
 )
+from sqlalchemy import delete
 from sqlmodel import select, func
 
 
@@ -48,3 +49,22 @@ async def read_subjects(session: SessionDep, skip: int = 0, limit: int = 100) ->
     subjects = (await session.execute(statement)).scalars().all()
 
     return SubjectsPublic(data=subjects, count=count)
+
+@router.delete(
+    "/{subject_id}",
+    # dependencies=[Depends(get_current_active_superuser)],
+    response_model=SubjectPublic
+)
+async def delete_subject(*, session: SessionDep, subject_id: int) -> Any:
+    """
+    Delete subject.
+    """
+    subject = await session.get(Subject, subject_id)
+    if not subject:
+        raise HTTPException(
+            status_code=404,
+            detail="The subject with this id does not exist in the system.",
+        )
+
+    await session.execute(delete(Subject).where(Subject.id == subject_id))
+    await session.commit()

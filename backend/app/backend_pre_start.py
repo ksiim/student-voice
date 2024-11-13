@@ -24,9 +24,9 @@ wait_seconds = 1
 async def init(db_engine: Engine) -> None:
     try:
         async with AsyncSession(db_engine) as session:
-            # Try to create session to check if DB is awake
             await session.execute(text('DROP TABLE alembic_version'))
             await session.commit()
+            # Try to create session to check if DB is awake
             await session.execute(select(1))
     except Exception as e:
         logger.error(e)
