@@ -1,6 +1,7 @@
 import uuid
 from typing import Any
 
+from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
@@ -9,6 +10,14 @@ from app.models import Attendance, AttendanceCreate, Building, BuildingCreate, C
 
 
 async def create_user(*, session: AsyncSession, user_create: UserCreate) -> User:
+    statement = select(Role.id)
+    roles_ids = (await session.execute(statement)).scalars().all()
+    if user_create.role_id not in roles_ids:
+        raise HTTPException(
+            status_code=400,
+            detail="Role not found",
+        )
+    
     db_obj = User.model_validate(
         user_create,
         update={

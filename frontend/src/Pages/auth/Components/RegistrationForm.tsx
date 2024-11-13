@@ -89,7 +89,7 @@ const RegistrationForm: React.FC = () => {
         is_superuser: false,
         full_name: `${formData.firstName} ${formData.lastName} ${formData.middleName}`,
         password: formData.password,
-        role_id: '', // TODO: УКАЗАТЬ РЕАЛЬНЫЙ ID РОЛИ, ЖЕЛАТЕЛЬНО НЕ КОСТЫЛЬНО, А ПОДТЯГИВАТЬ ЕЕ "ЗАПРОСОМ" ПО АПИШКЕ. РОЛЬ С name = 'teacher'
+        role_id: '3fa85f64-5717-4562-b3fc-2c963f66afa6', // TODO: УКАЗАТЬ РЕАЛЬНЫЙ ID РОЛИ, ЖЕЛАТЕЛЬНО НЕ КОСТЫЛЬНО, А ПОДТЯГИВАТЬ ЕЕ "ЗАПРОСОМ" ПО АПИШКЕ. РОЛЬ С name = 'teacher'
       };
       
       try {
