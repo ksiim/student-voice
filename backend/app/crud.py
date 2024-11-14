@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
 from app.core.security import get_password_hash, verify_password
-from app.models import Attendance, AttendanceCreate, Building, BuildingCreate, Class, ClassCreate, Item, ItemCreate, Review, ReviewCreate, Role, RoleCreate, Room, Subject, SubjectCreate, User, UserCreate, UserUpdate
+from app.models import Attendance, AttendanceCreate, Building, BuildingCreate, Class, ClassCreate, Item, ItemCreate, QRCode, Review, ReviewCreate, Role, RoleCreate, Room, Subject, SubjectCreate, User, UserCreate, UserUpdate
 
 
 async def create_user(*, session: AsyncSession, user_create: UserCreate) -> User:
@@ -144,3 +144,8 @@ async def create_attendance(*, session: AsyncSession, attendance_in: AttendanceC
     await session.commit()
     await session.refresh(db_obj)
     return db_obj
+
+async def get_qr_code_by_class_id(class_id, session: AsyncSession) -> QRCode:
+    statement = select(QRCode).where(QRCode.class_id == class_id)
+    qr_code = (await session.execute(statement)).scalars().all()[-1]
+    return qr_code

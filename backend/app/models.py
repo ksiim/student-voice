@@ -382,3 +382,13 @@ class ReviewPublic(ReviewBase):
 class ReviewsPublic(SQLModel):
     data: list[ReviewPublic]
     count: int
+    
+class QRCode(SQLModel, table=True):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    class_id: uuid.UUID = Field(
+        foreign_key="class.id", nullable=False, ondelete="CASCADE"
+    )
+    qr_code: bytes
+    created_at: datetime = Field(default_factory=datetime.now)
+    updated_at: datetime = Field(default_factory=datetime.now)
+    expiration_date: datetime = Field(default_factory=datetime.now)

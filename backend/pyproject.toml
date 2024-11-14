@@ -26,6 +26,8 @@ dependencies = [
     "asyncpg>=0.29.0",
     "networkx>=3.4.2",
     "typing-extensions>=4.12.2",
+    "qrcode>=8.0",
+    "pillow>=11.0.0",
 ]
 
 [tool.uv]

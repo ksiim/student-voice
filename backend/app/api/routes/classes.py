@@ -71,7 +71,7 @@ async def delete_class(*, session: SessionDep, class_id: uuid.UUID) -> Any:
     """
     Delete class.
     """
-    class_ = await session.get(Class, class_id)
+    class_ = await session.execute(select(Class).where(Class.id == class_id))
     if not class_:
         raise HTTPException(
             status_code=404,
