@@ -1,0 +1,57 @@
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.popupContent {
+  display: flex;
+  flex-direction: column;
+  gap: 3.125vw;
+  width: 47.5vw;
+  background: white;
+  padding: 2.5vw;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.title {
+  font-size: 52px;
+  font-weight: 600;
+  line-height: 57.2px;
+  text-align: left;
+  color: #1E4391;
+}
+
+.desc {
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 28.8px;
+  text-align: left;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+  color: #222222;
+}
+
+.okButton {
+  width: 15.3vw;
+  height: 4.2vw;
+  background-color: #1e4391;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.okButton:hover {
+  background-color: #163673;
+}
+
+/*# sourceMappingURL=InfoPopUp.module.css.map */

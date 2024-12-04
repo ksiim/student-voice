@@ -1,6 +1,6 @@
-import React, { ChangeEvent, FormEvent, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useState, useEffect } from 'react';
 import styles from './RegistrationForm.module.scss';
-import {getToken, setAuthHeader} from '../../../../api/serviceToken';
+import { getToken, setAuthHeader } from '../../../../api/serviceToken';
 
 interface FormData {
   search: string;
@@ -13,7 +13,16 @@ interface FormData {
   allowFeedback: boolean;
 }
 
-const RegistrationForm: React.FC = () => {
+interface Role {
+  id: string;
+  name: string;
+}
+
+interface RegistrationFormProps{
+  role: string;
+}
+
+const RegistrationForm: React.FC<RegistrationFormProps> = ({role = 'teacher'}) => {
   const [formData, setFormData] = useState<FormData>({
     search: '',
     lastName: '',
@@ -26,6 +35,41 @@ const RegistrationForm: React.FC = () => {
   });
   
   const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({});
+  const [roleId, setRoleId] = useState<string | null>(null);
+  const [roleError, setRoleError] = useState<string | null>(null);
+  
+  // Получаем role_id при монтировании компонента
+  useEffect(() => {
+    const fetchRoleId = async () => {
+      try {
+        const token = getToken();
+        if (token) {
+          setAuthHeader(token);
+        }
+        
+        const response = await fetch(`http://localhost:8000/api/v1/roles/name/${role}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+        
+        if (response.ok) {
+          const roleData: Role = await response.json();
+          setRoleId(roleData.id);
+          setRoleError(null);
+        } else {
+          const errorData = await response.json();
+          setRoleError('Не удалось получить роль учителя');
+          console.error('Error fetching role:', errorData);
+        }
+      } catch (error) {
+        setRoleError('Ошибка при получении роли');
+        console.error('Role fetch failed:', error);
+      }
+    };
+    
+    fetchRoleId()
+  }, []);
   
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
     const { name, value, type } = e.target;
@@ -81,15 +125,20 @@ const RegistrationForm: React.FC = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
+    // Проверяем наличие roleId перед отправкой
+    if (!roleId) {
+      setRoleError('Роль еще не загружена. Подождите немного и попробуйте снова.');
+      return;
+    }
+    
     if (validateForm()) {
-      // Формируем данные для отправки
       const requestBody = {
         email: formData.email,
         is_active: true,
         is_superuser: false,
         full_name: `${formData.firstName} ${formData.lastName} ${formData.middleName}`,
         password: formData.password,
-        role_id: '3fa85f64-5717-4562-b3fc-2c963f66afa6', // TODO: УКАЗАТЬ РЕАЛЬНЫЙ ID РОЛИ, ЖЕЛАТЕЛЬНО НЕ КОСТЫЛЬНО, А ПОДТЯГИВАТЬ ЕЕ "ЗАПРОСОМ" ПО АПИШКЕ. РОЛЬ С name = 'teacher'
+        role_id: '454e0847-1fbd-4105-b15c-d7c326549de2',
       };
       
       try {
@@ -102,7 +151,7 @@ const RegistrationForm: React.FC = () => {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`, // Передаем токен в заголовках
+            'Authorization': `Bearer ${token}`,
           },
           body: JSON.stringify(requestBody),
         });
@@ -120,12 +169,18 @@ const RegistrationForm: React.FC = () => {
     }
   };
   
+  
   return (
     <div className={styles.formContainer}>
       <h2 className={styles.formTitle}>Создание/редактирование пользователя</h2>
       
+      {roleError && (
+        <div className={styles.errorText}>
+          {roleError}
+        </div>
+      )}
+      
       <form className={styles.form} onSubmit={handleSubmit} noValidate>
-        {/* Поля формы */}
         <div className={styles.inputGroup}>
           <label htmlFor="lastName">Фамилия</label>
           <input
@@ -150,7 +205,6 @@ const RegistrationForm: React.FC = () => {
           />
           {errors.firstName && <span className={styles.errorText}>{errors.firstName}</span>}
         </div>
-        {/* Остальные поля формы */}
         <div className={styles.inputGroup}>
           <label htmlFor="email">Email</label>
           <input
@@ -177,7 +231,11 @@ const RegistrationForm: React.FC = () => {
           {errors.password && <span className={styles.errorText}>{errors.password}</span>}
         </div>
         
-        <button type="submit" className={styles.submitButton}>
+        <button
+          type="submit"
+          className={styles.submitButton}
+          disabled={!roleId}
+        >
           Сохранить
         </button>
       </form>

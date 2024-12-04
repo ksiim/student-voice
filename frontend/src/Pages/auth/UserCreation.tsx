@@ -30,7 +30,7 @@ const UserCreation: React.FC = () => {
       
       <div className={styles.contentWrapper}>
         <div className={styles.content}>
-          <RegistrationForm />
+          <RegistrationForm role='teacher' />
         </div>
       </div>
     </div>
