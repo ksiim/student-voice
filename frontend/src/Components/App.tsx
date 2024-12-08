@@ -1,6 +1,5 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import HomePage from '../Pages/home/HomePage.tsx';
-import LoginPage from '../Pages/auth/LoginPage.tsx';
 import TeacherProfile from '../Pages/profile/TeacherProfile.tsx'
 import '../index.css';
 import UserCreation from '../Pages/auth/UserCreation.tsx';
@@ -8,11 +7,12 @@ import FeedbackForm from '../Pages/feedback/FeedbackForm.tsx';
 import AdminPanel from '../Pages/admin/AdminPanel.tsx';
 import CreateClass from '../Pages/creation/CreateClass.tsx';
 import UploadReports from '../Pages/Reports/UploadReports.tsx';
-import ChangePassword from '../Pages/auth/changePassword.tsx';
+import ChangePassword from '../NewPages/ChangePassword/ChangePassword.tsx';
 import CreateForm from '../Pages/creation/CreateForm.tsx';
 import StudentList
   from '../Pages/feedback/StudentList.tsx';
 import LoadClass from '../Pages/creation/LoadClass.tsx';
+import LoginPage from '../NewPages/LoginPage/LoginPage.tsx';
 
 function App()  {
   return (

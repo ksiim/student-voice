@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Logo } from '../../Components/Logo';
 import { InputField } from '../../Components/InputField';
 import axios from 'axios';
 import { Navigate } from 'react-router-dom';
-import { saveToken, setAuthHeader } from '../../../api/serviceToken';
+import { saveToken, setAuthHeader } from '../../../api/serviceToken.js';
+import Button from '../../NewComponents/Button/Button.tsx';
+import Header from '../../NewComponents/Header/Header_teacher/Header.tsx';
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -16,8 +17,6 @@ const LoginPage: React.FC = () => {
     console.log('Текущие значения:', { email, password });
     
     try {
-      console.log(12)
-      
       // Создаем данные для отправки в формате x-www-form-urlencoded
       const data = new URLSearchParams();
       data.append('grant_type', 'password');
@@ -26,8 +25,6 @@ const LoginPage: React.FC = () => {
       data.append('scope', '');
       data.append('client_id', 'string');
       data.append('client_secret', 'string');
-      
-      console.log(data);
       
       const response = await axios.post(
         'http://localhost:8000/api/v1/login/access-token',
@@ -38,8 +35,6 @@ const LoginPage: React.FC = () => {
           },
         }
       );
-      
-      console.log('Ответ сервера:', response.data);
       const token = response.data.access_token;
       
       if (token) {
@@ -61,13 +56,13 @@ const LoginPage: React.FC = () => {
   return (
     <div className="flex items-center justify-center h-screen w-screen bg-gray-50">
       <div className="w-full max-w-md">
-        <Logo />
+        <Header/>
         <form onSubmit={handleSubmit} className="w-full max-w-sm bg-[#B8CDDA] p-8 rounded-lg shadow-md mt-6">
           <h2 className="text-center text-xl mb-6">Вход в профиль</h2>
           <InputField label="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
           <InputField label="Пароль/временный пароль" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
           <div className="flex flex-col items-center gap-4 mt-6">
-            <button type='submit' className="px-4 py-2 bg-blue-500 text-white rounded-lg">Войти</button>
+            <Button type={'submit'} text={'Войтииии'} color={'#1E4391'}/>
           </div>
           <div className="text-left mt-2">
             <a href="#" className="text-sm text-blue-500 hover:underline">Забыли пароль?</a>
