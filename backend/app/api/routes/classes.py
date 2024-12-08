@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Any, Optional
 import uuid
 from app import crud
-from app.models import Class, ClassCreate, ClassPublic, ClassesPublic
+from app.models import Class, ClassCreate, ClassPublic, ClassUpdate, ClassesPublic
 from fastapi import APIRouter, HTTPException, Query
 
 from app.api.deps import (
@@ -80,3 +80,27 @@ async def delete_class(*, session: SessionDep, class_id: uuid.UUID) -> Any:
     
     await session.execute(delete(Class).where(Class.id == class_id))
     await session.commit()
+
+
+@router.put(
+    "/{class_id}",
+    # dependencies=[Depends(get_current_active_superuser)],
+    response_model=ClassPublic
+)
+async def update_class(
+    session: SessionDep,
+    class_id: uuid.UUID,
+    class_in: ClassUpdate,
+) -> Any:
+    """
+    Update class.
+    """
+    class_ = await session.execute(select(Class).where(Class.id == class_id))
+    if not class_:
+        raise HTTPException(
+            status_code=404,
+            detail="The class with this id does not exist in the system.",
+        )
+    
+    class_ = await crud.create_class(session=session, class_create=class_in)
+    return class_    

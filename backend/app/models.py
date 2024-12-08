@@ -196,7 +196,7 @@ class Class(ClassBase, table=True):
     teacher: Optional["User"] = Relationship(back_populates="classes")
     attendances: list["Attendance"] = Relationship(
         back_populates="class_", cascade_delete=True)
-    backform: Optional["Backform"] = Relationship(back_populates="class_")
+    backform: Optional["BackForm"] = Relationship(back_populates="class_")
     reviews: list["Review"] = Relationship(
         back_populates="class_", cascade_delete=True)
 
@@ -351,7 +351,7 @@ class QRCode(SQLModel, table=True):
     backform_id: uuid.UUID = Field(
         foreign_key="backform.id", nullable=False, ondelete="CASCADE"
     )
-    backform: Optional["Backform"] = Relationship(back_populates="qr_code")
+    backform: Optional["BackForm"] = Relationship(back_populates="qr_code")
     qr_code: bytes
     created_at: datetime = Field(default_factory=datetime.now)
     updated_at: datetime = Field(default_factory=datetime.now)
@@ -379,7 +379,7 @@ class BackFormUpdate(BackFormBase):
     updated_at: datetime = Field(default_factory=datetime.now)
     end_of_active_status: datetime = Field(default=datetime.now)
     
-class Backform(BackFormBase, table=True):
+class BackForm(BackFormBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     class_id: uuid.UUID = Field(
         foreign_key="class.id", nullable=False, ondelete="CASCADE"
@@ -387,12 +387,12 @@ class Backform(BackFormBase, table=True):
     class_: Optional["Class"] = Relationship(back_populates="backform")
     qr_code: Optional["QRCode"] = Relationship(back_populates="backform")
     
-class BackformPublic(BackFormBase):
+class BackFormPublic(BackFormBase):
     id: uuid.UUID
     class_id: uuid.UUID
     
-class BackformsPublic(SQLModel):
-    data: list[BackformPublic]
+class BackFormsPublic(SQLModel):
+    data: list[BackFormPublic]
     count: int
     
 class ExportSettingBase(SQLModel):

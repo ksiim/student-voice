@@ -7,7 +7,7 @@ from sqlalchemy import select
 
 from app.core.security import get_password_hash, verify_password
 from app.models import (
-    Attendance, AttendanceCreate,
+    Attendance, AttendanceCreate, BackForm, BackFormCreate,
     Class, ClassCreate,
     Item, ItemCreate,
     QRCode,
@@ -152,3 +152,15 @@ async def get_qr_code_by_class_id(class_id, session: AsyncSession) -> QRCode:
     statement = select(QRCode).where(QRCode.class_id == class_id)
     qr_code = (await session.execute(statement)).scalars().all()[-1]
     return qr_code
+
+async def create_backform(session: AsyncSession, backform_create: BackFormCreate) -> BackForm:
+    db_obj = BackForm.model_validate(backform_create)
+    session.add(db_obj)
+    await session.commit()
+    await session.refresh(db_obj)
+    return db_obj
+
+async def get_backform_by_id(session: AsyncSession, backform_id: uuid.UUID) -> BackForm | None:
+    statement = select(BackForm).where(BackForm.id == backform_id)
+    backform = (await session.execute(statement)).scalars().first()
+    return backform
