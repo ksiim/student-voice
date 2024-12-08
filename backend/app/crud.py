@@ -177,3 +177,8 @@ async def get_backform_by_id(session: AsyncSession, backform_id: uuid.UUID) -> B
     statement = select(BackForm).where(BackForm.id == backform_id)
     backform = (await session.execute(statement)).scalars().first()
     return backform
+
+async def get_backform_by_class_id(session: AsyncSession, class_id: uuid.UUID) -> BackForm | None:
+    statement = select(BackForm).where(BackForm.class_id == class_id)
+    backform = (await session.execute(statement)).scalars().first()
+    return backform
