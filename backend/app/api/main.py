@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
 from app.api.routes import (
-    buildings, items, login, qr,
+    backforms, items, login, qr,
     reviews, rooms, users, utils,
     roles, classes, subjects, attendances
 )
@@ -20,8 +20,8 @@ api_router.include_router(
 api_router.include_router(
     rooms.router, prefix="/rooms", tags=["rooms"])
 api_router.include_router(
-    buildings.router, prefix="/buildings", tags=["buildings"])
-api_router.include_router(
     attendances.router, prefix='/attendances', tags=['attendances'])
 api_router.include_router(
     qr.router, prefix="/qr", tags=["qr"])
+api_router.include_router(
+    backforms.router, prefix="/backforms", tags=["backforms"])
