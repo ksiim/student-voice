@@ -65,6 +65,7 @@ class User(UserBase, table=True):
     items: list["Item"] = Relationship(
         back_populates="owner", cascade_delete=True)
     classes: list["Class"] = Relationship(back_populates="teacher")
+    ical_schedulers: list["iCalScheduler"] = Relationship(back_populates="teacher")
     export_setting: Optional["ExportSetting"] = Relationship(back_populates="teacher")
 
 
@@ -229,6 +230,7 @@ class Subject(SubjectBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     classes: list["Class"] = Relationship(
         back_populates="subject", cascade_delete=True)
+    ical_schedulers: list["iCalScheduler"] = Relationship(back_populates="subject")
 
 
 class SubjectPublic(SubjectBase):
@@ -422,4 +424,51 @@ class ExportSettingPublic(ExportSettingBase):
     
 class ExportSettingsPublic(SQLModel):
     data: list[ExportSettingPublic]
+    count: int
+    
+class iCalSchedulerBase(SQLModel):
+    day_of_week: int
+    start_time: datetime
+    end_time: datetime
+    location: str = Field(max_length=255)
+    study_groups: str = Field(max_length=255)
+    is_excluded: bool = Field(default=False)
+
+class iCalSchedulerCreate(iCalSchedulerBase):
+    created_at: datetime = Field(default_factory=datetime.now)
+    updated_at: datetime = Field(default_factory=datetime.now)
+    teacher_id: uuid.UUID = Field(
+        foreign_key="user.id", nullable=False, ondelete="CASCADE"
+    )
+    subject_id: uuid.UUID = Field(
+        foreign_key="subject.id", nullable=False, ondelete="CASCADE"
+    )
+    
+class iCalSchedulerUpdate(iCalSchedulerBase):
+    day_of_week: int | None = Field(default=None)
+    start_time: datetime | None = Field(default=None)
+    end_time: datetime | None = Field(default=None)
+    location: str | None = Field(default=None, max_length=255)
+    study_groups: str | None = Field(default=None, max_length=255)
+    is_excluded: bool | None = Field(default=None)
+    updated_at: datetime = Field(default_factory=datetime.now)
+    
+class iCalScheduler(iCalSchedulerBase, table=True):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    teacher_id: uuid.UUID = Field(
+        foreign_key="user.id", nullable=False, ondelete="CASCADE"
+    )
+    subject_id: uuid.UUID = Field(
+        foreign_key="subject.id", nullable=False, ondelete="CASCADE"
+    )
+    teacher: Optional["User"] = Relationship(back_populates="ical_schedulers")
+    subject: Optional["Subject"] = Relationship(back_populates="ical_schedulers")
+    
+class iCalSchedulerPublic(iCalSchedulerBase):
+    id: uuid.UUID
+    teacher_id: uuid.UUID
+    subject_id: uuid.UUID
+    
+class iCalSchedulersPublic(SQLModel):
+    data: list[iCalSchedulerPublic]
     count: int
