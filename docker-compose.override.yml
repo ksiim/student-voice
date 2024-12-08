@@ -93,14 +93,18 @@ services:
       - "1025:1025"
 
   frontend:
-    restart: "no"
-    ports:
-      - "5173:80"
     build:
       context: ./frontend
-      args:
-        - VITE_API_URL=http://localhost:8000
-        - NODE_ENV=development
+      target: dev-stage  # Используем dev-stage для разработки
+    volumes:
+      - ./frontend:/app  # Прямое примонтирование исходников
+      - /app/node_modules # Исключение node_modules
+    ports:
+      - "5173:5173" # Порт Vite
+    environment:
+      - VITE_API_URL=http://localhost:8000
+    command: [ "npm", "run", "dev", "--", "--host" ] # Запуск Vite
+
 
 networks:
   traefik-public:
