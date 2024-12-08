@@ -4,7 +4,7 @@ import styles from './ChangePassword.module.scss';
 import InputField from '../../NewComponents/InputField/InputField.tsx';
 import Button from '../../NewComponents/Button/Button.tsx';
 import axios from 'axios';
-import { getToken, setAuthHeader } from '../../../api/serviceToken.js';
+import { getToken, setAuthHeader } from '../../../public/serviceToken';
 import InfoPopUp from '../../NewComponents/InfoPopUp/InfoPopUp.tsx';
 
 const ChangePassword: React.FC = () => {

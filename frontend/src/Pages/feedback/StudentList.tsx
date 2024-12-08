@@ -4,7 +4,7 @@ import styles from './StudentList.module.scss';
 import { Logo } from '../../Components/Logo';
 import Button from '../profile/Components/Button';
 import { useNavigate } from 'react-router-dom';
-import { getToken, setAuthHeader } from '../../../api/serviceToken';
+import { getToken, setAuthHeader } from '../../../public/serviceToken';
 
 interface StudentListProps{
   classId: string;

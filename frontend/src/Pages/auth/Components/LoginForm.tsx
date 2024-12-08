@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { InputField } from '../../../Components/InputField';
 import axios from 'axios';
 import { Navigate } from 'react-router-dom';
-import { saveToken, setAuthHeader } from '../../../../api/serviceToken.js';
+import { saveToken, setAuthHeader } from '../../../../public/serviceToken';
 
 export const LoginForm: React.FC = () => {
   const [email, setEmail] = useState('');

@@ -1,6 +1,6 @@
 import React, { ChangeEvent, FormEvent, useState, useEffect } from 'react';
 import styles from './RegistrationForm.module.scss';
-import { getToken, setAuthHeader } from '../../../../api/serviceToken';
+import { getToken, setAuthHeader } from '../../../../public/serviceToken';
 
 interface FormData {
   search: string;

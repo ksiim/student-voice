@@ -4,7 +4,7 @@ import {Logo} from '../../Components/Logo.tsx';
 import Button from '../profile/Components/Button.tsx';
 import {useNavigate} from 'react-router-dom';
 import axios from 'axios';
-import { getToken, setAuthHeader } from '../../../api/serviceToken.js';
+import { getToken, setAuthHeader } from '../../../public/serviceToken';
 
 
 const ChangePassword = () => {

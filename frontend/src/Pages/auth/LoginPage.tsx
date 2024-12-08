@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { InputField } from '../../Components/InputField';
 import axios from 'axios';
 import { Navigate } from 'react-router-dom';
-import { saveToken, setAuthHeader } from '../../../api/serviceToken.js';
+import { saveToken, setAuthHeader } from '../../../public/serviceToken';
 import Button from '../../NewComponents/Button/Button.tsx';
 import Header from '../../NewComponents/Header/Header_teacher/Header.tsx';
 

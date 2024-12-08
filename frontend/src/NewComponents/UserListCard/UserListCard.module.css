@@ -1,0 +1,31 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+.card {
+  width: 448px;
+  height: 24px;
+  display: flex;
+  padding: 0 32px;
+  justify-content: space-between;
+}
+
+.fio {
+  font-family: Montserrat, sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 21.6px;
+  text-align: left;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+}
+
+.editIcon {
+  width: 24px;
+  height: 24px;
+}
+
+/*# sourceMappingURL=UserListCard.module.css.map */

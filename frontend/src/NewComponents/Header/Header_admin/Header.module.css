@@ -1,3 +1,28 @@
+.wrapper {
+  width: 100%;
+  height: 160px;
+  padding: 51.5px 195px;
+  display: flex;
+  justify-content: space-between;
+}
 
+.navigation {
+  display: flex;
+  gap: 119.5px;
+}
+.navigation__link {
+  align-content: center;
+  font-size: 24px;
+  line-height: 28.8px;
+  font-family: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+.navigation__link:hover {
+  color: #0F2B5E;
+}
+.navigation__link:focus {
+  border: 1px solid #3b82f6;
+}
 
 /*# sourceMappingURL=Header.module.css.map */
