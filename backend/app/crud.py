@@ -8,7 +8,7 @@ from sqlalchemy import select
 from app.core.security import get_password_hash, verify_password
 from app.models import (
     Attendance, AttendanceCreate, BackForm, BackFormCreate,
-    Class, ClassCreate,
+    Class, ClassCreate, ClassUpdate,
     Item, ItemCreate,
     QRCode,
     Review, ReviewCreate,
@@ -110,17 +110,23 @@ async def create_class(*, session: AsyncSession, class_create: ClassCreate) -> C
     db_obj = Class.model_validate(
         class_create,
         update={
-            'created_at': class_create.created_at,
             'updated_at': class_create.updated_at,
             'start_time': class_create.start_time.replace(tzinfo=None),
             'end_time': class_create.end_time.replace(tzinfo=None),
-            'end_of_active_status': class_create.end_of_active_status.replace(tzinfo=None),
         }
     )
     session.add(db_obj)
     await session.commit()
     await session.refresh(db_obj)
     return db_obj
+
+async def update_class(*, session: AsyncSession, class_: Class, class_in: ClassUpdate) -> Any:
+    class_data = class_in.model_dump(exclude_unset=True)
+    class_.sqlmodel_update(class_data)
+    session.add(class_)
+    await session.commit()
+    await session.refresh(class_)
+    return class_
 
 async def create_review(*, session: AsyncSession, review_create: ReviewCreate) -> Review:
     db_obj = Review.model_validate(review_create)
@@ -154,7 +160,14 @@ async def get_qr_code_by_class_id(class_id, session: AsyncSession) -> QRCode:
     return qr_code
 
 async def create_backform(session: AsyncSession, backform_create: BackFormCreate) -> BackForm:
-    db_obj = BackForm.model_validate(backform_create)
+    db_obj = BackForm.model_validate(
+        backform_create,
+        update={
+            'created_at': backform_create.created_at,
+            'updated_at': backform_create.updated_at,
+            'end_of_active_status': backform_create.end_of_active_status.replace(tzinfo=None),
+        }
+    )
     session.add(db_obj)
     await session.commit()
     await session.refresh(db_obj)
