@@ -6,7 +6,7 @@ import uuid
 from click import Option
 from networkx import null_graph
 
-from pydantic import EmailStr
+from pydantic import BaseModel, EmailStr
 from sqlmodel import Field, Relationship, SQLModel
 
 
@@ -71,6 +71,7 @@ class User(UserBase, table=True):
 
 class UserPublic(UserBase):
     id: uuid.UUID
+    role_id: uuid.UUID
 
 
 class UsersPublic(SQLModel):
@@ -472,3 +473,8 @@ class iCalSchedulerPublic(iCalSchedulerBase):
 class iCalSchedulersPublic(SQLModel):
     data: list[iCalSchedulerPublic]
     count: int
+
+class EmailRequest(BaseModel):
+    recipient: str
+    subject: str
+    message: str

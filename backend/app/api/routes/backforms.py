@@ -38,10 +38,11 @@ async def read_backforms(
     """
     Retrieve backforms.
     """
-    statement = select(BackForm)
-    statement = statement.offset(skip).limit(limit)
+    count_statement = select(func.count()).select_from(BackForm)
+    count = (await session.execute(count_statement)).scalar()
+    statement = select(BackForm).offset(skip).limit(limit)
     backforms = (await session.execute(statement)).scalars().all()
-    return backforms
+    return BackFormsPublic(data=backforms, count=count)
 
 @router.get(
     "/{backform_id}",
@@ -56,6 +57,22 @@ async def read_backform(
     Retrieve backform by id.
     """
     backform = await crud.get_backform_by_id(session=session, backform_id=backform_id)
+    if backform is None:
+        raise HTTPException(status_code=404, detail="BackForm not found")
+    return backform
+
+@router.get(
+    '/by_class_id/{class_id}',
+    response_model=BackFormPublic
+)
+async def read_backform_by_class_id(
+    session: SessionDep,
+    class_id: uuid.UUID
+) -> Any:
+    """
+    Retrieve backform by class_id.
+    """
+    backform = await crud.get_backform_by_class_id(session=session, class_id=class_id)
     if backform is None:
         raise HTTPException(status_code=404, detail="BackForm not found")
     return backform

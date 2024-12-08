@@ -95,12 +95,12 @@ async def update_class(
     """
     Update class.
     """
-    class_ = await session.execute(select(Class).where(Class.id == class_id))
+    class_ = await session.get(Class, class_id)
     if not class_:
         raise HTTPException(
             status_code=404,
             detail="The class with this id does not exist in the system.",
         )
     
-    class_ = await crud.create_class(session=session, class_create=class_in)
+    class_ = await crud.update_class(session=session, class_=class_, class_in=class_in)
     return class_    
