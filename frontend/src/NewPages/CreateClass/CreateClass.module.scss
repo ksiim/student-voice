@@ -1,0 +1,158 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap:70px; //TODO тут было 100пикс
+  height: 1080px;
+  width: 100%;
+  overflow: hidden;
+  z-index: -100;
+  font-family: Montserrat, sans-serif;
+  background-color: #F6F6F6;
+}
+
+.content {
+  width: 1530px;
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+  justify-content: start;
+
+  &__title{
+    color: #1E4391;
+    font-size: 52px;
+    font-weight: 600;
+    line-height: 57.2px;
+    text-align: left;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;
+  }
+
+  &__form {
+    width: 100%;
+    height: 330px;
+    display: flex;
+    gap:170px;
+  }
+}
+
+.inputs {
+  width: 448px;
+  height: 322px;
+
+  &__item {
+    width: 100%;
+    height: 102px;
+  }
+}
+
+.dateInfo{
+
+  &__title {
+    font-family: Montserrat,sans-serif;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 28.8px;
+    text-align: left;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;
+  }
+}
+
+.dayPicker {
+  display: flex;
+  flex-direction: column;
+  gap:32px;
+  align-items: start;
+}
+
+.addButton{
+  font-family: Montserrat, sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 28.8px;
+  text-align: center;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+  color: #1E4391;
+}
+
+.buttonGroup {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+
+  p {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 28.8px;
+    text-align: left;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;
+  }
+}
+
+.buttonGroup div {
+  display: flex;
+  align-items: center;
+}
+
+.buttonGroup__radioButton {
+  display: flex;
+  gap: 32px;
+  justify-content: space-between;
+}
+
+.buttonGroup__radioButton label {
+  //styleName: Заголовок3;
+  font-family: Montserrat, sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 28.8px;
+  text-align: left;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+}
+
+.buttonGroup input[type="radio"] {
+  appearance: none;
+  width: 30px;
+  height: 30px;
+  border: 2px solid #000;
+  border-radius: 50%;
+  background-color: #fff;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.buttonGroup input[type="radio"]:checked {
+  background-color: #fff;
+}
+
+.buttonGroup input[type="radio"]:checked::before {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background-color: #1E4391;
+  border-radius: 50%;
+}
+
+.bottomButtons {
+  display: flex;
+  justify-content: space-between;
+
+  &__rightSection {
+    display: flex;
+    gap:15px;
+  }
+}

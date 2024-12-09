@@ -51,7 +51,7 @@
   }
 
   &:-webkit-autofill {
-    box-shadow: 0 0 0px 1000px #fff inset; // Убираем желтую подсветку
+    box-shadow: 0 0 0px 1000px #F6F6F6 inset; // Убираем желтую подсветку
     -webkit-text-fill-color: #000; // Цвет текста
   }
 }

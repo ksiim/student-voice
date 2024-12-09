@@ -5,6 +5,7 @@ import InputField from '../../NewComponents/InputField/InputField.tsx';
 import Button from '../../NewComponents/Button/Button.tsx';
 import axios from 'axios';
 import {setAuthHeader, getToken } from '../../../public/serviceToken.js';
+import {useNavigate} from 'react-router-dom';
 
 const CreateUser: React.FC = () => {
   const [surname, setSurname] = useState('');
@@ -16,6 +17,7 @@ const CreateUser: React.FC = () => {
   const [passwordError, setPasswordError] = useState<string | null>(null);
   const [role, setRole] = useState('1f472826-cf79-4ea9-a194-c5880ec8817a'); // По умолчанию "Преподаватель"
   const [isChecked, setIsChecked] = useState(true);
+  const navigate = useNavigate();
   
   const handleCheckboxChange = () => {
     setIsChecked((prevState) => !prevState);
@@ -180,7 +182,7 @@ const CreateUser: React.FC = () => {
             </div>
           </div>
           <div className={styles.controls}>
-            <Button type="button" text="Назад" color="#CCCCCC" />
+            <Button type="button" text="Назад" color="#CCCCCC" onClick={() => navigate(-1)}/>
             <Button type="submit" text="Создать" color="#1E4391" />
           </div>
         </form>

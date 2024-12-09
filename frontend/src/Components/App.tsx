@@ -5,7 +5,7 @@ import '../index.css';
 import CreateUser from '../NewPages/CreateUser/CreateUser.tsx';
 import FeedbackForm from '../Pages/feedback/FeedbackForm.tsx';
 import AdminPanel from '../Pages/admin/AdminPanel.tsx';
-import CreateClass from '../Pages/creation/CreateClass.tsx';
+import CreateClass from '../NewPages/CreateClass/CreateClass.tsx';
 import UploadReports from '../Pages/Reports/UploadReports.tsx';
 import ChangePassword from '../NewPages/ChangePassword/ChangePassword.tsx';
 import CreateForm from '../Pages/creation/CreateForm.tsx';
