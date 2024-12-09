@@ -4,7 +4,6 @@ from app.api.routes import (
     backforms, items, login, qr,
     reviews, rooms, users, utils,
     roles, classes, subjects, attendances,
-    smtp
 )
 
 api_router = APIRouter()
@@ -26,5 +25,3 @@ api_router.include_router(
     qr.router, prefix="/qr", tags=["qr"])
 api_router.include_router(
     backforms.router, prefix="/backforms", tags=["backforms"])
-api_router.include_router(
-    smtp.router, prefix="/smtp", tags=["smtp"])
