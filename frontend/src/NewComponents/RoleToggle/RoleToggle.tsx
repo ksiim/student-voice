@@ -12,12 +12,14 @@ const RoleToggle: React.FC<RoleToggleProps> = ({ selectedRole, onRoleChange }) =
       <button
         className={`${styles.roleButton} ${selectedRole === 'Teacher' ? styles.activeButton : ''}`}
         onClick={() => onRoleChange('Teacher')}
+        disabled={selectedRole === 'Teacher'} // Отключение кнопки для активной роли
       >
         Преподаватели
       </button>
       <button
         className={`${styles.roleButton} ${selectedRole === 'Admin' ? styles.activeButton : ''}`}
         onClick={() => onRoleChange('Admin')}
+        disabled={selectedRole === 'Admin'} // Отключение кнопки для активной роли
       >
         Администраторы
       </button>

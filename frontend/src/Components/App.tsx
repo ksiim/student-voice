@@ -14,6 +14,7 @@ import StudentList
 import LoadClass from '../Pages/creation/LoadClass.tsx';
 import LoginPage from '../NewPages/LoginPage/LoginPage.tsx';
 import Users from '../NewPages/Users/Users.tsx';
+import UpdateUser from '../NewPages/UpdateUser/UpdateUser.tsx';
 
 function App()  {
   return (
@@ -23,6 +24,7 @@ function App()  {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/profile" element={<TeacherProfile />} />
         <Route path="/createUser" element={<CreateUser />} />
+        <Route path="/updateuser/:id" element={<UpdateUser />} />
         <Route path="/feedback" element={<FeedbackForm
           teacherName="Иванова И.И."
           groupId="АТ-02"

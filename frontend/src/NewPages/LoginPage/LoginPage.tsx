@@ -4,7 +4,7 @@ import Logo from '../../NewComponents/Logo/Logo.tsx';
 import InputField from '../../NewComponents/InputField/InputField.tsx';
 import Button from '../../NewComponents/Button/Button.tsx';
 import axios from 'axios';
-import {saveToken, setAuthHeader} from '../../../public/serviceToken';
+import {saveToken, setAuthHeader} from '../../../public/serviceToken.js';
 import {Navigate} from 'react-router-dom';
 
 const LoginPage :React.FC = () => {

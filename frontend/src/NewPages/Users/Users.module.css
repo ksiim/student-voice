@@ -75,6 +75,8 @@
   height: 280px;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(10, 1fr);
+  grid-auto-flow: column;
   column-gap: 16px;
 }
 .userList__button {

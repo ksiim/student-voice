@@ -1,16 +1,29 @@
 import React from 'react';
 import styles from './UserListCard.module.scss';
-import editIcon from '../../../public/assets/images/edit.svg';
+import editIcon from '/assets/images/edit.svg';
 
 interface UserListCardProps {
-
+  id: string;
+  name: string;
+  surname: string;
+  patronymic: string;
+  onEdit: () => void; // Обработчик для кнопки редактирования
 }
 
-const UserListCard:React.FC<UserListCardProps> = () => {
+const UserListCard: React.FC<UserListCardProps> = ({name, surname, patronymic, onEdit }) => {
   return (
     <div className={styles.card}>
-      <p className={styles.fio}>Кудрявцев Матвей Евгеньевич</p>
-      <img src={editIcon} alt={''} onClick={() => {}}/>
+      <div className={styles.info}>
+        <p className={styles.fio}>
+          {surname} {name} {patronymic}
+        </p>
+      </div>
+      <img
+        className={styles.editIcon}
+        src={editIcon}
+        alt="Редактировать"
+        onClick={onEdit}
+      />
     </div>
   );
 };
