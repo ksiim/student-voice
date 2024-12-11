@@ -1,0 +1,33 @@
+.container {
+  width: 602px;
+  height: 40px;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.roleButton {
+  color: #CCCCCC;
+  display: flex;
+  width: 293px;
+  padding: 8px 16px;
+  background-color: transparent;
+  border: 2px solid #CCCCCC;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 28.8px;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+}
+
+.activeButton {
+  border-color: #1E4391;
+  color: #1E4391;
+}
+
+/*# sourceMappingURL=RoleToggle.module.css.map */

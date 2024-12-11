@@ -1,8 +1,9 @@
-import React, { ChangeEvent, FormEvent, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useState, useEffect } from 'react';
 import styles from './RegistrationForm.module.scss';
+import { getToken, setAuthHeader } from '../../../../public/serviceToken';
 
 interface FormData {
-  search: string; // Добавлено поле поиска
+  search: string;
   lastName: string;
   firstName: string;
   middleName: string;
@@ -12,36 +13,65 @@ interface FormData {
   allowFeedback: boolean;
 }
 
-interface Subject {
-  id: number;
+interface Role {
+  id: string;
   name: string;
 }
 
-interface RegistrationFormProps {
-  onSubmit?: (data: FormData) => void;
-  initialSubjects?: Subject[];
+interface RegistrationFormProps{
+  role: string;
 }
 
-const RegistrationForm: React.FC<RegistrationFormProps> = ({
-                                                             onSubmit,
-                                                             initialSubjects = []
-                                                           }) => {
+const RegistrationForm: React.FC<RegistrationFormProps> = ({role = 'teacher'}) => {
   const [formData, setFormData] = useState<FormData>({
-    search: '', // Инициализация поля поиска
+    search: '',
     lastName: '',
     firstName: '',
     middleName: '',
     email: '',
     password: '',
     subjects: [],
-    allowFeedback: false
+    allowFeedback: false,
   });
   
   const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({});
+  const [roleId, setRoleId] = useState<string | null>(null);
+  const [roleError, setRoleError] = useState<string | null>(null);
   
-  const handleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ): void => {
+  // Получаем role_id при монтировании компонента
+  useEffect(() => {
+    const fetchRoleId = async () => {
+      try {
+        const token = getToken();
+        if (token) {
+          setAuthHeader(token);
+        }
+        
+        const response = await fetch(`http://localhost:8000/api/v1/roles/name/${role}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+        
+        if (response.ok) {
+          const roleData: Role = await response.json();
+          setRoleId(roleData.id);
+          setRoleError(null);
+        } else {
+          const errorData = await response.json();
+          setRoleError('Не удалось получить роль учителя');
+          console.error('Error fetching role:', errorData);
+        }
+      } catch (error) {
+        setRoleError('Ошибка при получении роли');
+        console.error('Role fetch failed:', error);
+      }
+    };
+    
+    fetchRoleId()
+  }, []);
+  
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
     const { name, value, type } = e.target;
     
     if (type === 'checkbox') {
@@ -92,47 +122,63 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
     return Object.keys(newErrors).length === 0;
   };
   
-  const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
+    // Проверяем наличие roleId перед отправкой
+    if (!roleId) {
+      setRoleError('Роль еще не загружена. Подождите немного и попробуйте снова.');
+      return;
+    }
+    
     if (validateForm()) {
-      onSubmit?.(formData);
+      const requestBody = {
+        email: formData.email,
+        is_active: true,
+        is_superuser: false,
+        full_name: `${formData.firstName} ${formData.lastName} ${formData.middleName}`,
+        password: formData.password,
+        role_id: '454e0847-1fbd-4105-b15c-d7c326549de2',
+      };
+      
+      try {
+        const token = getToken();
+        if (token) {
+          setAuthHeader(token);
+        }
+        
+        const response = await fetch('http://localhost:8000/api/v1/users/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+          body: JSON.stringify(requestBody),
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          console.log('User created:', data);
+        } else {
+          const errorData = await response.json();
+          console.error('Error:', errorData);
+        }
+      } catch (error) {
+        console.error('Request failed:', error);
+      }
     }
   };
   
-  const handlePasswordChange = (): void => {
-    console.log('Password change requested');
-  };
   
   return (
     <div className={styles.formContainer}>
       <h2 className={styles.formTitle}>Создание/редактирование пользователя</h2>
       
-      {/* Добавленное поле поиска */}
-      <div className={styles.searchContainer}>
-        <input
-          type="text"
-          name="search"
-          value={formData.search}
-          onChange={handleChange}
-          placeholder="Поиск..."
-          className={styles.searchInput}
-        />
-        <button type="button" className={styles.searchButton}>
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 16 16"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M15.7 14.3L11.9 10.5C12.9 9.2 13.4 7.6 13.4 5.9C13.4 2.6 10.7 0 7.4 0C4.1 0 1.4 2.6 1.4 5.9C1.4 9.2 4.1 11.8 7.4 11.8C9.1 11.8 10.7 11.3 12 10.3L15.8 14.1C15.9 14.2 16 14.3 16 14.5C16 14.7 15.9 14.8 15.7 14.9C15.5 15 15.3 15 15.1 14.8L15.7 14.3ZM2.9 5.9C2.9 3.4 4.9 1.4 7.4 1.4C9.9 1.4 11.9 3.4 11.9 5.9C11.9 8.4 9.9 10.4 7.4 10.4C4.9 10.4 2.9 8.4 2.9 5.9Z"
-              fill="#666666"
-            />
-          </svg>
-        </button>
-      </div>
+      {roleError && (
+        <div className={styles.errorText}>
+          {roleError}
+        </div>
+      )}
       
       <form className={styles.form} onSubmit={handleSubmit} noValidate>
         <div className={styles.inputGroup}>
@@ -147,10 +193,6 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
           />
           {errors.lastName && <span className={styles.errorText}>{errors.lastName}</span>}
         </div>
-        
-        {/* Остальные поля формы остаются без изменений */}
-        {/* ... */}
-        
         <div className={styles.inputGroup}>
           <label htmlFor="firstName">Имя</label>
           <input
@@ -163,18 +205,6 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
           />
           {errors.firstName && <span className={styles.errorText}>{errors.firstName}</span>}
         </div>
-        
-        <div className={styles.inputGroup}>
-          <label htmlFor="middleName">Отчество</label>
-          <input
-            id="middleName"
-            type="text"
-            name="middleName"
-            value={formData.middleName}
-            onChange={handleChange}
-          />
-        </div>
-        
         <div className={styles.inputGroup}>
           <label htmlFor="email">Email</label>
           <input
@@ -199,45 +229,13 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
             className={errors.password ? styles.errorInput : ''}
           />
           {errors.password && <span className={styles.errorText}>{errors.password}</span>}
-          <button
-            type="button"
-            className={styles.changePassword}
-            onClick={handlePasswordChange}
-          >
-            Изменить пароль
-          </button>
         </div>
         
-        <div className={styles.inputGroup}>
-          <label htmlFor="subjects">Предметы</label>
-          <select
-            id="subjects"
-            name="subjects"
-            multiple
-            value={formData.subjects}
-            onChange={handleChange}
-            className={styles.select}
-          >
-            {initialSubjects.map(subject => (
-              <option key={subject.id} value={subject.id}>
-                {subject.name}
-              </option>
-            ))}
-          </select>
-        </div>
-        
-        <div className={styles.checkboxGroup}>
-          <input
-            type="checkbox"
-            name="allowFeedback"
-            checked={formData.allowFeedback}
-            onChange={handleChange}
-            id="allowFeedback"
-          />
-          <label htmlFor="allowFeedback">Дать доступ к отзывам</label>
-        </div>
-        
-        <button type="submit" className={styles.submitButton}>
+        <button
+          type="submit"
+          className={styles.submitButton}
+          disabled={!roleId}
+        >
           Сохранить
         </button>
       </form>

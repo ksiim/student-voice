@@ -1,0 +1,74 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  height: 100%;
+}
+.wrapper__content {
+  height: 78px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label {
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 28.8px;
+  text-align: left;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+}
+
+.input {
+  width: 100%;
+  height: 41px;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 28.8px;
+  text-align: left;
+  padding: 0;
+  padding-right: 36px;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+  border: none;
+  border-bottom: 2px solid #CCCCCC;
+  outline: none;
+  background: none;
+  margin: 0;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+.input:focus {
+  border-bottom: 2px solid #1E4391;
+}
+.input::placeholder {
+  color: #CCCCCC;
+}
+.input:-webkit-autofill {
+  box-shadow: 0 0 0px 1000px #F6F6F6 inset;
+  -webkit-text-fill-color: #000;
+}
+
+.icon {
+  width: 28px;
+  height: 28px;
+}
+
+.inputError {
+  border-bottom: 2px solid red;
+}
+
+.errorText {
+  height: 20px;
+  color: red;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 19.6px;
+  text-align: left;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+}
+
+/*# sourceMappingURL=InputField.module.css.map */

@@ -1,0 +1,138 @@
+// StudentList.module.scss
+.container {
+  padding: 20px;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.header {
+  margin-bottom: 2rem; // mb-8
+  padding: 1rem; // p-4
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.headerButtons {
+  display: flex;
+  gap: 0.5rem; // space-x-2
+  margin-left: auto; // ml-auto
+}
+
+.title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 48px;
+}
+
+.loadingControls {
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-bottom: 40px;
+  border-radius: 16px;
+  padding: 24px 16px;
+
+  &__period {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+  }
+  &__process {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+  }
+}
+
+
+.table {
+  background-color: #ffffff;
+  width: 42%;
+  max-width: 800px;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 16px;
+  margin-bottom: 24px;
+}
+
+.tableHeader {
+  background-color: #e0e0e0;
+  padding: 10px;
+  text-align: center;
+  vertical-align: center;
+
+  &:first-child {
+    border-top-left-radius: 16px;
+  }
+
+  &:last-child {
+    border-top-right-radius: 16px;
+  }
+}
+
+.tableRow {
+  border-bottom: 1px solid #ccc;
+  text-align: center;
+  vertical-align: center;
+}
+
+.tableCell {
+  padding: 10px;
+  text-align: center;
+  vertical-align: center;
+  border-right: 3px solid #ccc;
+
+  &:last-child {
+    border-right: none;
+  }
+}
+
+.confirm {
+  display: flex;
+  justify-content: end;
+}
+
+.criteria {
+  margin-top: 16px;
+  font-size: 14px;
+  color: #666;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 800px;
+  text-align: center;
+}
+
+.showMoreContainer {
+  margin-bottom: 16px;
+}
+
+.metrics {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 800px;
+}
+
+.metricsItem {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: #666;
+}
+
+.criteria {
+  width:30%;
+  padding: 24px 16px;
+  background-color: #E0E9EF;
+  text-align: left;
+}

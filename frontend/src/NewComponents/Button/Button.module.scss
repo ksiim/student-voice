@@ -1,0 +1,19 @@
+.button {
+  width: 294px;
+  height: 80px;
+  padding: 29px 0;
+  gap: 10px;
+  border-radius: 16px;
+  font-family: inherit;
+  text-align: center;
+
+  &__text {
+    color: #ffffff;
+    font-size: 18px;
+    line-height: 21.6px;
+  }
+
+  &:hover{
+    background-color: #0F2B5E;
+  }
+}

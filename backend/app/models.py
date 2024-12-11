@@ -6,7 +6,7 @@ import uuid
 from click import Option
 from networkx import null_graph
 
-from pydantic import EmailStr
+from pydantic import BaseModel, EmailStr
 from sqlmodel import Field, Relationship, SQLModel
 
 
@@ -14,7 +14,9 @@ class UserBase(SQLModel):
     email: EmailStr = Field(unique=True, index=True, max_length=255)
     is_active: bool = True
     is_superuser: bool = False
-    full_name: str | None = Field(default=None, max_length=255)
+    name: str | None = Field(default=None, max_length=255)
+    surname: str | None = Field(default=None, max_length=255)
+    patronymic: str | None = Field(default=None, max_length=255)
 
 
 class UserCreate(UserBase):
@@ -27,7 +29,9 @@ class UserCreate(UserBase):
 class UserRegister(SQLModel):
     email: EmailStr = Field(max_length=255)
     password: str = Field(min_length=8, max_length=40)
-    full_name: str | None = Field(default=None, max_length=255)
+    name: str | None = Field(default=None, max_length=255)
+    surname: str | None = Field(default=None, max_length=255)
+    patronymic: str | None = Field(default=None, max_length=255)
     role_id: uuid.UUID = Field(
         foreign_key="role.id", nullable=True, ondelete="SET NULL"
     )
@@ -40,7 +44,9 @@ class UserUpdate(UserBase):
 
 
 class UserUpdateMe(SQLModel):
-    full_name: str | None = Field(default=None, max_length=255)
+    name: str | None = Field(default=None, max_length=255)
+    surname: str | None = Field(default=None, max_length=255)
+    patronymic: str | None = Field(default=None, max_length=255)
     email: EmailStr | None = Field(default=None, max_length=255)
 
 
@@ -59,10 +65,13 @@ class User(UserBase, table=True):
     items: list["Item"] = Relationship(
         back_populates="owner", cascade_delete=True)
     classes: list["Class"] = Relationship(back_populates="teacher")
+    ical_schedulers: list["iCalScheduler"] = Relationship(back_populates="teacher")
+    export_setting: Optional["ExportSetting"] = Relationship(back_populates="teacher")
 
 
 class UserPublic(UserBase):
     id: uuid.UUID
+    role_id: uuid.UUID
 
 
 class UsersPublic(SQLModel):
@@ -153,9 +162,8 @@ class RolesPublic(SQLModel):
 class ClassBase(SQLModel):
     name: str = Field(max_length=255)
     description: str | None = Field(default=None, max_length=255)
-    start_time: datetime | None = Field(default=None)
-    end_time: datetime | None = Field(default=None)
-    end_of_active_status: datetime | None = Field(default=None)
+    start_time: datetime = Field(default=datetime.now)
+    end_time: datetime = Field(default=datetime.now)
 
 
 class ClassCreate(ClassBase):
@@ -167,9 +175,6 @@ class ClassCreate(ClassBase):
     teacher_id: uuid.UUID = Field(
         foreign_key="user.id", nullable=False, ondelete="CASCADE"
     )
-    room_id: uuid.UUID = Field(
-        foreign_key="room.id", nullable=False, ondelete="CASCADE"
-    )
 
 
 class ClassUpdate(ClassBase):
@@ -177,7 +182,6 @@ class ClassUpdate(ClassBase):
     description: str | None = Field(default=None, max_length=255)
     start_time: datetime | None = Field(default=None)
     end_time: datetime | None = Field(default=None)
-    end_of_active_status: datetime | None = Field(default=None)
     updated_at: datetime = Field(default_factory=datetime.now)
 
 
@@ -189,14 +193,11 @@ class Class(ClassBase, table=True):
     subject_id: uuid.UUID = Field(
         foreign_key="subject.id", nullable=False, ondelete="CASCADE"
     )
-    room_id: uuid.UUID = Field(
-        foreign_key="room.id", nullable=False, ondelete="CASCADE"
-    )
-    location: Optional["Room"] = Relationship(back_populates="classes")
     subject: Optional["Subject"] = Relationship(back_populates="classes")
     teacher: Optional["User"] = Relationship(back_populates="classes")
     attendances: list["Attendance"] = Relationship(
         back_populates="class_", cascade_delete=True)
+    backform: Optional["BackForm"] = Relationship(back_populates="class_")
     reviews: list["Review"] = Relationship(
         back_populates="class_", cascade_delete=True)
 
@@ -230,6 +231,7 @@ class Subject(SubjectBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     classes: list["Class"] = Relationship(
         back_populates="subject", cascade_delete=True)
+    ical_schedulers: list["iCalScheduler"] = Relationship(back_populates="subject")
 
 
 class SubjectPublic(SubjectBase):
@@ -240,40 +242,8 @@ class SubjectsPublic(SQLModel):
     data: list[SubjectPublic]
     count: int
 
-
-class BuildingBase(SQLModel):
-    name: str = Field(max_length=255)
-    address: str = Field(max_length=255)
-
-
-class BuildingCreate(BuildingBase):
-    created_at: datetime = Field(default_factory=datetime.now)
-    updated_at: datetime = Field(default_factory=datetime.now)
-
-
-class BuildingUpdate(BuildingBase):
-    name: str | None = Field(default=None, max_length=255)
-    address: str | None = Field(default=None, max_length=255)
-    updated_at: datetime = Field(default_factory=datetime.now)
-
-
-class Building(BuildingBase, table=True):
-    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    rooms: list["Room"] = Relationship(
-        back_populates="building", cascade_delete=True)
-
-
-class BuildingPublic(BuildingBase):
-    id: uuid.UUID
-
-
-class BuildingsPublic(SQLModel):
-    data: list[BuildingPublic]
-    count: int
-
-
 class RoomBase(SQLModel):
-    room_number: str = Field(max_length=50)
+    number: str = Field(max_length=50)
     capacity: int
 
 
@@ -283,24 +253,17 @@ class RoomCreate(RoomBase):
 
 
 class RoomUpdate(RoomBase):
-    room_number: str | None = Field(default=None, max_length=50)
+    number: str | None = Field(default=None, max_length=50)
     capacity: int | None = Field(default=None)
     updated_at: datetime = Field(default_factory=datetime.now)
 
 
 class Room(RoomBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    building_id: uuid.UUID = Field(
-        foreign_key="building.id", nullable=False, ondelete="CASCADE"
-    )
-    building: Optional["Building"] = Relationship(back_populates="rooms")
-    classes: list["Class"] = Relationship(
-        back_populates="location", cascade_delete=True)
 
 
 class RoomPublic(RoomBase):
     id: uuid.UUID
-    building_id: uuid.UUID
 
 
 class RoomsPublic(SQLModel):
@@ -310,6 +273,9 @@ class RoomsPublic(SQLModel):
 
 class AttendanceBase(SQLModel):
     student_full_name: str = Field(max_length=255)
+    class_id: uuid.UUID = Field(
+        foreign_key="class.id", nullable=False, ondelete="CASCADE"
+    )
 
 
 class AttendanceCreate(AttendanceBase):
@@ -324,9 +290,6 @@ class AttendanceUpdate(AttendanceBase):
 
 class Attendance(AttendanceBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    class_id: uuid.UUID = Field(
-        foreign_key="class.id", nullable=False, ondelete="CASCADE"
-    )
     class_: Optional["Class"] = Relationship(back_populates="attendances")
 
 
@@ -345,11 +308,18 @@ class ReviewBase(SQLModel):
     teaching_quality: int
     material_clarity: int
     event_quality: int
+    study_group: str = Field(default=None, max_length=255)
+    answer_to_question_1: str | None = Field(default=None, max_length=255)
+    answer_to_question_2: str | None = Field(default=None, max_length=255)
+    answer_to_question_3: str | None = Field(default=None, max_length=255)
 
 
 class ReviewCreate(ReviewBase):
     created_at: datetime = Field(default_factory=datetime.now)
     updated_at: datetime = Field(default_factory=datetime.now)
+    class_id: uuid.UUID = Field(
+        foreign_key="class.id", nullable=False, ondelete="CASCADE"
+    )
 
 
 class ReviewUpdate(ReviewBase):
@@ -376,3 +346,135 @@ class ReviewPublic(ReviewBase):
 class ReviewsPublic(SQLModel):
     data: list[ReviewPublic]
     count: int
+    
+class QRCode(SQLModel, table=True):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    backform_id: uuid.UUID = Field(
+        foreign_key="backform.id", nullable=False, ondelete="CASCADE"
+    )
+    backform: Optional["BackForm"] = Relationship(back_populates="qr_code")
+    qr_code: bytes
+    created_at: datetime = Field(default_factory=datetime.now)
+    updated_at: datetime = Field(default_factory=datetime.now)
+    expiration_date: datetime = Field(default_factory=datetime.now)
+    
+class BackFormBase(SQLModel):
+    class_theme: str = Field(max_length=255)
+    additional_question_1: str | None = Field(default=None, max_length=255)
+    additional_question_2: str | None = Field(default=None, max_length=255)
+    additional_question_3: str | None = Field(default=None, max_length=255)
+    end_of_active_status: datetime = Field(default=datetime.now)
+    
+class BackFormCreate(BackFormBase):
+    created_at: datetime = Field(default_factory=datetime.now)
+    updated_at: datetime = Field(default_factory=datetime.now)
+    class_id: uuid.UUID = Field(
+        foreign_key="class.id", nullable=False, ondelete="CASCADE"
+    )
+    
+class BackFormUpdate(BackFormBase):
+    class_theme: str | None = Field(default=None, max_length=255)
+    additional_question_1: str | None = Field(default=None, max_length=255)
+    additional_question_2: str | None = Field(default=None, max_length=255)
+    additional_question_3: str | None = Field(default=None, max_length=255)
+    updated_at: datetime = Field(default_factory=datetime.now)
+    end_of_active_status: datetime = Field(default=datetime.now)
+    
+class BackForm(BackFormBase, table=True):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    class_id: uuid.UUID = Field(
+        foreign_key="class.id", nullable=False, ondelete="CASCADE"
+    )
+    class_: Optional["Class"] = Relationship(back_populates="backform")
+    qr_code: Optional["QRCode"] = Relationship(back_populates="backform")
+    
+class BackFormPublic(BackFormBase):
+    id: uuid.UUID
+    class_id: uuid.UUID
+    
+class BackFormsPublic(SQLModel):
+    data: list[BackFormPublic]
+    count: int
+    
+class ExportSettingBase(SQLModel):
+    frequency: str = Field(max_length=255)
+    next_export_date: datetime = Field(default=datetime.now)
+
+class ExportSettingCreate(ExportSettingBase):
+    created_at: datetime = Field(default_factory=datetime.now)
+    updated_at: datetime = Field(default_factory=datetime.now)
+    teacher_id: uuid.UUID = Field(
+        foreign_key="user.id", nullable=False, ondelete="CASCADE"
+    )
+    
+class ExportSettingUpdate(ExportSettingBase):
+    frequency: str | None = Field(default=None, max_length=255)
+    next_export_date: datetime = Field(default=datetime.now)
+    updated_at: datetime = Field(default_factory=datetime.now)
+    
+class ExportSetting(ExportSettingBase, table=True):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    teacher_id: uuid.UUID = Field(
+        foreign_key="user.id", nullable=False, ondelete="CASCADE"
+    )
+    teacher: Optional["User"] = Relationship(back_populates="export_setting")
+    
+class ExportSettingPublic(ExportSettingBase):
+    id: uuid.UUID
+    teacher_id: uuid.UUID
+    
+class ExportSettingsPublic(SQLModel):
+    data: list[ExportSettingPublic]
+    count: int
+    
+class iCalSchedulerBase(SQLModel):
+    day_of_week: int
+    start_time: datetime
+    end_time: datetime
+    location: str = Field(max_length=255)
+    study_groups: str = Field(max_length=255)
+    is_excluded: bool = Field(default=False)
+
+class iCalSchedulerCreate(iCalSchedulerBase):
+    created_at: datetime = Field(default_factory=datetime.now)
+    updated_at: datetime = Field(default_factory=datetime.now)
+    teacher_id: uuid.UUID = Field(
+        foreign_key="user.id", nullable=False, ondelete="CASCADE"
+    )
+    subject_id: uuid.UUID = Field(
+        foreign_key="subject.id", nullable=False, ondelete="CASCADE"
+    )
+    
+class iCalSchedulerUpdate(iCalSchedulerBase):
+    day_of_week: int | None = Field(default=None)
+    start_time: datetime | None = Field(default=None)
+    end_time: datetime | None = Field(default=None)
+    location: str | None = Field(default=None, max_length=255)
+    study_groups: str | None = Field(default=None, max_length=255)
+    is_excluded: bool | None = Field(default=None)
+    updated_at: datetime = Field(default_factory=datetime.now)
+    
+class iCalScheduler(iCalSchedulerBase, table=True):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    teacher_id: uuid.UUID = Field(
+        foreign_key="user.id", nullable=False, ondelete="CASCADE"
+    )
+    subject_id: uuid.UUID = Field(
+        foreign_key="subject.id", nullable=False, ondelete="CASCADE"
+    )
+    teacher: Optional["User"] = Relationship(back_populates="ical_schedulers")
+    subject: Optional["Subject"] = Relationship(back_populates="ical_schedulers")
+    
+class iCalSchedulerPublic(iCalSchedulerBase):
+    id: uuid.UUID
+    teacher_id: uuid.UUID
+    subject_id: uuid.UUID
+    
+class iCalSchedulersPublic(SQLModel):
+    data: list[iCalSchedulerPublic]
+    count: int
+
+class EmailRequest(BaseModel):
+    recipient: str
+    subject: str
+    message: str

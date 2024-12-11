@@ -4,9 +4,9 @@ from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 
 from app.core.config import settings
 from app.models import RoleCreate, User, UserCreate
-from app.crud import create_role, create_user
+from app.crud import create_role, create_user, get_role_by_name
 
-async_engine = create_async_engine(str(settings.SQLALCHEMY_DATABASE_URI), echo=True)
+async_engine = create_async_engine(str(settings.SQLALCHEMY_DATABASE_URI))
 
 
 # make sure all SQLModel models are imported (app.models) before initializing DB
@@ -28,21 +28,25 @@ async def init_db(session: AsyncSession) -> None:
         select(User).where(User.email == settings.FIRST_SUPERUSER)
     )).first()
     if not user:
-        admin_role_in = RoleCreate(
-            name='admin'
-        )
-        admin_role = await create_role(session=session, role_create=admin_role_in)
+        teacher_role = await get_role_by_name(session=session, name='teacher')
+        if not teacher_role:
+            teacher_role_in = RoleCreate(
+                name='teacher'
+            )
+            teacher_role = await create_role(session=session, role_create=teacher_role_in)
         
-        teacher_role_in = RoleCreate(
-            name='teacher'
-        )
-        teacher_role = await create_role(session=session, role_create=teacher_role_in)
+        admin_role = await get_role_by_name(session=session, name='admin')
+        if not admin_role:
+            admin_role_in = RoleCreate(
+                name='admin'
+            )
+            admin_role = await create_role(session=session, role_create=admin_role_in)
         
         user_in = UserCreate(
             email=settings.FIRST_SUPERUSER,
-            password=settings.FIRST_SUPERUSER_PASSWORD,
             is_superuser=True,
-            role_id=admin_role.id
+            password=settings.FIRST_SUPERUSER_PASSWORD,
+            role_id=admin_role.id,
         )
         user = await create_user(session=session, user_create=user_in)
         

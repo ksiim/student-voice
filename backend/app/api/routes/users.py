@@ -1,7 +1,7 @@
 import uuid
-from typing import Any
+from typing import Any, Optional
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlmodel import col, delete, func, select
 
 from app import crud
@@ -15,6 +15,7 @@ from app.core.security import get_password_hash, verify_password
 from app.models import (
     Item,
     Message,
+    Role,
     UpdatePassword,
     User,
     UserCreate,
@@ -24,7 +25,9 @@ from app.models import (
     UserUpdate,
     UserUpdateMe,
 )
-from app.utils import generate_new_account_email, send_email
+from app.utils import generate_new_password_email, send_email
+
+import secrets
 
 router = APIRouter()
 
@@ -34,13 +37,24 @@ router = APIRouter()
     dependencies=[Depends(get_current_active_superuser)],
     response_model=UsersPublic,
 )
-async def read_users(session: SessionDep, skip: int = 0, limit: int = 100) -> Any:
+async def read_users(
+    session: SessionDep,
+    skip: int = 0,
+    limit: int = 100,
+    role_name: Optional[str] = Query(None)
+) -> Any:
     """
     Retrieve users.
     """
-    count_statement = select(func.count()).select_from(User)
+    statement = select(User)
+    
+    if role_name:
+        statement = statement.join(User.role).where(Role.name == role_name)
+    
+    count_statement = select(func.count()).select_from(statement.subquery())
     count = (await session.execute(count_statement)).scalar()
-    statement = select(User).offset(skip).limit(limit)
+    
+    statement = statement.offset(skip).limit(limit)
     users = (await session.execute(statement)).scalars().all()
 
     return UsersPublic(data=users, count=count)
@@ -61,15 +75,6 @@ async def create_user(*, session: SessionDep, user_in: UserCreate) -> Any:
         )
 
     user = await crud.create_user(session=session, user_create=user_in)
-    if settings.emails_enabled and user_in.email:
-        email_data = await generate_new_account_email(
-            email_to=user_in.email, username=user_in.email, password=user_in.password
-        )
-        await send_email(
-            email_to=user_in.email,
-            subject=email_data.subject,
-            html_content=email_data.html_content,
-        )
     return user
 
 
@@ -223,3 +228,28 @@ async def delete_user(
     await session.delete(user)
     await session.commit()
     return Message(message="User deleted successfully")
+
+
+@router.get('/generate_password/')
+async def generate_password():
+    return {"password": secrets.token_urlsafe(16)}
+
+@router.post(
+    '/send_new_password_on_mail',
+)
+async def send_new_password_on_mail(
+    email: str,
+    password: str,
+    title: str
+):
+    email_data = await generate_new_password_email(
+        email_to=email, username=email, password=password, title=title
+    )
+    await send_email(
+        email_to=email,
+        subject=email_data.subject,
+        html_content=email_data.html_content,
+    )
+    return {"message": "Email sent successfully"}
+
+
