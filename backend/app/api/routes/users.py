@@ -2,6 +2,7 @@ import uuid
 from typing import Any, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
+from sqlalchemy import or_
 from sqlmodel import col, delete, func, select
 
 from app import crud
@@ -58,6 +59,48 @@ async def read_users(
     users = (await session.execute(statement)).scalars().all()
 
     return UsersPublic(data=users, count=count)
+
+
+@router.get(
+    '/search/',
+    # dependencies=[Depends(get_current_active_superuser)],
+    response_model=UsersPublic,
+)
+async def search_users(
+    session: SessionDep,
+    query: str = Query(..., description="Search query"),
+    skip: int = 0,
+    limit: int = 100,
+) -> Any:
+    """
+    Search users.
+    """
+    
+    if not query:
+        raise HTTPException(
+            status_code=400,
+            detail="Query cannot be empty",
+        )
+    
+    words = query.split()
+
+    conditions = []
+    for word in words:
+        conditions.append(User.name.ilike(f"%{word}%"))
+        conditions.append(User.surname.ilike(f"%{word}%"))
+        conditions.append(User.patronymic.ilike(f"%{word}%"))
+
+    statement = select(User).where(or_(*conditions))
+
+    count_statement = select(func.count()).select_from(statement.subquery())
+    count = (await session.execute(count_statement)).scalar()
+
+    statement = statement.offset(skip).limit(limit)
+
+    users = (await session.execute(statement)).scalars().all()
+
+    return UsersPublic(data=users, count=count)
+
 
 
 @router.post(
