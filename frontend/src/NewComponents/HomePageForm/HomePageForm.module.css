@@ -1,0 +1,22 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border-radius: 1.25vw;
+  padding: 2.5vw 4.17vw;
+}
+
+.form__inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 1.67vw;
+}
+
+/*# sourceMappingURL=HomePageForm.module.css.map */

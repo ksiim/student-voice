@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import HomePage from '../Pages/home/HomePage.tsx';
+import Homepage from '../NewPages/Homepage/Homepage.tsx';
 import TeacherProfile from '../Pages/profile/TeacherProfile.tsx'
 import '../index.css';
 import CreateUser from '../NewPages/CreateUser/CreateUser.tsx';
@@ -11,7 +11,7 @@ import ChangePassword from '../NewPages/ChangePassword/ChangePassword.tsx';
 import CreateForm from '../Pages/creation/CreateForm.tsx';
 import StudentList
   from '../Pages/feedback/StudentList.tsx';
-import LoadClass from '../Pages/creation/LoadClass.tsx';
+import LoadClass from '../NewPages/LoadClass/LoadClass.tsx';
 import LoginPage from '../NewPages/LoginPage/LoginPage.tsx';
 import Users from '../NewPages/Users/Users.tsx';
 import UpdateUser from '../NewPages/UpdateUser/UpdateUser.tsx';
@@ -20,7 +20,7 @@ function App()  {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<HomePage />} />
+        <Route path="/" element={<Homepage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/profile" element={<TeacherProfile />} />
         <Route path="/createUser" element={<CreateUser />} />

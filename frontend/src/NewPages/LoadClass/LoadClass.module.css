@@ -1,0 +1,122 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+h2 {
+  color: #1E4391;
+  font-size: 52px;
+  font-weight: 600;
+  line-height: 57.2px;
+  text-align: left;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 70px;
+  width: 100%;
+  overflow: hidden;
+  z-index: -100;
+  font-family: Montserrat, sans-serif;
+  background-color: #F6F6F6;
+}
+
+.content {
+  width: 1530px;
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+  justify-content: start;
+}
+.content__bottomButtons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.buttonGroup {
+  display: flex;
+  width: 60%;
+  justify-content: space-between;
+}
+.buttonGroup p {
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 28.8px;
+  text-align: left;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+}
+
+.buttonGroup div {
+  display: flex;
+  align-items: center;
+}
+
+.buttonGroup__radioButton {
+  display: flex;
+  gap: 32px;
+  justify-content: space-between;
+}
+
+.buttonGroup__radioButton label {
+  font-family: Montserrat, sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 28.8px;
+  text-align: left;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+}
+
+.buttonGroup input[type=radio] {
+  appearance: none;
+  width: 30px;
+  height: 30px;
+  border: 2px solid #000;
+  border-radius: 50%;
+  background-color: #fff;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.buttonGroup input[type=radio]:checked {
+  background-color: #fff;
+}
+
+.buttonGroup input[type=radio]:checked::before {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background-color: #1E4391;
+  border-radius: 50%;
+}
+
+.list {
+  margin-top: 2rem;
+}
+.list__table {
+  width: 1530px;
+  padding: 48px 80px 48px 80px;
+  border-radius: 24px;
+  justify: space-between;
+}
+.list__table th, .list__table td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  background-color: white;
+}
+.list__table th {
+  background-color: #ffffff;
+  font-weight: 600;
+}
+
+/*# sourceMappingURL=LoadClass.module.css.map */
