@@ -4,6 +4,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
+from app.models import Review
 import emails  # type: ignore
 import jwt
 from jinja2 import Template
@@ -100,3 +101,21 @@ async def verify_password_reset_token(token: str) -> str | None:
         return str(decoded_token["sub"])
     except InvalidTokenError:
         return None
+    
+async def calculate_average_event_quality(reviews: list[Review]) -> float:
+    return sum(review.event_quality for review in reviews) / len(reviews)
+
+async def calculate_average_material_clarity(reviews: list[Review]) -> float:
+    return sum(review.material_clarity for review in reviews) / len(reviews)
+
+async def calculate_average_teaching_quality(reviews: list[Review]) -> float:
+    return sum(review.teaching_quality for review in reviews) / len(reviews)
+
+async def get_answers_to_questions(reviews: list[Review]) -> list[dict[str, str]]:
+    answers_to_questions = []
+    for review in reviews:
+        answers_to_questions.append({
+            "answer_to_question_1": review.answer_to_question_1,
+            "answer_to_question_2": review.answer_to_question_2,
+            "answer_to_question_3": review.answer_to_question_3,
+        })

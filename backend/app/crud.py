@@ -1,6 +1,8 @@
+import asyncio
 import uuid
 from typing import Any
 
+from app.utils import calculate_average_event_quality, calculate_average_material_clarity, calculate_average_teaching_quality, get_answers_to_questions
 from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
@@ -8,7 +10,7 @@ from sqlalchemy import select
 from app.core.security import get_password_hash, verify_password
 from app.models import (
     Attendance, AttendanceCreate, BackForm, BackFormCreate,
-    Class, ClassCreate, ClassUpdate,
+    Class, ClassCreate, ClassInfo, ClassUpdate,
     Item, ItemCreate,
     QRCode,
     Review, ReviewCreate,
@@ -27,7 +29,7 @@ async def create_user(*, session: AsyncSession, user_create: UserCreate) -> User
             status_code=400,
             detail="Role not found",
         )
-    
+
     db_obj = User.model_validate(
         user_create,
         update={
@@ -77,6 +79,7 @@ async def create_item(*, session: AsyncSession, item_in: ItemCreate, owner_id: u
     await session.refresh(db_item)
     return db_item
 
+
 async def create_role(*, session: AsyncSession, role_create: RoleCreate) -> Role:
     db_obj = Role.model_validate(role_create)
     session.add(db_obj)
@@ -84,15 +87,18 @@ async def create_role(*, session: AsyncSession, role_create: RoleCreate) -> Role
     await session.refresh(db_obj)
     return db_obj
 
+
 async def get_role_by_id(*, session: AsyncSession, role_id: uuid.UUID) -> Role | None:
     statement = select(Role).where(Role.id == role_id)
     session_role = (await session.execute(statement)).scalars().first()
     return session_role
 
+
 async def get_role_by_name(*, session: AsyncSession, name: str) -> Role | None:
     statement = select(Role).where(Role.name == name)
     session_role = (await session.execute(statement)).scalars().first()
     return session_role
+
 
 async def create_subject(*, session: AsyncSession, subject_create: SubjectCreate) -> Subject:
     db_obj = Subject.model_validate(subject_create)
@@ -101,10 +107,12 @@ async def create_subject(*, session: AsyncSession, subject_create: SubjectCreate
     await session.refresh(db_obj)
     return db_obj
 
+
 async def get_subject_by_name(*, session: AsyncSession, name: str) -> Subject | None:
     statement = select(Subject).where(Subject.name == name)
     session_subject = (await session.execute(statement)).scalars().first()
     return session_subject
+
 
 async def create_class(*, session: AsyncSession, class_create: ClassCreate) -> Class:
     db_obj = Class.model_validate(
@@ -115,10 +123,12 @@ async def create_class(*, session: AsyncSession, class_create: ClassCreate) -> C
             'end_time': class_create.end_time.replace(tzinfo=None),
         }
     )
+
     session.add(db_obj)
     await session.commit()
     await session.refresh(db_obj)
     return db_obj
+
 
 async def update_class(*, session: AsyncSession, class_: Class, class_in: ClassUpdate) -> Any:
     class_data = class_in.model_dump(exclude_unset=True)
@@ -128,6 +138,35 @@ async def update_class(*, session: AsyncSession, class_: Class, class_in: ClassU
     await session.refresh(class_)
     return class_
 
+
+async def get_class_info(session: AsyncSession, class_id: uuid.UUID) -> Class | None:
+    class_ = await get_class(session, class_id)
+    reviews = await get_reviews_by_class_id(session, class_id)
+
+    avg_event_quality, avg_material_clarity, avg_teaching_quality, answers_to_questions = await asyncio.gather(
+        calculate_average_event_quality(reviews),
+        calculate_average_material_clarity(reviews),
+        calculate_average_teaching_quality(reviews),
+        get_answers_to_questions(reviews)
+    )
+
+    return ClassInfo(
+        additional_question_1=class_.backform.additional_question_1,
+        additional_question_2=class_.backform.additional_question_2,
+        additional_question_3=class_.backform.additional_question_3,
+        avg_event_quality=avg_event_quality,
+        avg_material_clarity=avg_material_clarity,
+        avg_teaching_quality=avg_teaching_quality,
+        comments=[review.comment for review in reviews],
+        answers_to_questions=...
+    )
+
+
+async def get_class(session: AsyncSession, class_id: uuid.UUID) -> Class | None:
+    class_ = await session.get(Class, class_id)
+    return class_
+
+
 async def create_review(*, session: AsyncSession, review_create: ReviewCreate) -> Review:
     db_obj = Review.model_validate(review_create)
     session.add(db_obj)
@@ -135,10 +174,18 @@ async def create_review(*, session: AsyncSession, review_create: ReviewCreate) -
     await session.refresh(db_obj)
     return db_obj
 
+
+async def get_reviews_by_class_id(session: AsyncSession, class_id: uuid.UUID) -> list[Review]:
+    statement = select(Review).where(Review.class_id == class_id)
+    reviews = (await session.execute(statement)).scalars().all()
+    return reviews
+
+
 async def get_room_by_number(*, session: AsyncSession, name: str) -> Room | None:
     statement = select(Room).where(Room.number == name)
     session_room = (await session.execute(statement)).scalars().first()
     return session_room
+
 
 async def create_room(*, session: AsyncSession, room_create: Room) -> Room:
     db_obj = Room.model_validate(room_create)
@@ -147,6 +194,7 @@ async def create_room(*, session: AsyncSession, room_create: Room) -> Room:
     await session.refresh(db_obj)
     return db_obj
 
+
 async def create_attendance(*, session: AsyncSession, attendance_in: AttendanceCreate) -> Attendance:
     db_obj = Attendance.model_validate(attendance_in)
     session.add(db_obj)
@@ -154,10 +202,12 @@ async def create_attendance(*, session: AsyncSession, attendance_in: AttendanceC
     await session.refresh(db_obj)
     return db_obj
 
+
 async def get_qr_code_by_class_id(class_id, session: AsyncSession) -> QRCode:
-    statement = select(QRCode).where(QRCode.class_id == class_id)
+    statement = select(QRCode).where(QRCode.backform.class_id == class_id)
     qr_code = (await session.execute(statement)).scalars().all()[-1]
     return qr_code
+
 
 async def create_backform(session: AsyncSession, backform_create: BackFormCreate) -> BackForm:
     db_obj = BackForm.model_validate(
@@ -173,10 +223,12 @@ async def create_backform(session: AsyncSession, backform_create: BackFormCreate
     await session.refresh(db_obj)
     return db_obj
 
+
 async def get_backform_by_id(session: AsyncSession, backform_id: uuid.UUID) -> BackForm | None:
     statement = select(BackForm).where(BackForm.id == backform_id)
     backform = (await session.execute(statement)).scalars().first()
     return backform
+
 
 async def get_backform_by_class_id(session: AsyncSession, class_id: uuid.UUID) -> BackForm | None:
     statement = select(BackForm).where(BackForm.class_id == class_id)

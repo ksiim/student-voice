@@ -62,6 +62,24 @@ async def read_classes(
 
     return ClassesPublic(data=classes, count=count)
 
+@router.get(
+    '/info/{class_id}',
+)
+async def read_class_info(
+    session: SessionDep,
+    class_id: uuid.UUID
+) -> Any:
+    """
+    Retrieve class info.
+    """
+    class_ = await crud.get_class_info(session=session, class_id=class_id)
+    if not class_:
+        raise HTTPException(
+            status_code=404,
+            detail="The class with this id does not exist in the system.",
+        )
+    return class_
+
 @router.delete(
     "/{class_id}",
     # dependencies=[Depends(get_current_active_superuser)],

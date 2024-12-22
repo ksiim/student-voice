@@ -273,6 +273,7 @@ class RoomsPublic(SQLModel):
 
 class AttendanceBase(SQLModel):
     student_full_name: str = Field(max_length=255)
+    study_group: str = Field(default=None, max_length=255)
     class_id: uuid.UUID = Field(
         foreign_key="class.id", nullable=False, ondelete="CASCADE"
     )
@@ -308,7 +309,6 @@ class ReviewBase(SQLModel):
     teaching_quality: int
     material_clarity: int
     event_quality: int
-    study_group: str = Field(default=None, max_length=255)
     answer_to_question_1: str | None = Field(default=None, max_length=255)
     answer_to_question_2: str | None = Field(default=None, max_length=255)
     answer_to_question_3: str | None = Field(default=None, max_length=255)
@@ -363,7 +363,7 @@ class BackFormBase(SQLModel):
     additional_question_1: str | None = Field(default=None, max_length=255)
     additional_question_2: str | None = Field(default=None, max_length=255)
     additional_question_3: str | None = Field(default=None, max_length=255)
-    end_of_active_status: datetime = Field(default=datetime.now)
+    end_of_active_status: datetime | None = Field(default=datetime.now)
     
 class BackFormCreate(BackFormBase):
     created_at: datetime = Field(default_factory=datetime.now)
@@ -378,7 +378,7 @@ class BackFormUpdate(BackFormBase):
     additional_question_2: str | None = Field(default=None, max_length=255)
     additional_question_3: str | None = Field(default=None, max_length=255)
     updated_at: datetime = Field(default_factory=datetime.now)
-    end_of_active_status: datetime = Field(default=datetime.now)
+    end_of_active_status: datetime | None = Field(default=datetime.now)
     
 class BackForm(BackFormBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
@@ -478,3 +478,13 @@ class EmailRequest(BaseModel):
     recipient: str
     subject: str
     message: str
+    
+class ClassInfo(SQLModel):
+    additional_question_1: str
+    additional_question_2: str
+    additional_question_3: str
+    avg_teaching_quality: float
+    avg_material_clarity: float
+    avg_event_quality: float
+    comments: list[str]
+    answers_to_questions: list[dict[str, str]]
