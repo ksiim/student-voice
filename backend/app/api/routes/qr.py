@@ -12,13 +12,13 @@ from app.api.deps import (
     SessionDep
 )
 from app.core.config import settings
-from app.models import Class, QRCode
+from app.models import BackForm, Class, QRCode
 
 router = APIRouter()
 
 async def generate_and_save_qr_code(session: SessionDep, base_url: str, class_id: uuid.UUID) -> bytes:
     qr_code = await session.get(QRCode, class_id)
-    if not qr_code:
+    if qr_code:
         raise HTTPException(status_code=400, detail="QR code already exists")
     
     class_url = f'{base_url}/{class_id}'
@@ -39,8 +39,9 @@ async def generate_and_save_qr_code(session: SessionDep, base_url: str, class_id
     
     qr_code_data = img_bytes.getvalue()
 
-    # Создание экземпляра модели QRCodeModel
-    qr_code_record = QRCode(class_id=class_id, qr_code=qr_code_data)
+    backform = await crud.get_backform_by_class_id(session, class_id)
+    # Создание экземпляра модели QRCode
+    qr_code_record = QRCode(qr_code=qr_code_data, backform_id=backform.id)
 
     # Сохранение записи в базу данных
     session.add(qr_code_record)

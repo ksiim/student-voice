@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Any, Optional
 import uuid
 from app import crud
-from app.models import Class, ClassCreate, ClassPublic, ClassUpdate, ClassesPublic
+from app.models import BackFormCreate, Class, ClassCreate, ClassPublic, ClassUpdate, ClassesPublic
 from fastapi import APIRouter, HTTPException, Query
 
 from app.api.deps import (
@@ -21,9 +21,14 @@ router = APIRouter()
 )
 async def create_class(*, session: SessionDep, class_in: ClassCreate) -> Any:
     """
-    Create new class.
+    Create new class with backform
     """
     class_ = await crud.create_class(session=session, class_create=class_in)
+    backform_in = BackFormCreate(
+        class_id=class_.id,
+    )
+    backform = await crud.create_backform(session=session, backform_create=backform_in)
+    await session.refresh(class_)
     return class_
 
 @router.get(

@@ -359,13 +359,14 @@ class QRCode(SQLModel, table=True):
     expiration_date: datetime = Field(default_factory=datetime.now)
     
 class BackFormBase(SQLModel):
-    class_theme: str = Field(max_length=255)
+    class_theme: str | None = Field(max_length=255)
     additional_question_1: str | None = Field(default=None, max_length=255)
     additional_question_2: str | None = Field(default=None, max_length=255)
     additional_question_3: str | None = Field(default=None, max_length=255)
     end_of_active_status: datetime | None = Field(default=datetime.now)
     
 class BackFormCreate(BackFormBase):
+    class_theme: str | None = Field(default=None, max_length=255)
     created_at: datetime = Field(default_factory=datetime.now)
     updated_at: datetime = Field(default_factory=datetime.now)
     class_id: uuid.UUID = Field(

@@ -204,8 +204,12 @@ async def create_attendance(*, session: AsyncSession, attendance_in: AttendanceC
 
 
 async def get_qr_code_by_class_id(class_id, session: AsyncSession) -> QRCode:
-    statement = select(QRCode).where(QRCode.backform.class_id == class_id)
-    qr_code = (await session.execute(statement)).scalars().all()[-1]
+    statement = (
+        select(QRCode)
+        .join(QRCode.backform)
+        .where(BackForm.class_id == class_id)
+    )
+    qr_code = (await session.execute(statement)).scalar_one_or_none()
     return qr_code
 
 
@@ -215,7 +219,7 @@ async def create_backform(session: AsyncSession, backform_create: BackFormCreate
         update={
             'created_at': backform_create.created_at,
             'updated_at': backform_create.updated_at,
-            'end_of_active_status': backform_create.end_of_active_status.replace(tzinfo=None),
+            'end_of_active_status': backform_create.end_of_active_status().replace(tzinfo=None),
         }
     )
     session.add(db_obj)
