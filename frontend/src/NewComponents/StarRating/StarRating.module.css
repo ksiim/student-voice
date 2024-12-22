@@ -1,0 +1,43 @@
+.ratingContainer {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: Montserrat, sans-serif;
+}
+
+.title {
+  font-size: 3.75vw;
+  font-weight: 600;
+  line-height: 4.5vw;
+  text-align: left;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+}
+
+.stars {
+  display: flex;
+  gap: 0.3125vw;
+}
+
+.star {
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s;
+  color: #222222;
+}
+.star.active .starIcon {
+  color: #1e4391;
+}
+.star.error .starIcon {
+  color: #FFCCC7;
+}
+
+.ratingValue {
+  font-size: 14px;
+  color: #666;
+}
+
+/*# sourceMappingURL=StarRating.module.css.map */

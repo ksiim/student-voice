@@ -9,6 +9,7 @@ interface InputFieldProps {
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   error: string | null;
+  disabled?: boolean; // Новый пропс
 }
 
 const InputField: React.FC<InputFieldProps> = ({
@@ -17,7 +18,8 @@ const InputField: React.FC<InputFieldProps> = ({
                                                  type,
                                                  value,
                                                  onChange,
-                                                 error
+                                                 error,
+                                                 disabled = false // Значение по умолчанию
                                                }) => {
   const [showPassword, setShowPassword] = useState(false);
   
@@ -33,6 +35,7 @@ const InputField: React.FC<InputFieldProps> = ({
             value={value}
             onChange={onChange}
             autoComplete={type === 'password' ? 'new-password' : 'off'} // Отключение автозаполнения
+            disabled={disabled} // Передача пропса disabled
           />
           {type === 'password' && (
             <button
@@ -50,6 +53,7 @@ const InputField: React.FC<InputFieldProps> = ({
                 display: 'flex',
                 alignItems: 'center'
               }}
+              disabled={disabled} // Блокируем кнопку, если поле disabled
             >
               {showPassword ? (
                 <EyeOff className={styles.icon} color="#CCCCCC" />

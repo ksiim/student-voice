@@ -1,39 +1,55 @@
 .wrapper{
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 0.21vw;
   height: 100%;
 
   &__content{
-    height: 78px;
+    height: 4.06vw;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 0.42vw;
+
+    @media (max-width: 768px) {
+      height: 10.625vw; // Фиксированная высота для телефонов
+      font-size: 5vw;
+      line-height: 7.5vw; // Уменьшаем отступ для иконки
+    }
   }
+
 }
 
 .label{
-  font-size: 24px;
+  font-size: 1.25vw;
   font-weight: 600;
-  line-height: 28.8px;
+  line-height: 1.5vw;
   text-align: left;
   text-underline-position: from-font;
   text-decoration-skip-ink: none;
+
+  @media (max-width: 768px) {
+    font-size: 3.75vw;
+    font-weight: 600;
+    line-height: 4.5vw;
+    text-align: left;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;
+  }
 }
 
 .input {
   width: 100%;
-  height: 41px;
-  font-size: 24px;
+  height: 2.135vw;
+  font-size: 1.25vw;
   font-weight: 600;
-  line-height: 28.8px;
+  line-height: 1.5vw;
   text-align: left;
   padding: 0;
-  padding-right: 36px; // Добавлено место для иконки
+  padding-right: 1.875vw; // Добавлено место для иконки
   text-underline-position: from-font;
   text-decoration-skip-ink: none;
   border: none;
-  border-bottom: 2px solid #CCCCCC;
+  border-bottom: 0.104vw solid #CCCCCC;
   outline: none;
   background: none;
   margin: 0;
@@ -43,7 +59,7 @@
   appearance: none;
 
   &:focus {
-    border-bottom: 2px solid #1E4391;
+    border-bottom: 0.104vw solid #1E4391;
   }
 
   &::placeholder{
@@ -51,26 +67,32 @@
   }
 
   &:-webkit-autofill {
-    box-shadow: 0 0 0px 1000px #F6F6F6 inset; // Убираем желтую подсветку
+    box-shadow: 0 0 0 52.08vw #F6F6F6 inset; // Убираем желтую подсветку
     -webkit-text-fill-color: #000; // Цвет текста
+  }
+
+  @media (max-width: 768px) {
+    height: 5.652vw; // Фиксированная высота для телефонов
+    font-size: 5vw;
+    line-height: 7.5vw; // Уменьшаем отступ для иконки
   }
 }
 
 .icon{
-  width: 28px;
-  height: 28px;
+  width: 1.5vw;
+  height: 1.5vw;
 }
 
 .inputError {
-  border-bottom: 2px solid red;
+  border-bottom: 0.104vw solid red;
 }
 
 .errorText{
-  height: 20px;
+  height: 1.04vw;
   color: red;
-  font-size: 14px;
+  font-size: 0.73vw;
   font-weight: 700;
-  line-height: 19.6px;
+  line-height: 1.02vw;
   text-align: left;
   text-underline-position: from-font;
   text-decoration-skip-ink: none;

@@ -1,0 +1,85 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.feedbackForm {
+  min-height: 100vh;
+  height: 100%;
+  margin: 0 auto;
+  padding: 7.5vw 6.25vw 12.19vw 6.25vw;
+  background: #F6F6F6;
+  border-radius: 8px;
+  font-family: Montserrat, sans-serif;
+
+  &__content{
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 7.5vw;
+  }
+  &__title {
+    font-family: inherit;
+    height: 15.93vw;
+    font-size: 4.375vw;
+    font-weight: 600;
+    line-height: 5.25vw;
+    text-align: left;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;
+  }
+
+  &__inputs {
+    display: flex;
+    flex-direction: column;
+    height: 23.75vw;
+    gap: 2.5vw;
+    width: 100%;
+  }
+
+  &__reviews {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5vw;
+  }
+
+  &__comments {
+    display: flex;
+    flex-direction: column;
+    height: 31.875vw;
+    gap: 2.5vw;
+    width: 100%;
+
+
+
+    &__interesting {
+      display: flex;
+      flex-direction: column;
+      gap: 0.625vw;
+
+      p {
+      color: #CCCCCC;
+      font-size: 3.125vw;
+      font-weight: 400;
+      line-height: 3.75vw;
+      text-align: left;
+      text-underline-position: from-font;
+      text-decoration-skip-ink: none;
+      padding-top: 0.625vw;
+      }
+    }
+  }
+}
+
+.disclaimer {
+  font-family: inherit;
+  font-size: 3.75vw;
+  font-weight: 400;
+  line-height: 4.5vw;
+  text-align: left;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+  color: #CCCCCC;
+}

@@ -1,0 +1,56 @@
+@charset "UTF-8";
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh; /* Используем min-height вместо height */
+  background-color: #F6F6F6; /* Добавляем фоновый цвет и body */
+  overflow: auto;
+}
+
+#root {
+  min-height: 100vh; /* Важно для React-приложений */
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  z-index: -100;
+  font-family: Montserrat, sans-serif;
+  background-color: #F6F6F6;
+}
+
+.content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 3.125vw 10.15vw 5.21vw 10.15vw;
+  gap: 3.125vw;
+}
+
+.form {
+  display: flex;
+  flex-direction: row;
+  gap: 8.854vw;
+}
+.form__main {
+  display: flex;
+  flex-direction: column;
+  gap: 1.67vw;
+}
+.form__additional {
+  display: flex;
+  flex-direction: column;
+  gap: 1.67vw;
+}
+
+/*# sourceMappingURL=CreateFeedbackForm.module.css.map */

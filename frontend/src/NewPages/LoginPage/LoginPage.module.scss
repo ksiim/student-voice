@@ -6,7 +6,7 @@
 
 .wrapper {
   display: flex;
-  height: 1080px;
+  height: 100vh;
   width: 100%;
   overflow: hidden;
   background-color: #F6F6F6;
@@ -16,22 +16,22 @@
 .leftSection{
   width: 50%;
   height: 100%;
-  padding: 51.5px 161px 0 195px;
+  padding: 2.68vw 8.38vw 0 10.16vw;
   display: flex;
   flex-direction: column;
-  gap:181.5px;
+  gap:9.45vw;
   justify-content: start;
 }
 
 .form{
   display: flex;
   flex-direction: column;
-  gap:60px;
+  gap:3.125vw;
 
   &__heading {
-    font-size: 52px;
+    font-size: 2.708vw;
     font-weight: 600;
-    line-height: 57.2px;
+    line-height: 2.98vw;
     text-align: left;
     text-underline-position: from-font;
     text-decoration-skip-ink: none;
@@ -41,13 +41,13 @@
   &__inputs {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 1.67vw;
   }
 
   &__forgot {
-    font-size: 18px;
+    font-size: 0.9375vw;
     font-weight: 600;
-    line-height: 21.6px;
+    line-height: 1.125vw;
     text-align: left;
     text-underline-position: from-font;
     text-decoration-skip-ink: none;
@@ -60,8 +60,13 @@
   width: 50%;
   height: 100%;
   background-image: url('frontend/public/assets/images/login_bg.jpg');
-  background-size: contain;
+  background-size: 50vw 100vh;
   background-repeat: no-repeat;
   background-position: center;
   overflow: hidden;
+}
+
+.pattern__image {
+  height: 100%;
+  width: 100%;
 }

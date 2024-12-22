@@ -1,0 +1,133 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh; /* Используем min-height вместо height */
+  background-color: #F6F6F6; /* Добавляем фоновый цвет и body */
+  overflow: auto;
+}
+
+#root {
+  min-height: 100vh; /* Важно для React-приложений */
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  z-index: -100;
+  font-family: Montserrat, sans-serif;
+  background-color: #F6F6F6;
+}
+
+.content {
+  width: 100%;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 3.125vw 10.15vw 5.21vw 10.15vw;
+  gap: 5.21vw;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.67vw;
+
+  &__count {
+    font-size: 2.08vw;
+    font-weight: 600;
+    line-height: 48px;
+    text-align: left;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;
+    color: #222222;
+  }
+
+  &__items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4.84vw;
+    justify-content: space-between;
+
+    ul {
+      width: 100%;
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+      column-count: 3;
+      column-gap: 4.84vw;
+
+      li {
+        display: flex;
+        gap: 1.25vw;
+        align-items: center;
+        break-inside: avoid;
+        font-size: 0.9375vw;
+        font-weight: 600;
+        line-height: 1.125vw;
+        text-align: left;
+        text-underline-position: from-font;
+        text-decoration-skip-ink: none;
+        margin-bottom: 0.417vw; // Добавляем отступ снизу вместо row-gap
+
+        &:last-child {
+          margin-bottom: 0; // Убираем отступ у последнего элемента
+        }
+      }
+    }
+  }
+
+  &__buttons {
+    display: flex;
+    justify-content: start;
+    gap: 0.52vw;
+  }
+}
+
+.answers {
+  display: flex;
+  flex-direction: row;
+  gap: 2.08vw;
+  column-gap: 4.84vw;
+}
+
+.answerColumn {
+  flex: 1;
+
+  &__question {
+    font-size: 1.25vw;
+    font-weight: 600;
+    line-height: 1.5vw;
+    text-align: left;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;
+
+    margin-bottom: 1.67vw;
+    color: #222222;
+  }
+
+  &__list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  &__item {
+    font-size: 1.04vw;
+    line-height: 1.56vw;
+    color: #555555;
+    margin-bottom: 1.67vw;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
