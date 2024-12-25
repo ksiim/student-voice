@@ -40,6 +40,8 @@ async def generate_and_save_qr_code(session: SessionDep, base_url: str, class_id
     qr_code_data = img_bytes.getvalue()
 
     backform = await crud.get_backform_by_class_id(session, class_id)
+    if not backform:
+        raise HTTPException(status_code=404, detail="Backform not found")
     # Создание экземпляра модели QRCode
     qr_code_record = QRCode(qr_code=qr_code_data, backform_id=backform.id)
 
