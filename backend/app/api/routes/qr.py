@@ -13,6 +13,7 @@ from app.api.deps import (
 )
 from app.core.config import settings
 from app.models import BackForm, Class, QRCode
+from app.models import BackForm, Class, QRCode
 
 router = APIRouter()
 

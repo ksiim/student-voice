@@ -1,5 +1,48 @@
 FROM python:3.10
 
+RUN apt-get update && apt-get install -y \
+    wget \
+    gnupg \
+    unzip \
+    fonts-liberation \
+    libappindicator3-1 \
+    libasound2 \
+    libatk-bridge2.0-0 \
+    libnspr4 \
+    libnss3 \
+    libxss1 \
+    libxtst6 \
+    xdg-utils \
+    chromium
+
+RUN apt-get install -y curl && \
+    CHROME_DRIVER_VERSION=$(curl -sS https://chromedriver.storage.googleapis.com/LATEST_RELEASE) && \
+    wget -O /tmp/chromedriver.zip https://chromedriver.storage.googleapis.com/$CHROME_DRIVER_VERSION/chromedriver_linux64.zip && \
+    unzip /tmp/chromedriver.zip -d /usr/local/bin && \
+    rm /tmp/chromedriver.zip
+
+RUN apt-get update && apt-get install -y \
+    wget \
+    gnupg \
+    unzip \
+    fonts-liberation \
+    libappindicator3-1 \
+    libasound2 \
+    libatk-bridge2.0-0 \
+    libnspr4 \
+    libnss3 \
+    libxss1 \
+    libxtst6 \
+    xdg-utils \
+    chromium
+
+# Установка ChromeDriver
+RUN apt-get install -y curl && \
+    CHROME_DRIVER_VERSION=$(curl -sS https://chromedriver.storage.googleapis.com/LATEST_RELEASE) && \
+    wget -O /tmp/chromedriver.zip https://chromedriver.storage.googleapis.com/$CHROME_DRIVER_VERSION/chromedriver_linux64.zip && \
+    unzip -o /tmp/chromedriver.zip -d /usr/local/bin && \
+    rm /tmp/chromedriver.zip
+
 WORKDIR /app/
 
 # Install uv
