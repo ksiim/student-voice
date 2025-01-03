@@ -15,11 +15,24 @@ RUN apt-get update && apt-get install -y \
     xdg-utils \
     chromium
 
-RUN apt-get install -y curl && \
-    CHROME_DRIVER_VERSION=$(curl -sS https://chromedriver.storage.googleapis.com/LATEST_RELEASE) && \
-    wget -O /tmp/chromedriver.zip https://chromedriver.storage.googleapis.com/$CHROME_DRIVER_VERSION/chromedriver_linux64.zip && \
-    unzip /tmp/chromedriver.zip -d /usr/local/bin && \
-    rm /tmp/chromedriver.zip
+# Установка зависимостей
+RUN apt-get update -qq -y && \
+apt-get install -y \
+    libasound2 \
+    libatk-bridge2.0-0 \
+    libgtk-4-1 \
+    libnss3 \
+    xdg-utils \
+    wget && \
+wget -q -O chrome-linux64.zip https://bit.ly/chrome-linux64-121-0-6167-85 && \
+unzip chrome-linux64.zip && \
+rm chrome-linux64.zip && \
+mv chrome-linux64 /opt/chrome/ && \
+ln -s /opt/chrome/chrome /usr/local/bin/ && \
+wget -q -O chromedriver-linux64.zip https://bit.ly/chromedriver-linux64-121-0-6167-85 && \
+unzip -j chromedriver-linux64.zip chromedriver-linux64/chromedriver && \
+rm chromedriver-linux64.zip && \
+mv chromedriver /usr/local/bin/
 
 RUN apt-get update && apt-get install -y \
     wget \

@@ -41,6 +41,9 @@ class UserUpdate(UserBase):
     email: EmailStr | None = Field(
         default=None, max_length=255)  # type: ignore
     password: str | None = Field(default=None, min_length=8, max_length=40)
+    role_id: uuid.UUID | None = Field(
+        foreign_key="role.id", nullable=True, ondelete="SET NULL"
+    )
 
 
 class UserUpdateMe(SQLModel):
@@ -489,3 +492,37 @@ class ClassInfo(SQLModel):
     avg_event_quality: float
     comments: list[str]
     answers_to_questions: list[dict[str, str]]
+    
+class Period(BaseModel):
+    start_date: datetime
+    end_date: datetime
+
+class TeacherMetricsRequest(BaseModel):
+    period: Period
+    teacher_ids: Optional[list[uuid.UUID]] = None
+
+class SubjectMetrics(BaseModel):
+    id: uuid.UUID
+    name: str
+    metrics: dict
+
+class TeacherMetricsResponse(BaseModel):
+    id: uuid.UUID
+    full_name: str
+    metrics: dict
+    subjects: list[SubjectMetrics]
+    
+class SubjectMetricsRequest(BaseModel):
+    period: Period
+    subject_ids: Optional[list[uuid.UUID]] = None
+
+class TeacherMetrics(BaseModel):
+    id: uuid.UUID
+    full_name: str
+    metrics: dict
+
+class SubjectMetricsResponse(BaseModel):
+    id: uuid.UUID
+    name: str
+    metrics: dict
+    teachers: list[TeacherMetrics]
