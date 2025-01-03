@@ -1,0 +1,25 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  z-index: -100;
+  font-family: Montserrat, sans-serif;
+  background-color: #F6F6F6;
+}
+
+.content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 3.125vw 10.15vw 5.21vw 10.15vw;
+  gap: 3.125vw;
+}
+

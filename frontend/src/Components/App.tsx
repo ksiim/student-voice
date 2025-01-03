@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Homepage from '../NewPages/Homepage/Homepage.tsx';
-import TeacherProfile from '../Pages/profile/TeacherProfile.tsx'
+import TeacherProfile from '../NewPages/Profile/Profile.tsx'
 import '../index.css';
 import CreateUser from '../NewPages/CreateUser/CreateUser.tsx';
 import FeedbackForm from '../NewPages/FeedbackForm/FeedbackForm.tsx';
