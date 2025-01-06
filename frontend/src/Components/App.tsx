@@ -15,6 +15,8 @@ import LoadClass from '../NewPages/LoadClass/LoadClass.tsx';
 import LoginPage from '../NewPages/LoginPage/LoginPage.tsx';
 import Users from '../NewPages/Users/Users.tsx';
 import UpdateUser from '../NewPages/UpdateUser/UpdateUser.tsx';
+import Metrics from '../NewPages/Metrics/Metrics.tsx';
+
 
 function App()  {
   return (
@@ -33,6 +35,7 @@ function App()  {
         <Route path='/changePassword' element={<ChangePassword/>}/>
         <Route path='/createForm' element={<CreateForm/>}/>
         <Route path='/list' element={<StudentList/>} />
+        <Route path='/metrics' element={<Metrics/>} />
         <Route path='/load' element={<LoadClass items={[
           { subject: 'Арх эвм', group: 'АТ-01', time: '12:30-13:30', date: new Date(2024,10,30), place: 'Ирит-РТФ'},
           { subject: 'Арх эвм', group: 'АТ-01', time: '12:30-13:30', date: new Date(2024,10,30), place: 'Ирит-РТФ'},

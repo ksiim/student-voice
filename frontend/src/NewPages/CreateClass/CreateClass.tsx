@@ -5,7 +5,9 @@ import DropdownMenu from '../../NewComponents/DropdownMenu/DropdownMenu.tsx';
 import InputField from '../../NewComponents/InputField/InputField.tsx';
 import CreateClassCard from '../../NewComponents/CreateClassCard/CreateClassCard.tsx';
 import Button from '../../NewComponents/Button/Button.tsx';
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { setAuthHeader, getToken } from '../../../public/serviceToken.js';
+import axios from 'axios';
 
 const options = [
   'Технологии программирования',
@@ -23,7 +25,7 @@ const CreateClass: React.FC = () => {
   const [place, setPlace] = useState('');
   const [groups, setGroups] = useState('');
   const [cards, setCards] = useState<{ day: string; time: string; id: string }[]>([
-    { id: crypto.randomUUID(), day: '', time: '' } // Одна пустая карточка по умолчанию
+    { id: crypto.randomUUID(), day: '', time: '' },
   ]);
   const [repeatFrequency, setRepeatFrequency] = useState<string>('everyWeek');
   const navigate = useNavigate();
@@ -42,17 +44,104 @@ const CreateClass: React.FC = () => {
   };
   
   const updateCard = (id: string, day: string, time: string) => {
-    setCards(
-      cards.map((card) =>
-        card.id === id ? { ...card, day, time } : card
-      )
-    );
+    setCards(cards.map((card) => (card.id === id ? { ...card, day, time } : card)));
   };
+  
+  // Функция для вычисления следующей даты для конкретного дня недели
+  // Функция для вычисления следующей даты для конкретного дня недели
+  const getNextDate = (day: string): Date => {
+    const today = new Date();
+    const daysOfWeek = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
+    const dayIndex = daysOfWeek.indexOf(day);
+    
+    if (dayIndex === -1) {
+      throw new Error('Invalid day'); // Если день введен некорректно
+    }
+    
+    const currentDayIndex = today.getDay() === 0 ? 6 : today.getDay() - 1; // Корректируем для воскресенья
+    
+    let daysDifference = dayIndex - currentDayIndex;
+    if (daysDifference <= 0) {
+      daysDifference += 7; // Если выбранный день на следующей неделе, добавляем 7 дней
+    }
+    
+    today.setDate(today.getDate() + daysDifference); // Устанавливаем следующую дату
+    return today; // Возвращаем объект Date
+  };
+  
+  const createClass = async () => {
+    if (!selectedOption || !place || !groups.trim()) {
+      console.error("Все поля обязательны для заполнения");
+      return;
+    }
+    
+    const token = getToken();
+    if (token) {
+      setAuthHeader(token);
+    }
+    
+    const subject_id = '5100f637-ec07-4cf0-afbd-49a3efed2ee7';
+    const teacher_id = '94b30151-089b-48fc-a85a-620a4ce4831c';
+    
+    const groupList = groups.trim().split(' ');
+    
+    const createRequests = cards.map(async (card) => {
+      const [startTimeStr, endTimeStr] = card.time.split(' - ');
+      
+      const [startHours, startMinutes] = startTimeStr.split(':').map(Number);
+      
+      // Получаем день недели из card (например, "Понедельник")
+      const nextDate = getNextDate(card.day); // Используем день из card
+      const start_time = new Date(nextDate); // Устанавливаем вычисленную дату как дату старта
+      start_time.setHours(startHours, startMinutes, 0, 0); // Устанавливаем время
+      start_time.setMinutes(start_time.getMinutes() - start_time.getTimezoneOffset()); // Применяем timezone offset
+      
+      if (isNaN(start_time.getTime())) {
+        console.error(`Невалидная дата: ${startTimeStr}`);
+        return;
+      }
+      
+      const [endHours, endMinutes] = endTimeStr.split(':').map(Number);
+      const end_time = new Date(start_time);
+      end_time.setHours(endHours, endMinutes, 0, 0);
+      end_time.setMinutes(end_time.getMinutes() - end_time.getTimezoneOffset());
+      
+      if (isNaN(end_time.getTime())) {
+        console.error(`Невалидная дата: ${endTimeStr}`);
+        return;
+      }
+      
+      try {
+        await axios.post(
+          'http://localhost:8000/api/v1/classes/',
+          {
+            name: selectedOption,
+            description: 'Описание пары',
+            start_time: start_time.toISOString(),
+            end_time: end_time.toISOString(),
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+            subject_id,
+            teacher_id,
+            groups: groupList,
+          },
+          {
+            headers: { 'Content-Type': 'application/json' }
+          }
+        );
+      } catch (error) {
+        console.error('Ошибка при создании пары:', error);
+      }
+    });
+    
+    await Promise.all(createRequests);
+  };
+  
+  
   
   return (
     <div className={styles.wrapper}>
       <Header />
-      
       <div className={styles.content}>
         <h2 className={styles.content__title}>Создание пары</h2>
         
@@ -109,9 +198,7 @@ const CreateClass: React.FC = () => {
           </div>
         </div>
         <fieldset className={styles.buttonGroup}>
-          <p className={styles.buttonGroup__title}>Повторяется
-            каждую(-ые)
-          </p>
+          <p className={styles.buttonGroup__title}>Повторяется каждую(-ые)</p>
           
           <div className={styles.buttonGroup__radioButton}>
             <input
@@ -149,13 +236,8 @@ const CreateClass: React.FC = () => {
             <label htmlFor="oddWeeks">2 недели (нечетные)</label>
           </div>
         </fieldset>
-        <div className={styles.bottomButtons}>
-          <Button type={'button'} text={'Назад'} color={'#CCCCCC'} onClick={() => navigate(-1)} />
-          <div className={styles.bottomButtons__rightSection}>
-            <Button type={'button'} text={'Удалить'} color={'#1E4391'} onClick={() => navigate(-1)} />
-            <Button type={'button'} text={'Сохранить'} color={'#1E4391'} onClick={() => {}}/>
-          </div>
-        </div>
+        
+        <Button onClick={createClass}  text={'Создать'} />
       </div>
     </div>
   );

@@ -21,5 +21,12 @@
   flex: 1;
   padding: 3.125vw 10.15vw 5.21vw 10.15vw;
   gap: 3.125vw;
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 3.125vw;
+  }
 }
+
 

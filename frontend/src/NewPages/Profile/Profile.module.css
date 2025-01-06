@@ -22,5 +22,10 @@
   padding: 3.125vw 10.15vw 5.21vw 10.15vw;
   gap: 3.125vw;
 }
+.content__list {
+  display: flex;
+  flex-direction: column;
+  gap: 3.125vw;
+}
 
 /*# sourceMappingURL=Profile.module.css.map */

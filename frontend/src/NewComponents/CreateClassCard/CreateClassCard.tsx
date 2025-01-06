@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './CreateClassCard.module.scss';
 import DropdownMenu from '../DropdownMenu/DropdownMenu.tsx';
 import trashIcon from '/assets/images/trash.svg';
@@ -34,6 +34,13 @@ const CreateClassCard: React.FC<CreateClassCardProps> = ({ day, time, onRemove, 
   const [selectedOption, setSelectedOption] = useState(day);
   const [selectedTime, setSelectedTime] = useState(time);
   
+  useEffect(() => {
+    if (selectedOption) {
+      const nextDate = getNextDate(selectedOption);
+      console.log('Next Date:', nextDate);
+    }
+  }, [selectedOption]);
+  
   const handleOptionSelect = (option: string) => {
     setSelectedOption(option);
     onCardUpdate(option, selectedTime);
@@ -44,11 +51,37 @@ const CreateClassCard: React.FC<CreateClassCardProps> = ({ day, time, onRemove, 
     onCardUpdate(selectedOption, timeOption);
   };
   
+  const getNextDate = (day: string): string => {
+    const today = new Date();
+    const daysOfWeek = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
+    const dayIndex = daysOfWeek.indexOf(day);
+    
+    if (dayIndex === -1) {
+      return 'Invalid day'; // Если день введен некорректно
+    }
+    
+    const currentDayIndex = today.getDay() === 0 ? 6 : today.getDay() - 1; // Корректируем, если сегодня воскресенье
+    
+    let daysDifference = dayIndex - currentDayIndex;
+    if (daysDifference <= 0) {
+      daysDifference += 7; // Если выбранный день в следующей неделе, прибавляем 7 дней
+    }
+    
+    today.setDate(today.getDate() + daysDifference); // Устанавливаем следующую дату
+    return today.t; // Возвращаем объект Date
+  };
+
+// Пример использования
+  const nextDate = getNextDate('Понедельник'); // Выбираем день для вычисления следующей даты
+  const start_time = nextDate; // Устанавливаем start_time в следующую дату
+  console.log('Start time:', start_time); // Выводим start_time
+  
+  
   return (
     <div className={styles.wrapper}>
       <div className={styles.wrapper__dropdown}>
         <DropdownMenu
-          placeholder={'Выберите'}
+          placeholder={'Выберите день'}
           options={weekOptions}
           onOptionSelect={handleOptionSelect}
           selectedOption={selectedOption}
@@ -57,7 +90,7 @@ const CreateClassCard: React.FC<CreateClassCardProps> = ({ day, time, onRemove, 
       <div className={styles.dateDropdown}>
         <TimeDropdown
           options={timeOptions}
-          placeholder={timeOptions[0]}
+          placeholder={'Выберите время'}
           selectedOption={selectedTime}
           onOptionSelect={handleTimeSelect}
         />
