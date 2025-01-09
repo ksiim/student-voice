@@ -5,7 +5,7 @@ interface ButtonProps {
   text: string;
   type?: 'button' | 'submit' | 'reset'; // Добавляем type как опциональное свойство
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
-  color: string
+  color?: string
   disabled?: boolean
 }
 

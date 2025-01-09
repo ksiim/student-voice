@@ -1,18 +1,24 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 .wrapper {
   display: flex;
   flex-direction: column;
   gap: 0.21vw;
-  height: 100%;
+  height: auto;
 }
 .wrapper__content {
-  height: 4.06vw;
+  min-height: 4.06vw;
   display: flex;
   flex-direction: column;
   gap: 0.42vw;
 }
 @media (max-width: 768px) {
   .wrapper__content {
-    height: 10.625vw;
+    min-height: 10.625vw;
     font-size: 5vw;
     line-height: 7.5vw;
   }
@@ -39,13 +45,13 @@
 
 .input {
   width: 100%;
-  height: 2.135vw;
+  min-height: 2.135vw;
   font-size: 1.25vw;
   font-weight: 600;
-  line-height: 1.5vw;
+  line-height: 1.6vw;
   text-align: left;
-  padding: 0;
   padding-right: 1.875vw;
+  padding-bottom: 0.625vw;
   text-underline-position: from-font;
   text-decoration-skip-ink: none;
   border: none;
@@ -53,9 +59,7 @@
   outline: none;
   background: none;
   margin: 0;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
+  transition: height 0.2s ease;
 }
 .input:focus {
   border-bottom: 0.104vw solid #1E4391;
@@ -69,7 +73,7 @@
 }
 @media (max-width: 768px) {
   .input {
-    height: 5.652vw;
+    min-height: 5.652vw;
     font-size: 5vw;
     line-height: 7.5vw;
   }
@@ -93,6 +97,11 @@
   text-align: left;
   text-underline-position: from-font;
   text-decoration-skip-ink: none;
+}
+
+.inputDisabled {
+  color: #CCCCCC;
+  cursor: not-allowed;
 }
 
 /*# sourceMappingURL=InputField.module.css.map */

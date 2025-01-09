@@ -1,19 +1,19 @@
 .wrapper {
   width: 100%;
-  height: 160px;
-  padding: 51.5px 195px;
+  height: 8.33vw;
+  padding: 2.68vw 10.16vw;
   display: flex;
   justify-content: space-between;
 }
 
 .navigation {
   display: flex;
-  gap: 119.5px;
+  gap: 6.22vw;
 }
 .navigation__link {
   align-content: center;
-  font-size: 24px;
-  line-height: 28.8px;
+  font-size: 1.25vw;
+  line-height: 1.5vw;
   font-family: inherit;
   font-weight: 600;
   cursor: pointer;
@@ -22,7 +22,7 @@
   color: #0F2B5E;
 }
 .navigation__link:focus {
-  border: 1px solid #3b82f6;
+  border: 0.05vw solid #3b82f6;
 }
 
 /*# sourceMappingURL=Header.module.css.map */

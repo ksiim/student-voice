@@ -1,25 +1,30 @@
-.wrapper{
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.wrapper {
   display: flex;
   flex-direction: column;
   gap: 0.21vw;
-  height: 100%;
+  height: auto; // Изменено с height: 100%
 
-  &__content{
-    height: 4.06vw;
+  &__content {
+    min-height: 4.06vw; // Изменено с height на min-height
     display: flex;
     flex-direction: column;
     gap: 0.42vw;
 
     @media (max-width: 768px) {
-      height: 10.625vw; // Фиксированная высота для телефонов
+      min-height: 10.625vw;
       font-size: 5vw;
-      line-height: 7.5vw; // Уменьшаем отступ для иконки
+      line-height: 7.5vw;
     }
   }
-
 }
 
-.label{
+.label {
   font-size: 1.25vw;
   font-weight: 600;
   line-height: 1.5vw;
@@ -39,13 +44,13 @@
 
 .input {
   width: 100%;
-  height: 2.135vw;
+  min-height: 2.135vw;
   font-size: 1.25vw;
   font-weight: 600;
-  line-height: 1.5vw;
+  line-height: 1.6vw;
   text-align: left;
-  padding: 0;
-  padding-right: 1.875vw; // Добавлено место для иконки
+  padding-right: 1.875vw;
+  padding-bottom: 0.625vw;
   text-underline-position: from-font;
   text-decoration-skip-ink: none;
   border: none;
@@ -53,32 +58,29 @@
   outline: none;
   background: none;
   margin: 0;
-
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
+  transition: height 0.2s ease; // Добавлена плавная анимация
 
   &:focus {
     border-bottom: 0.104vw solid #1E4391;
   }
 
-  &::placeholder{
+  &::placeholder {
     color: #CCCCCC;
   }
 
   &:-webkit-autofill {
-    box-shadow: 0 0 0 52.08vw #F6F6F6 inset; // Убираем желтую подсветку
-    -webkit-text-fill-color: #000; // Цвет текста
+    box-shadow: 0 0 0 52.08vw #F6F6F6 inset;
+    -webkit-text-fill-color: #000;
   }
 
   @media (max-width: 768px) {
-    height: 5.652vw; // Фиксированная высота для телефонов
+    min-height: 5.652vw;
     font-size: 5vw;
-    line-height: 7.5vw; // Уменьшаем отступ для иконки
+    line-height: 7.5vw;
   }
 }
 
-.icon{
+.icon {
   width: 1.5vw;
   height: 1.5vw;
 }
@@ -87,7 +89,7 @@
   border-bottom: 0.104vw solid red;
 }
 
-.errorText{
+.errorText {
   height: 1.04vw;
   color: red;
   font-size: 0.73vw;
@@ -96,4 +98,9 @@
   text-align: left;
   text-underline-position: from-font;
   text-decoration-skip-ink: none;
+}
+
+.inputDisabled {
+  color: #CCCCCC;
+  cursor: not-allowed;
 }
