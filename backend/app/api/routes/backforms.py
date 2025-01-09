@@ -76,3 +76,20 @@ async def read_backform_by_class_id(
     if backform is None:
         raise HTTPException(status_code=404, detail="BackForm not found")
     return backform
+
+
+@router.patch(
+    "/{backform_id}",
+    # dependencies=[Depends(get_current_active_superuser)],
+    response_model=BackFormPublic
+)
+async def update_backform(
+    session: SessionDep,
+    backform_id: uuid.UUID,
+    backform_in: BackFormUpdate,
+) -> Any:
+    """
+    Update an backform.
+    """
+    backform = await crud.update_backform(session=session, backform_id=backform_id, backform_update=backform_in)
+    return backform

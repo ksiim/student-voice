@@ -251,3 +251,14 @@ async def get_backform_by_class_id(session: AsyncSession, class_id: uuid.UUID) -
     statement = select(BackForm).where(BackForm.class_id == class_id)
     backform = (await session.execute(statement)).scalars().first()
     return backform
+
+async def update_backform(session: AsyncSession, backform_id: uuid.UUID, backform_in: BackFormCreate) -> Any:
+    backform = await get_backform_by_id(session=session, backform_id=backform_id)
+    if backform is None:
+        raise HTTPException(status_code=404, detail="BackForm not found")
+    backform_data = backform_in.model_dump(exclude_unset=True)
+    backform.sqlmodel_update(backform_data)
+    session.add(backform)
+    await session.commit()
+    await session.refresh(backform)
+    return backform
