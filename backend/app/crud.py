@@ -223,9 +223,7 @@ async def get_qr_code_by_class_id(class_id, session: AsyncSession) -> QRCode:
 
 async def create_backform(session: AsyncSession, backform_create: BackFormCreate) -> BackForm:
     end_of_active_status = backform_create.end_of_active_status
-    print(type(end_of_active_status))
     if type(end_of_active_status) is not datetime:
-        print(123)
         end_of_active_status = end_of_active_status().replace(tzinfo=None)
     db_obj = BackForm.model_validate(
         backform_create,
@@ -257,7 +255,13 @@ async def update_backform(session: AsyncSession, backform_id: uuid.UUID, backfor
     if backform is None:
         raise HTTPException(status_code=404, detail="BackForm not found")
     backform_data = backform_in.model_dump(exclude_unset=True)
-    backform.sqlmodel_update(backform_data)
+    backform.sqlmodel_update(
+        backform_data,
+        update={
+            'updated_at': backform_in.updated_at,
+            'end_of_active_status': backform_in.end_of_active_status.replace(tzinfo=None),
+        }
+    )
     session.add(backform)
     await session.commit()
     await session.refresh(backform)
