@@ -79,17 +79,17 @@ async def read_backform_by_class_id(
 
 
 @router.patch(
-    "/{backform_id}",
+    "/{class_id}",
     # dependencies=[Depends(get_current_active_superuser)],
     response_model=BackFormPublic
 )
-async def update_backform(
+async def update_backform_by_class_id(
     session: SessionDep,
-    backform_id: uuid.UUID,
+    class_id: uuid.UUID,
     backform_in: BackFormUpdate,
 ) -> Any:
     """
-    Update an backform.
+    Update an backform by class id
     """
-    backform = await crud.update_backform(session=session, backform_id=backform_id, backform_in=backform_in)
+    backform = await crud.update_backform(session=session, class_id=class_id, backform_in=backform_in)
     return backform
