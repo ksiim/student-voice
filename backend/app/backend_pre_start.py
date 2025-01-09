@@ -5,10 +5,6 @@ from sqlalchemy import Engine, text
 from sqlmodel import Session, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from tenacity import after_log, before_log, retry, stop_after_attempt, wait_fixed
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service as ChromeService
-from selenium.webdriver import Chrome
-from selenium.webdriver import ChromeOptions
 
 from app.core.db import async_engine
 
@@ -38,20 +34,9 @@ async def init(db_engine: Engine) -> None:
 
 async def main() -> None:
     logger.info("Initializing service")
-
-    # logger_selenium = logging.getLogger('selenium')
-    # logger_selenium.setLevel(logging.DEBUG)
-
-    
-    # options = webdriver.ChromeOptions()
-    # options.add_argument('--headless')
-    # options.add_argument('--disable-gpu')
-    # options.add_argument('--no-sandbox')
-    # options.add_argument('--disable-dev-shm-usage')
-
-    # driver = webdriver.Chrome(service=ChromeService(), options=options)
     
     await init(async_engine)
+    
     logger.info("Service finished initializing")
 
 

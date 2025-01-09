@@ -73,6 +73,25 @@ async def read_classes(
     return ClassesPublic(data=classes, count=count)
 
 @router.get(
+    '/{class_id}',
+    response_model=ClassPublic
+)
+async def read_class(
+    session: SessionDep,
+    class_id: uuid.UUID
+) -> Any:
+    """
+    Retrieve class.
+    """
+    class_ = await session.get(Class, class_id)
+    if not class_:
+        raise HTTPException(
+            status_code=404,
+            detail="The class with this id does not exist in the system.",
+        )
+    return class_
+
+@router.get(
     '/info/{class_id}',
 )
 async def read_class_info(

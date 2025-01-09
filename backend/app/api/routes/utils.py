@@ -41,7 +41,6 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 import asyncio
 
 class ModeusParser:
@@ -55,10 +54,10 @@ class ModeusParser:
     def start_browser(self):
         """Запускает браузер с помощью Selenium."""
         chrome_options = Options()
-        chrome_options.add_argument("--headless")  # Запуск в фоновом режиме
+        chrome_options.add_argument("--headless=new")
         chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument("--disable-dev-shm-usage")
-
+        
         self.driver = webdriver.Chrome(service=Service(), options=chrome_options)
 
     def close_browser(self):
@@ -69,24 +68,30 @@ class ModeusParser:
     def login(self):
         """Авторизуется на сайте Modeus."""
         self.driver.get(self.link)
-
+        
+        WebDriverWait(self.driver, 20).until(
+            lambda driver: driver.execute_script('return document.readyState') == 'complete'
+        )
+        
+        print(self.driver.page_source)
+        
         # Ввод логина и пароля
-        username_input = WebDriverWait(self.driver, 10).until(
-            EC.presence_of_element_located((By.NAME, "username"))
-        )
-        username_input.send_keys(self.username)
+        # username_input = WebDriverWait(self.driver, 10).until(
+        #     EC.presence_of_element_located((By.NAME, "username"))
+        # )
+        # username_input.send_keys(self.username)
 
-        password_input = self.driver.find_element(By.NAME, "password")
-        password_input.send_keys(self.password)
+        # password_input = self.driver.find_element(By.NAME, "password")
+        # password_input.send_keys(self.password)
 
-        # Нажатие кнопки входа
-        submit_button = self.driver.find_element(By.CSS_SELECTOR, 'button[type="submit"]')
-        submit_button.click()
+        # # Нажатие кнопки входа
+        # submit_button = self.driver.find_element(By.CSS_SELECTOR, 'button[type="submit"]')
+        # submit_button.click()
 
-        # Ожидание перехода на следующую страницу
-        WebDriverWait(self.driver, 10).until(
-            EC.url_to_be(self.link)
-        )
+        # # Ожидание перехода на следующую страницу
+        # WebDriverWait(self.driver, 10).until(
+        #     EC.url_to_be(self.link)
+        # )
 
     def get_html(self):
         """Получает HTML-код текущей страницы."""

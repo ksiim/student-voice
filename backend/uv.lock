@@ -171,6 +171,7 @@ dependencies = [
     { name = "sqlmodel" },
     { name = "tenacity" },
     { name = "typing-extensions" },
+    { name = "undetected-chromedriver" },
     { name = "webdriver-manager" },
     { name = "xlsxwriter" },
 ]
@@ -216,6 +217,7 @@ requires-dist = [
     { name = "sqlmodel", specifier = ">=0.0.21,<1.0.0" },
     { name = "tenacity", specifier = ">=8.2.3,<9.0.0" },
     { name = "typing-extensions", specifier = ">=4.12.2" },
+    { name = "undetected-chromedriver", specifier = ">=3.5.5" },
     { name = "webdriver-manager", specifier = ">=4.0.2" },
     { name = "xlsxwriter", specifier = ">=3.2.0" },
 ]
@@ -2224,6 +2226,17 @@ sdist = { url = "https://files.pythonhosted.org/packages/e1/34/943888654477a574a
 wheels = [
     { url = "https://files.pythonhosted.org/packages/a6/ab/7e5f53c3b9d14972843a647d8d7a853969a58aecc7559cb3267302c94774/tzdata-2024.2-py2.py3-none-any.whl", hash = "sha256:a48093786cdcde33cad18c2555e8532f34422074448fbc874186f0abd79565cd", size = 346586 },
 ]
+
+[[package]]
+name = "undetected-chromedriver"
+version = "3.5.5"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "requests" },
+    { name = "selenium" },
+    { name = "websockets" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/1f/98/7ab46625ce2317756e4e857fe6ac24b6378c3e8f477da26c95226ed8ccb7/undetected-chromedriver-3.5.5.tar.gz", hash = "sha256:9f945e1435005247abe17de316bcfda85b284a4177fd5f25167c78ced33b65ec", size = 65409 }
 
 [[package]]
 name = "urllib3"
