@@ -171,6 +171,7 @@ class ClassBase(SQLModel):
     end_time: datetime = Field(default=datetime.now)
     study_groups: str | None = Field(
         max_length=255, default=None, nullable=True)
+    place: str | None = Field(max_length=255, default=None, nullable=True)
 
 
 class ClassCreate(ClassBase):
