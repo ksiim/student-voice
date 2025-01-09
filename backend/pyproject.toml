@@ -34,6 +34,8 @@ dependencies = [
     "selenium>=4.27.1",
     "selenium-wire>=5.1.0",
     "webdriver-manager>=4.0.2",
+    "pandas>=2.2.3",
+    "xlsxwriter>=3.2.0",
 ]
 
 [tool.uv]

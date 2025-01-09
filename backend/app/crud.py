@@ -1,4 +1,5 @@
 import asyncio
+from datetime import datetime
 import uuid
 from typing import Any
 
@@ -6,6 +7,7 @@ from app.utils import calculate_average_event_quality, calculate_average_materia
 from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
+from sqlalchemy.orm import joinedload
 
 from app.core.security import get_password_hash, verify_password
 from app.models import (
@@ -140,7 +142,13 @@ async def update_class(*, session: AsyncSession, class_: Class, class_in: ClassU
 
 
 async def get_class_info(session: AsyncSession, class_id: uuid.UUID) -> Class | None:
-    class_ = await get_class(session, class_id)
+    class_query = select(Class).where(Class.id == class_id).options(joinedload(Class.backform))
+    class_ = (await session.execute(class_query)).unique().scalar_one_or_none()
+    
+    additional_question_1 = class_.backform.additional_question_1,
+    additional_question_2 = class_.backform.additional_question_2,
+    additional_question_3 = class_.backform.additional_question_3,
+        
     reviews = await get_reviews_by_class_id(session, class_id)
 
     avg_event_quality, avg_material_clarity, avg_teaching_quality, answers_to_questions = await asyncio.gather(
@@ -151,14 +159,14 @@ async def get_class_info(session: AsyncSession, class_id: uuid.UUID) -> Class | 
     )
 
     return ClassInfo(
-        additional_question_1=class_.backform.additional_question_1,
-        additional_question_2=class_.backform.additional_question_2,
-        additional_question_3=class_.backform.additional_question_3,
+        additional_question_1=additional_question_1[0],
+        additional_question_2=additional_question_2[0],
+        additional_question_3=additional_question_3[0],
         avg_event_quality=avg_event_quality,
         avg_material_clarity=avg_material_clarity,
         avg_teaching_quality=avg_teaching_quality,
         comments=[review.comment for review in reviews],
-        answers_to_questions=...
+        answers_to_questions=answers_to_questions
     )
 
 
@@ -214,12 +222,17 @@ async def get_qr_code_by_class_id(class_id, session: AsyncSession) -> QRCode:
 
 
 async def create_backform(session: AsyncSession, backform_create: BackFormCreate) -> BackForm:
+    end_of_active_status = backform_create.end_of_active_status
+    print(type(end_of_active_status))
+    if type(end_of_active_status) is not datetime:
+        print(123)
+        end_of_active_status = end_of_active_status().replace(tzinfo=None)
     db_obj = BackForm.model_validate(
         backform_create,
         update={
             'created_at': backform_create.created_at,
             'updated_at': backform_create.updated_at,
-            'end_of_active_status': backform_create.end_of_active_status().replace(tzinfo=None),
+            'end_of_active_status': end_of_active_status.replace(tzinfo=None),
         }
     )
     session.add(db_obj)

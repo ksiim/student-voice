@@ -17,6 +17,7 @@ from app.models import (
     Item,
     Message,
     Role,
+    SendToAdminEmailIn,
     UpdatePassword,
     User,
     UserCreate,
@@ -26,7 +27,7 @@ from app.models import (
     UserUpdate,
     UserUpdateMe,
 )
-from app.utils import generate_new_password_email, send_email
+from app.utils import generate_new_password_email, generate_text_email, send_email
 
 import secrets
 
@@ -290,6 +291,25 @@ async def send_new_password_on_mail(
     )
     await send_email(
         email_to=email,
+        subject=email_data.subject,
+        html_content=email_data.html_content,
+    )
+    return {"message": "Email sent successfully"}
+
+
+@router.post(
+    '/send_to_admin',
+)
+async def send_to_admin(
+    send_to_admin_email_in: SendToAdminEmailIn
+):
+    email_data = await generate_text_email(
+        name=send_to_admin_email_in.name,
+        text=send_to_admin_email_in.text,
+        email=send_to_admin_email_in.email
+    )
+    await send_email(
+        email_to=settings.EMAILS_FROM_EMAIL,
         subject=email_data.subject,
         html_content=email_data.html_content,
     )

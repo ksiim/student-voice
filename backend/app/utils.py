@@ -62,6 +62,15 @@ async def generate_test_email(email_to: str) -> EmailData:
     return EmailData(html_content=html_content, subject=subject)
 
 
+async def generate_text_email(name: str, text: str, email: str) -> EmailData:
+    project_name = settings.PROJECT_NAME
+    subject = f"{project_name} - Text email"
+    html_content = await render_email_template(
+        template_name="text_email.html",
+        context={"project_name": settings.PROJECT_NAME, "text": text, "name": name, "email": email},
+    )
+    return EmailData(html_content=html_content, subject=subject)
+
 
 async def generate_new_password_email(
     email_to: str, username: str, password: str, title: str
@@ -119,3 +128,4 @@ async def get_answers_to_questions(reviews: list[Review]) -> list[dict[str, str]
             "answer_to_question_2": review.answer_to_question_2,
             "answer_to_question_3": review.answer_to_question_3,
         })
+    return answers_to_questions
