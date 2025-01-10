@@ -8,40 +8,64 @@
   font-family: Arial, sans-serif;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 1.04vw;
 }
 
 .section {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 0.521vw;
 }
 
 .inputs {
   display: flex;
-  gap: 6px;
+  gap: 0.3125vw;
+  align-items: center;
 }
 
 .title {
-  font-size: 24px;
+  font-size: 1.25vw;
   font-weight: 600;
-  line-height: 28.8px;
+  line-height: 1.5vw;
   text-align: left;
   text-underline-position: from-font;
   text-decoration-skip-ink: none;
 }
 
-.timeSelect, .timeInput, .dateInput {
+.timeSelect, .timeInput, .dateInput, .dateSelect {
+  font-family: Montserrat, sans-serif;
   color: #1E4391;
-  padding: 8px;
-  border-radius: 8px;
-  border: 2px solid #1E4391;
-  font-size: 24px;
+  border-radius: 0.417vw;
+  border: 0.104vw solid #1E4391;
+  font-size: 1.25vw;
   font-weight: 600;
-  line-height: 28.8px;
+  line-height: 1.5vw;
   text-align: center;
   text-underline-position: from-font;
   text-decoration-skip-ink: none;
+  height: 2.083vw;
+}
+
+.timeSelect, .dateInput, .dateSelect {
+  width: 9.17vw;
+}
+
+.timeInput, .timeSelect {
+  padding: 0.286vw 1.094vw;
+}
+
+.dateSelect {
+  padding: 0.286vw 0.5vw;
+}
+
+.dateSelect::-webkit-calendar-picker-indicator {
+  display: none;
+  -webkit-appearance: none;
+  opacity: 0;
+}
+
+.dateInput {
+  padding: 0.286vw 0.5208vw;
 }
 
 .error {

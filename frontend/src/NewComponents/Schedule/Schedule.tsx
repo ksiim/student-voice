@@ -31,11 +31,13 @@ const Schedule: React.FC<ScheduleProps> = ({
                                            }) => {
   const [currentWeek, setCurrentWeek] = useState({
     start: new Date(),
-    end: new Date()
+    end: new Date(),
   });
   
   useEffect(() => {
-    // При первой загрузке устанавливаем текущую неделю
+    console.log("Schedule props:", days); // Логирование данных в компоненте
+    
+    // Устанавливаем начальную неделю при загрузке
     setInitialWeek();
   }, []);
   
@@ -43,24 +45,16 @@ const Schedule: React.FC<ScheduleProps> = ({
     const today = new Date();
     const currentDay = today.getDay();
     
-    // Получаем начало недели (понедельник)
     const monday = new Date(today);
     monday.setDate(today.getDate() - (currentDay === 0 ? 6 : currentDay - 1));
+    monday.setHours(0, 0, 0, 0);
     
-    // Получаем конец недели (воскресенье)
     const sunday = new Date(monday);
     sunday.setDate(monday.getDate() + 6);
+    sunday.setHours(23, 59, 59, 999);
     
     setCurrentWeek({ start: monday, end: sunday });
     onWeekChange?.(monday, sunday);
-  };
-  
-  const formatDate = (date: Date): string => {
-    return date.toLocaleDateString('ru-RU', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
-    }).replace(/\./g, '.');
   };
   
   const navigateWeek = (direction: 'prev' | 'next') => {
@@ -75,12 +69,49 @@ const Schedule: React.FC<ScheduleProps> = ({
       newEnd.setDate(newEnd.getDate() + 7);
     }
     
+    newStart.setHours(0, 0, 0, 0);
+    newEnd.setHours(23, 59, 59, 999);
+    
     setCurrentWeek({ start: newStart, end: newEnd });
     onWeekChange?.(newStart, newEnd);
   };
   
+  const formatDate = (date: Date): string => {
+    return date
+      .toLocaleDateString('ru-RU', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+      })
+      .replace(/\./g, '.');
+  };
+  
+  const formatTime = (time: string): string => {
+    return time.slice(0, 5); // Оставляем только часы и минуты
+  };
+  
+  // Фильтруем дни, которые входят в текущую неделю
+  const filteredDays = days.filter((day) => {
+    const [dayNum, month, year] = day.date.split('.').map(Number);
+    const dayDate = new Date(year, month - 1, dayNum); // создаем дату в формате YYYY-MM-DD
+    return dayDate >= currentWeek.start && dayDate <= currentWeek.end;
+  });
+  
+  // Сортировка пар внутри дня по времени
+  const sortedLessons = (lessons: Lesson[]) => {
+    return lessons.sort((a, b) => {
+      const [aStartHour, aStartMinute] = a.startTime.split(':').map(Number);
+      const [bStartHour, bStartMinute] = b.startTime.split(':').map(Number);
+      
+      const aTotalMinutes = aStartHour * 60 + aStartMinute;
+      const bTotalMinutes = bStartHour * 60 + bStartMinute;
+      
+      return aTotalMinutes - bTotalMinutes;
+    });
+  };
+  
   // Определяем количество столбцов
-  const columns = days.length === 6 ? 3 : days.length;
+  const columns = filteredDays.length === 6 ? 3 : filteredDays.length;
   
   return (
     <div className={styles.scheduleContainer}>
@@ -94,13 +125,9 @@ const Schedule: React.FC<ScheduleProps> = ({
             <ChevronLeft size={36} />
           </button>
           <div className={styles.dateRangeContainer}>
-            <div className={styles.dateBox}>
-              {formatDate(currentWeek.start)}
-            </div>
+            <div className={styles.dateBox}>{formatDate(currentWeek.start)}</div>
             <div className={styles.dateSeparator}>-</div>
-            <div className={styles.dateBox}>
-              {formatDate(currentWeek.end)}
-            </div>
+            <div className={styles.dateBox}>{formatDate(currentWeek.end)}</div>
           </div>
           <button
             className={styles.navigationButton}
@@ -114,9 +141,9 @@ const Schedule: React.FC<ScheduleProps> = ({
       
       <div
         className={styles.daysContainer}
-        style={{ '--days-columns': columns } as React.CSSProperties}
+        style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` } as React.CSSProperties}
       >
-        {days.map((day) => (
+        {filteredDays.map((day) => (
           <div key={day.date} className={styles.dayCard}>
             <div className={styles.dayHeader}>
               <div>{day.weekDay}</div>
@@ -124,10 +151,10 @@ const Schedule: React.FC<ScheduleProps> = ({
             </div>
             
             <div className={styles.lessonCardList}>
-              {day.lessons.map((lesson) => (
+              {sortedLessons(day.lessons).map((lesson) => (
                 <div key={lesson.id} className={styles.lessonCard}>
                   <div className={styles.lessonTime}>
-                    {lesson.startTime}-{lesson.endTime}
+                    {formatTime(lesson.startTime)}-{formatTime(lesson.endTime)}
                   </div>
                   <div className={styles.lessonTitle}>{lesson.title}</div>
                   <div className={styles.actionButtons}>
@@ -157,3 +184,4 @@ const Schedule: React.FC<ScheduleProps> = ({
 };
 
 export default Schedule;
+

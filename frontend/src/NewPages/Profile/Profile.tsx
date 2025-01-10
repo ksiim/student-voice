@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import styles from './Profile.module.scss';
 import Header from '../../NewComponents/Header/Header_teacher/Header';
-import Schedule from '../../NewComponents/Schedule/Schedule.tsx'; // Adjust the import path according to your file structure
+import Schedule from '../../NewComponents/Schedule/Schedule.tsx';
 import { DaySchedule } from '../../NewComponents/Schedule/Schedule.tsx';
 import ClassList from '../../NewComponents/ClassList/ClassList.tsx';
 import { setAuthHeader, getToken } from '../../../public/serviceToken.js';
@@ -15,7 +15,6 @@ const Profile: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Логика работы с токеном
         const token = getToken();
         if (token) {
           setAuthHeader(token);
@@ -38,21 +37,32 @@ const Profile: React.FC = () => {
           },
         });
         
-        // Преобразование данных в формат DaySchedule[]
-        const formattedSchedule: DaySchedule[] = classesResponse.data.data.map((lesson: any) => ({
-          date: new Date(lesson.start_time).toLocaleDateString('ru-RU'), // Форматирование даты
-          weekDay: new Date(lesson.start_time).toLocaleDateString('ru-RU', { weekday: 'long' }), // День недели
-          lessons: [
-            {
-              id: lesson.id,
-              startTime: new Date(lesson.start_time).toLocaleTimeString('ru-RU'),
-              endTime: new Date(lesson.end_time).toLocaleTimeString('ru-RU'),
-              title: lesson.name,
-              isEditable: false, // Можно добавить дополнительную логику для редактируемости
-            },
-          ],
-        }));
+        // Группировка данных по дате
+        const scheduleMap: Record<string, DaySchedule> = {};
         
+        classesResponse.data.data.forEach((lesson: any) => {
+          const dateKey = new Date(lesson.start_time).toLocaleDateString('ru-RU');
+          const weekDay = new Date(lesson.start_time).toLocaleDateString('ru-RU', { weekday: 'long' });
+          
+          if (!scheduleMap[dateKey]) {
+            scheduleMap[dateKey] = {
+              date: dateKey,
+              weekDay,
+              lessons: [],
+            };
+          }
+          
+          scheduleMap[dateKey].lessons.push({
+            id: lesson.id,
+            startTime: new Date(lesson.start_time).toLocaleTimeString('ru-RU'),
+            endTime: new Date(lesson.end_time).toLocaleTimeString('ru-RU'),
+            title: lesson.name,
+            isEditable: false, // Здесь можно добавить логику редактируемости
+          });
+        });
+        
+        // Преобразование в массив для отображения
+        const formattedSchedule: DaySchedule[] = Object.values(scheduleMap);
         
         setSchedule(formattedSchedule);
       } catch (err: any) {
@@ -65,6 +75,7 @@ const Profile: React.FC = () => {
     fetchData();
   }, []);
   
+  
   const handleEditLesson = (lessonId: string) => {
     console.log('Edit lesson:', lessonId);
     // Логика редактирования занятия
@@ -75,10 +86,6 @@ const Profile: React.FC = () => {
     // Логика просмотра занятия
   };
   
-  const handleWeekChange = (startDate: Date, endDate: Date) => {
-    console.log(`Неделя изменена: с ${startDate} по ${endDate}`);
-    // Логика изменения недели, если потребуется
-  };
   
   if (loading) {
     return <div>Загрузка...</div>;

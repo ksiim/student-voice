@@ -27,11 +27,10 @@ const InputField: React.FC<InputFieldProps> = ({
   const adjustHeight = () => {
     const textarea = textareaRef.current;
     if (textarea) {
-      // Сначала сбрасываем высоту до минимума
-      textarea.style.height = '2.135vw';
-      // Затем устанавливаем высоту по содержимому
-      const scrollHeight = textarea.scrollHeight;
-      textarea.style.height = `${scrollHeight}px`;
+      // Сначала сбрасываем высоту
+      textarea.style.height = 'auto';  // Автоматически уменьшаем высоту
+      // Устанавливаем новую высоту по содержимому
+      textarea.style.height = `${textarea.scrollHeight}px`;
     }
   };
   

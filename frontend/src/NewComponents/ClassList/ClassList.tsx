@@ -6,6 +6,7 @@ import Button from '../Button/Button';
 import ClassListDateTimePicker from '../ClassListDateTimePicker/ClassListDateTimePicker.tsx';
 import { Clock, CheckCircle, XCircle, Edit, MessageSquare } from 'lucide-react';
 import { getToken, setAuthHeader } from '../../../public/serviceToken.js';
+import {useNavigate} from 'react-router-dom';
 
 interface FilterState {
   subjects: string[];
@@ -17,6 +18,7 @@ interface FilterState {
 }
 
 interface ClassRow {
+  id: string;
   subject: string;
   group: string;
   date: string;
@@ -33,6 +35,13 @@ const ClassList: React.FC = () => {
     statuses: ['В ожидании', 'Проведено', 'Не проведено'],
     selectedStatuses: []
   });
+  
+  const navigate = useNavigate();
+  
+  const handleFeedbackForm = (classId: string) => {
+    navigate(`/createForm/${classId}`);
+  };
+  
   
   const [classes, setClasses] = useState<ClassRow[]>([]);
   const [loading, setLoading] = useState(false);
@@ -60,15 +69,16 @@ const ClassList: React.FC = () => {
         
         // Форматируем данные для отображения
         const formattedClasses: ClassRow[] = rawClasses.map((lesson: any) => ({
+          id: lesson.id, // Добавляем id
           subject: lesson.name,
-          group: lesson.group || 'Группа неизвестна',
+          group: lesson.study_groups || 'Группа неизвестна',
           date: new Date(lesson.start_time).toLocaleDateString('ru-RU'),
-          // Убираем секунды из времени
           time: `${new Date(lesson.start_time).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })} - ${new Date(
             lesson.end_time
           ).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}`,
-          status: 'В ожидании', // Укажите статус по умолчанию или извлеките его из API
+          status: 'В ожидании',
         }));
+        
         
         
         setClasses(formattedClasses);
@@ -188,7 +198,7 @@ const ClassList: React.FC = () => {
                 </button>
               </td>
               <td>
-                <button className={styles.feedbackButton}>
+                <button onClick={ () => handleFeedbackForm(classRow.id)} className={styles.feedbackButton}>
                   <MessageSquare />
                 </button>
               </td>

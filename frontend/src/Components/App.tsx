@@ -8,7 +8,6 @@ import AdminPanel from '../Pages/admin/AdminPanel.tsx';
 import CreateClass from '../NewPages/CreateClass/CreateClass.tsx';
 import UploadReports from '../Pages/Reports/UploadReports.tsx';
 import ChangePassword from '../NewPages/ChangePassword/ChangePassword.tsx';
-import CreateForm from '../NewPages/CreateFeedbackForm/CreateFeedbackForm.tsx';
 import StudentList
   from '../NewPages/AttendanceList/AttendanceList.tsx';
 import LoadClass from '../NewPages/LoadClass/LoadClass.tsx';
@@ -16,6 +15,8 @@ import LoginPage from '../NewPages/LoginPage/LoginPage.tsx';
 import Users from '../NewPages/Users/Users.tsx';
 import UpdateUser from '../NewPages/UpdateUser/UpdateUser.tsx';
 import Metrics from '../NewPages/Metrics/Metrics.tsx';
+import CreateFeedbackForm
+  from '../NewPages/CreateFeedbackForm/CreateFeedbackForm.tsx';
 
 
 function App()  {
@@ -27,13 +28,13 @@ function App()  {
         <Route path="/profile" element={<TeacherProfile />} />
         <Route path="/createUser" element={<CreateUser />} />
         <Route path="/updateuser/:id" element={<UpdateUser />} />
-        <Route path="/feedback" element={<FeedbackForm/>} />
+        <Route path="/feedback/:class_id" element={<FeedbackForm />} />
         <Route path='/users' element={<Users/>}/>
         <Route path='/adminPanel' element={<AdminPanel/>}/>
         <Route path='/createClass' element={<CreateClass />}/>
         <Route path='/reports' element={<UploadReports />}/>
         <Route path='/changePassword' element={<ChangePassword/>}/>
-        <Route path='/createForm' element={<CreateForm/>}/>
+        <Route path="/createForm/:id" element={<CreateFeedbackForm />} />
         <Route path='/list' element={<StudentList/>} />
         <Route path='/metrics' element={<Metrics/>} />
         <Route path='/load' element={<LoadClass items={[

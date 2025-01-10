@@ -1,24 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './CreateClass.module.scss';
 import Header from '../../NewComponents/Header/Header_teacher/Header.tsx';
 import DropdownMenu from '../../NewComponents/DropdownMenu/DropdownMenu.tsx';
 import InputField from '../../NewComponents/InputField/InputField.tsx';
 import CreateClassCard from '../../NewComponents/CreateClassCard/CreateClassCard.tsx';
 import Button from '../../NewComponents/Button/Button.tsx';
-import { useNavigate } from 'react-router-dom';
 import { setAuthHeader, getToken } from '../../../public/serviceToken.js';
 import axios from 'axios';
-
-const options = [
-  'Технологии программирования',
-  'Операционные системы',
-  'Теория вероятностей и математическая статистика',
-  'История Российской цивилизации',
-  'Базы данных',
-  'Системная аналитика',
-  'Архитектура ЭВМ',
-  'Системный анализ',
-];
 
 const CreateClass: React.FC = () => {
   const [selectedOption, setSelectedOption] = useState('');
@@ -28,7 +16,25 @@ const CreateClass: React.FC = () => {
     { id: crypto.randomUUID(), day: '', time: '' },
   ]);
   const [repeatFrequency, setRepeatFrequency] = useState<string>('everyWeek');
-  const navigate = useNavigate();
+  const [subjects, setSubjects] = useState<{ name: string; id: string }[]>([]);
+  
+  // Получение данных из API
+  useEffect(() => {
+    const fetchSubjects = async () => {
+      try {
+        const token = getToken();
+        if (token) {
+          setAuthHeader(token);
+        }
+        const response = await axios.get('http://localhost:8000/api/v1/subjects/');
+        setSubjects(response.data.data);
+      } catch (error) {
+        console.error('Ошибка при загрузке списка предметов:', error);
+      }
+    };
+    
+    fetchSubjects();
+  }, []);
   
   const handleOptionSelect = (option: string) => {
     setSelectedOption(option);
@@ -47,8 +53,6 @@ const CreateClass: React.FC = () => {
     setCards(cards.map((card) => (card.id === id ? { ...card, day, time } : card)));
   };
   
-  // Функция для вычисления следующей даты для конкретного дня недели
-  // Функция для вычисления следующей даты для конкретного дня недели
   const getNextDate = (day: string): Date => {
     const today = new Date();
     const daysOfWeek = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
@@ -83,18 +87,26 @@ const CreateClass: React.FC = () => {
     const subject_id = '5100f637-ec07-4cf0-afbd-49a3efed2ee7';
     const teacher_id = '94b30151-089b-48fc-a85a-620a4ce4831c';
     
-    const groupList = groups.trim().split(' ');
+    // Парсинг групп: удаление лишних пробелов и фильтрация пустых значений
+    const groupList = groups
+      .trim()
+      .split(/\s+/) // Разделение по пробелам
+      .filter((group) => group !== ''); // Удаление пустых значений
+    
+    if (groupList.length === 0) {
+      console.error("Необходимо указать хотя бы одну группу");
+      return;
+    }
     
     const createRequests = cards.map(async (card) => {
       const [startTimeStr, endTimeStr] = card.time.split(' - ');
       
       const [startHours, startMinutes] = startTimeStr.split(':').map(Number);
       
-      // Получаем день недели из card (например, "Понедельник")
-      const nextDate = getNextDate(card.day); // Используем день из card
-      const start_time = new Date(nextDate); // Устанавливаем вычисленную дату как дату старта
-      start_time.setHours(startHours, startMinutes, 0, 0); // Устанавливаем время
-      start_time.setMinutes(start_time.getMinutes() - start_time.getTimezoneOffset()); // Применяем timezone offset
+      const nextDate = getNextDate(card.day);
+      const start_time = new Date(nextDate);
+      start_time.setHours(startHours, startMinutes, 0, 0);
+      start_time.setMinutes(start_time.getMinutes() - start_time.getTimezoneOffset());
       
       if (isNaN(start_time.getTime())) {
         console.error(`Невалидная дата: ${startTimeStr}`);
@@ -119,16 +131,16 @@ const CreateClass: React.FC = () => {
             description: 'Описание пары',
             start_time: start_time.toISOString(),
             end_time: end_time.toISOString(),
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
+            place: place,
             subject_id,
             teacher_id,
-            groups: groupList,
+            study_groups: groupList.join(', '), // Преобразуем массив обратно в строку
           },
           {
-            headers: { 'Content-Type': 'application/json' }
+            headers: { 'Content-Type': 'application/json' },
           }
         );
+        
       } catch (error) {
         console.error('Ошибка при создании пары:', error);
       }
@@ -136,7 +148,6 @@ const CreateClass: React.FC = () => {
     
     await Promise.all(createRequests);
   };
-  
   
   
   return (
@@ -151,7 +162,7 @@ const CreateClass: React.FC = () => {
               <DropdownMenu
                 label="Название предмета"
                 placeholder="Выберите"
-                options={options}
+                options={subjects.map((subject) => subject.name)} // Подставляем названия предметов
                 selectedOption={selectedOption}
                 onOptionSelect={handleOptionSelect}
               />
@@ -237,7 +248,7 @@ const CreateClass: React.FC = () => {
           </div>
         </fieldset>
         
-        <Button onClick={createClass}  text={'Создать'} />
+        <Button onClick={createClass} text={'Создать'} />
       </div>
     </div>
   );
