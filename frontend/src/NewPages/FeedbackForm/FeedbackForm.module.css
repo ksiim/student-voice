@@ -22,7 +22,6 @@ html, body {
 }
 .feedbackForm__title {
   font-family: inherit;
-  height: 15.93vw;
   font-size: 4.375vw;
   font-weight: 600;
   line-height: 5.25vw;
@@ -45,16 +44,16 @@ html, body {
 .feedbackForm__comments {
   display: flex;
   flex-direction: column;
-  height: 31.875vw;
   gap: 2.5vw;
   width: 100%;
 }
-.feedbackForm__comments__interesting {
+
+.additional {
   display: flex;
   flex-direction: column;
   gap: 0.625vw;
 }
-.feedbackForm__comments__interesting p {
+.additional p {
   color: #CCCCCC;
   font-size: 3.125vw;
   font-weight: 400;
@@ -74,6 +73,53 @@ html, body {
   text-underline-position: from-font;
   text-decoration-skip-ink: none;
   color: #CCCCCC;
+}
+
+.thankYouContainer {
+  font-family: Montserrat, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  padding: 2rem 1.5rem;
+  max-width: 100%;
+  text-align: start;
+}
+.thankYouContainer h1 {
+  font-size: 9.5vw;
+  font-weight: 600;
+  line-height: 8.25vw;
+  text-align: left;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+  margin-bottom: 32.8vw;
+}
+.thankYouContainer h2 {
+  font-size: 5.7vw;
+  font-weight: 600;
+  line-height: 5.25vw;
+  text-align: left;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+  margin-bottom: 7.5vw;
+}
+.thankYouContainer p {
+  font-size: 3.75vw;
+  color: #666;
+  line-height: 1.5;
+  margin-bottom: 2.5vw;
+  max-width: 93.75vw;
+}
+
+.buttonWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625vw;
+}
+
+.errorMessage {
+  color: red;
+  margin-top: 10px;
+  font-size: 14px;
 }
 
 /*# sourceMappingURL=FeedbackForm.module.css.map */

@@ -1,49 +1,35 @@
 import React from 'react';
-import { Star } from 'lucide-react';
 import styles from './FeedbackResults.module.scss';
+import { Star } from 'lucide-react';
 
-const FeedbackResults: React.FC = () => {
-  const feedbackData = {
-    averageRatings: {
-      teachingQuality: 4.2,
-      materialAccessibility: 3.8,
-      eventQuality: 4.5
-    },
-    comments: [
-      {
-        text: "Материал объясняется слишком быстро, было сложно следить за логикой объяснения.",
-        rating: 3
-      },
-      {
-        text: "Красно, что преподаватель уделяет время каждому, кто не успевает разобраться. Это очень помогает.",
-        rating: 5
-      },
-      {
-        text: "Спасибо за структурированный подход к занятию, было легко следовать теме и задавать вопросы!",
-        rating: 4
-      },
-      {
-        text: "Не хватает дополнительного материала",
-        rating: 3
-      },
-      {
-        text: "Красно, что преподаватель уделяет время каждому, кто не успевает разобраться. Это очень помогает.",
-        rating: 5
-      },
-      {
-        text: "Спасибо за структурированный подход к занятию, было легко следовать теме и задавать вопросы!",
-        rating: 4
-      },{
-        text: "Красно, что преподаватель уделяет время каждому, кто не успевает разобраться. Это очень помогает.",
-        rating: 5
-      },
-      {
-        text: "Спасибо за структурированный подход к занятию, было легко следовать теме и задавать вопросы!",
-        rating: 4
-      }
-    ]
+interface Review {
+  comment: string;
+  teaching_quality: number;
+  material_clarity: number;
+  event_quality: number;
+  answer_to_question_1?: string;
+  answer_to_question_2?: string;
+  answer_to_question_3?: string;
+  id: string;
+  class_id: string;
+}
+
+interface FeedbackResultsProps {
+  reviews: Review[];
+}
+
+const FeedbackResults: React.FC<FeedbackResultsProps> = ({ reviews }) => {
+  // Подсчет среднего значения рейтингов
+  const averageRatings = {
+    teachingQuality:
+      reviews.reduce((acc, review) => acc + review.teaching_quality, 0) / reviews.length || 0,
+    materialClarity:
+      reviews.reduce((acc, review) => acc + review.material_clarity, 0) / reviews.length || 0,
+    eventQuality:
+      reviews.reduce((acc, review) => acc + review.event_quality, 0) / reviews.length || 0,
   };
   
+  // Функция для отображения звезд
   const renderStars = (rating: number) => {
     const wholeStars = Math.floor(rating);
     const hasHalfStar = rating % 1 >= 0.5;
@@ -52,6 +38,7 @@ const FeedbackResults: React.FC = () => {
       <div className={styles.rating__stars}>
         {[...Array(5)].map((_, index) => (
           <Star
+            size={36}
             key={index}
             className={`${styles.star} ${
               index < wholeStars
@@ -62,41 +49,39 @@ const FeedbackResults: React.FC = () => {
             }`}
           />
         ))}
-        <span className={styles.rating__value}>
-          {rating.toFixed(1)}
-        </span>
+        <span className={styles.rating__value}>{rating.toFixed(1)}</span>
       </div>
     );
   };
   
   return (
     <div className={styles.wrapper}>
-      {/* Average Ratings Section */}
+      {/* Раздел со средними оценками */}
       <div className={styles.section}>
         <div className={styles.rating}>
           <div className={styles.rating__row}>
             <span className={styles.rating__label}>Качество преподавания</span>
-            {renderStars(feedbackData.averageRatings.teachingQuality)}
+            {renderStars(averageRatings.teachingQuality)}
           </div>
           <div className={styles.rating__row}>
-            <span className={styles.rating__label}>Доступность материла</span>
-            {renderStars(feedbackData.averageRatings.materialAccessibility)}
+            <span className={styles.rating__label}>Доступность материала</span>
+            {renderStars(averageRatings.materialClarity)}
           </div>
           <div className={styles.rating__row}>
             <span className={styles.rating__label}>Качество проведения мероприятия</span>
-            {renderStars(feedbackData.averageRatings.eventQuality)}
+            {renderStars(averageRatings.eventQuality)}
           </div>
         </div>
       </div>
       
-      {/* Comments Section */}
+      {/* Раздел с комментариями */}
       <div className={styles.section}>
         <h2 className={styles.section__title}>Комментарии</h2>
         <div className={`${styles.comments__list} ${styles.items}`}>
           <ul>
-            {feedbackData.comments.map((comment, index) => (
+            {reviews.map((review, index) => (
               <li key={index} className={styles.comments__item}>
-                <p className={styles.comments__text}>{comment.text}</p>
+                <p className={styles.comments__text}>{review.comment}</p>
               </li>
             ))}
           </ul>

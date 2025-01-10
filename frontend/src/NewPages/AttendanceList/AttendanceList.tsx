@@ -1,74 +1,103 @@
 import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import styles from './AttendanceList.module.scss';
 import Header from '../../NewComponents/Header/Header_teacher/Header.tsx';
 import Collapsible from '../../NewComponents/Collapsible/Collapsible.tsx';
 import Button from '../../NewComponents/Button/Button.tsx';
 import FeedbackResults from '../../NewComponents/FeedbackResults/FeedbackResults.tsx';
-import { useNavigate } from 'react-router-dom';
 
-interface Voter {
-  group: string;
-  name: string;
+interface Attendance {
+  student_full_name: string;
+  study_group: string;
 }
 
-interface Answer {
-  question: string;
-  answers: string[];
+interface Review {
+  comment: string;
+  teaching_quality: number;
+  material_clarity: number;
+  event_quality: number;
+  answer_to_question_1?: string;
+  answer_to_question_2?: string;
+  answer_to_question_3?: string;
+  id: string;
+  class_id: string;
+}
+
+interface Backform {
+  additional_question_1: string;
+  additional_question_2: string;
+  additional_question_3: string;
 }
 
 const AttendanceList: React.FC = () => {
+  const { class_id } = useParams();
   const navigate = useNavigate();
-  const [voters, setVoters] = useState<Voter[]>([]);
-  const [answers, setAnswers] = useState<Answer[]>([]);
+  
+  const [attendances, setAttendances] = useState<Attendance[]>([]);
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [questions, setQuestions] = useState<Backform | null>(null);
+  const [loading, setLoading] = useState(true);
   
   useEffect(() => {
-    // Simulate fetching data from an API
+    let isMounted = true;
+    
     const fetchData = async () => {
-      const votersData = [
-        { group: 'AT-01', name: 'Артемов Филипп Владиславович' },
-        { group: 'AT-01', name: 'Белова Каролина Данииловна' },
-        { group: 'AT-02', name: 'Григорьев Иван Сергеевич' },
-        { group: 'AT-02', name: 'Евгеньевна Мария Васильевна' },
-        // Add more voters as needed
-      ];
-      
-      const answersData = [
-        {
-          question: 'Устраивает ли вас баланс между теорией и практикой?',
-          answers: [
-            'Слишком много теории, и не всегда хватает времени на практическое применение знаний. Хотелось бы больше задач и практических работ в группе.',
-            'Баланс хороший, но иногда темы практики не совпадают с теоретической частью.',
-            'Нормально.'
-          ],
-        },
-        {
-          question: 'Как я могу улучшить коммуникацию?',
-          answers: [
-            'Все ок.',
-            'Иногда не хватает времени для обсуждения всего на паре.',
-            'Взаимодействие отличное, но хотелось бы больше примеров или объяснений, когда кто-то задает вопросы, чтобы остальные тоже лучше поняли.'
-          ],
-        },
-        {
-          question: 'Что самое интересное было на паре?',
-          answers: [
-            'Обсуждение реальных примеров.',
-            'Мне очень понравилось, как преподаватель объяснял сложную тему через аналогии.',
-            'Работа в командах сказалась очень интересно! Не только погрузился в задачу, но и услышал разные подходы к ее решению.'
-          ],
-        },
-      ];
-      
-      setVoters(votersData);
-      setAnswers(answersData);
+      try {
+        // Запросы к API
+        const [attendanceResponse, reviewsResponse, backformResponse] = await Promise.all([
+          axios.get(`http://localhost:8000/api/v1/attendances/${class_id}/`),
+          axios.get(`http://localhost:8000/api/v1/reviews/`, { params: { class_id } }),
+          axios.get(`http://localhost:8000/api/v1/backforms/by_class_id/${class_id}`)
+        ]);
+        
+        if (isMounted) {
+          setAttendances(attendanceResponse.data.data);
+          setReviews(reviewsResponse.data.data);
+          setQuestions({
+            additional_question_1: backformResponse.data.additional_question_1,
+            additional_question_2: backformResponse.data.additional_question_2,
+            additional_question_3: backformResponse.data.additional_question_3,
+          });
+        }
+      } catch (error) {
+        console.error('Ошибка при загрузке данных:', error);
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
     };
     
-    fetchData();
-  }, []);
+    if (class_id) {
+      fetchData();
+    }
+    
+    return () => {
+      isMounted = false;
+    };
+  }, [class_id]);
   
   const handleBack = () => {
     navigate(-1);
   };
+  
+  // Преобразование данных для голосовавших
+  const voters = attendances.map((attendance) => ({
+    name: attendance.student_full_name,
+    group: attendance.study_group,
+  }));
+  
+  // Преобразование данных для дополнительных вопросов
+  const answers = [
+    { question: questions?.additional_question_1 || 'Ответ на вопрос 1', answers: reviews.map((r) => r.answer_to_question_1 || '—') },
+    { question: questions?.additional_question_2 || 'Ответ на вопрос 2', answers: reviews.map((r) => r.answer_to_question_2 || '—') },
+    { question: questions?.additional_question_3 || 'Ответ на вопрос 3', answers: reviews.map((r) => r.answer_to_question_3 || '—') },
+  ];
+  
+  if (loading) {
+    return <div>Загрузка...</div>;
+  }
   
   return (
     <div className={styles.wrapper}>
@@ -122,7 +151,7 @@ const AttendanceList: React.FC = () => {
           </div>
         </Collapsible>
         <Collapsible title={'Отзывы'}>
-          <FeedbackResults />
+          <FeedbackResults reviews={reviews} />
         </Collapsible>
         <Button text={'Назад'} type={'button'} color={'#CCCCCC'} onClick={handleBack} />
       </div>

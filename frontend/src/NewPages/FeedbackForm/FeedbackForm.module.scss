@@ -1,3 +1,9 @@
+// Variables
+$primary-color: #1a4b8c;
+$primary-color-hover: #153d73;
+$text-color: #666;
+$transition-speed: 0.2s;
+
 html, body {
   height: 100%;
   margin: 0;
@@ -22,7 +28,6 @@ html, body {
   }
   &__title {
     font-family: inherit;
-    height: 15.93vw;
     font-size: 4.375vw;
     font-weight: 600;
     line-height: 5.25vw;
@@ -48,28 +53,25 @@ html, body {
   &__comments {
     display: flex;
     flex-direction: column;
-    height: 31.875vw;
     gap: 2.5vw;
     width: 100%;
+  }
+}
 
+.additional {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625vw;
 
-
-    &__interesting {
-      display: flex;
-      flex-direction: column;
-      gap: 0.625vw;
-
-      p {
-      color: #CCCCCC;
-      font-size: 3.125vw;
-      font-weight: 400;
-      line-height: 3.75vw;
-      text-align: left;
-      text-underline-position: from-font;
-      text-decoration-skip-ink: none;
-      padding-top: 0.625vw;
-      }
-    }
+  p {
+    color: #CCCCCC;
+    font-size: 3.125vw;
+    font-weight: 400;
+    line-height: 3.75vw;
+    text-align: left;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;
+    padding-top: 0.625vw;
   }
 }
 
@@ -82,4 +84,54 @@ html, body {
   text-underline-position: from-font;
   text-decoration-skip-ink: none;
   color: #CCCCCC;
+}
+
+.thankYouContainer {
+  font-family: Montserrat,sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  padding: 2rem 1.5rem;
+  max-width: 100%;
+  text-align: start;
+
+  h1 {
+    font-size: 9.5vw;
+    font-weight: 600;
+    line-height: 8.25vw;
+    text-align: left;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;
+    margin-bottom: 32.8vw;
+  }
+
+  h2 {
+    font-size: 5.7vw;
+    font-weight: 600;
+    line-height: 5.25vw;
+    text-align: left;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;
+    margin-bottom: 7.5vw;
+  }
+
+  p {
+    font-size: 3.75vw;
+    color: $text-color;
+    line-height: 1.5;
+    margin-bottom: 2.5vw;
+    max-width: 93.75vw;
+  }
+}
+
+.buttonWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625vw;
+}
+
+.errorMessage {
+  color: red;
+  margin-top: 10px;
+  font-size: 14px;
 }

@@ -35,7 +35,7 @@ function App()  {
         <Route path='/reports' element={<UploadReports />}/>
         <Route path='/changePassword' element={<ChangePassword/>}/>
         <Route path="/createForm/:id" element={<CreateFeedbackForm />} />
-        <Route path='/list' element={<StudentList/>} />
+        <Route path='/list/:class_id' element={<StudentList/>} />
         <Route path='/metrics' element={<Metrics/>} />
         <Route path='/load' element={<LoadClass items={[
           { subject: 'Арх эвм', group: 'АТ-01', time: '12:30-13:30', date: new Date(2024,10,30), place: 'Ирит-РТФ'},
