@@ -58,7 +58,7 @@ async def generate_qr_code(
     class_id: uuid.UUID,
     session: SessionDep
 ) -> StreamingResponse:
-    base_url = "http://localhost:5173/class"
+    base_url = "http://localhost:5173/feedback"
     qr_code_data = await generate_and_save_qr_code(session, base_url, class_id)
     
     img_bytes = BytesIO(qr_code_data)
@@ -72,7 +72,6 @@ async def download_qr_code(
     session: SessionDep
 ) -> StreamingResponse:
     
-    base_url = "https://localhost:5173/class"
     qr_code_data = (await crud.get_qr_code_by_class_id(class_id, session)).qr_code
     
     img_bytes = BytesIO(qr_code_data)
