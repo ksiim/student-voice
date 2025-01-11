@@ -4,9 +4,7 @@ import TeacherProfile from '../NewPages/Profile/Profile.tsx'
 import '../index.css';
 import CreateUser from '../NewPages/CreateUser/CreateUser.tsx';
 import FeedbackForm from '../NewPages/FeedbackForm/FeedbackForm.tsx';
-import AdminPanel from '../Pages/admin/AdminPanel.tsx';
 import CreateClass from '../NewPages/CreateClass/CreateClass.tsx';
-import UploadReports from '../Pages/Reports/UploadReports.tsx';
 import ChangePassword from '../NewPages/ChangePassword/ChangePassword.tsx';
 import StudentList
   from '../NewPages/AttendanceList/AttendanceList.tsx';
@@ -30,9 +28,7 @@ function App()  {
         <Route path="/updateuser/:id" element={<UpdateUser />} />
         <Route path="/feedback/:class_id" element={<FeedbackForm />} />
         <Route path='/users' element={<Users/>}/>
-        <Route path='/adminPanel' element={<AdminPanel/>}/>
         <Route path='/createClass' element={<CreateClass />}/>
-        <Route path='/reports' element={<UploadReports />}/>
         <Route path='/changePassword' element={<ChangePassword/>}/>
         <Route path="/createForm/:id" element={<CreateFeedbackForm />} />
         <Route path='/list/:class_id' element={<StudentList/>} />
