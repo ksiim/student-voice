@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff, Wand2 } from 'lucide-react';
 import styles from './InputField.module.scss';
 
 interface InputFieldProps {
@@ -10,6 +10,7 @@ interface InputFieldProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   error: string | null;
   disabled?: boolean;
+  onGeneratePassword?: () => void;
 }
 
 const InputField: React.FC<InputFieldProps> = ({
@@ -19,7 +20,8 @@ const InputField: React.FC<InputFieldProps> = ({
                                                  value,
                                                  onChange,
                                                  error,
-                                                 disabled = false
+                                                 disabled = false,
+                                                 onGeneratePassword,
                                                }) => {
   const [showPassword, setShowPassword] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -27,14 +29,11 @@ const InputField: React.FC<InputFieldProps> = ({
   const adjustHeight = () => {
     const textarea = textareaRef.current;
     if (textarea) {
-      // Сначала сбрасываем высоту
-      textarea.style.height = 'auto';  // Автоматически уменьшаем высоту
-      // Устанавливаем новую высоту по содержимому
+      textarea.style.height = 'auto';
       textarea.style.height = `${textarea.scrollHeight}px`;
     }
   };
   
-  // Подстраиваем высоту при изменении значения
   useEffect(() => {
     if (type === 'textarea') {
       adjustHeight();
@@ -48,7 +47,16 @@ const InputField: React.FC<InputFieldProps> = ({
     }
   };
   
-  const inputType = type === 'password' ? (showPassword ? 'text' : 'password') : type;
+  // Определяем, какой тип input использовать
+  const getInputType = () => {
+    if (type === 'password') {
+      return showPassword ? 'text' : 'password';
+    }
+    if (type === 'generatedPassword') {
+      return 'password';
+    }
+    return type;
+  };
   
   return (
     <div className={styles.wrapper}>
@@ -73,39 +81,66 @@ const InputField: React.FC<InputFieldProps> = ({
             />
           ) : (
             <input
-              type={inputType}
+              type={getInputType()}
               className={`${styles.input} ${error ? styles.inputError : ''}`}
               placeholder={placeholder}
               value={value}
               onChange={handleChange}
-              autoComplete={type === 'password' ? 'new-password' : 'off'}
+              autoComplete={type === 'password' || type === 'generatedPassword' ? 'new-password' : 'off'}
               disabled={disabled}
             />
           )}
           {type === 'password' && (
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              style={{
-                position: 'absolute',
-                right: 0,
-                top: '50%',
-                transform: 'translateY(-50%)',
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                padding: 0,
-                display: 'flex',
-                alignItems: 'center'
-              }}
-              disabled={disabled}
-            >
-              {showPassword ? (
-                <EyeOff className={styles.icon} color="#CCCCCC" />
-              ) : (
-                <Eye className={styles.icon} color="#CCCCCC" />
-              )}
-            </button>
+            <div className={styles.iconContainer}>
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className={styles.iconButton}
+                disabled={disabled}
+                style={{
+                  position: 'absolute',
+                  right: 0,
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  padding: 0,
+                  display: 'flex',
+                  alignItems: 'center'
+                }}
+              >
+                {showPassword ? (
+                  <EyeOff className={styles.icon} color="#CCCCCC" />
+                ) : (
+                  <Eye className={styles.icon} color="#CCCCCC" />
+                )}
+              </button>
+            </div>
+          )}
+          {type === 'generatedPassword' && onGeneratePassword && (
+            <div className={styles.iconContainer}>
+              <button
+                type="button"
+                onClick={onGeneratePassword}
+                className={styles.iconButton}
+                disabled={disabled}
+                style={{
+                  position: 'absolute',
+                  right: 0,
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  padding: 0,
+                  display: 'flex',
+                  alignItems: 'center'
+                }}
+              >
+                <Wand2 className={styles.icon} color="#CCCCCC" />
+              </button>
+            </div>
           )}
         </div>
       </div>

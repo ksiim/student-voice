@@ -53,24 +53,74 @@ const CreateClass: React.FC = () => {
     setCards(cards.map((card) => (card.id === id ? { ...card, day, time } : card)));
   };
   
-  const getNextDate = (day: string): Date => {
+  const getNextDate = (day: string, weekOffset: number = 0): Date => {
     const today = new Date();
     const daysOfWeek = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
     const dayIndex = daysOfWeek.indexOf(day);
     
     if (dayIndex === -1) {
-      throw new Error('Invalid day'); // Если день введен некорректно
+      throw new Error('Invalid day');
     }
     
-    const currentDayIndex = today.getDay() === 0 ? 6 : today.getDay() - 1; // Корректируем для воскресенья
+    const currentDayIndex = today.getDay() === 0 ? 6 : today.getDay() - 1;
     
     let daysDifference = dayIndex - currentDayIndex;
     if (daysDifference <= 0) {
-      daysDifference += 7; // Если выбранный день на следующей неделе, добавляем 7 дней
+      daysDifference += 7;
     }
     
-    today.setDate(today.getDate() + daysDifference); // Устанавливаем следующую дату
-    return today; // Возвращаем объект Date
+    // Добавляем смещение недель
+    daysDifference += weekOffset * 7;
+    
+    const nextDate = new Date(today);
+    nextDate.setDate(today.getDate() + daysDifference);
+    return nextDate;
+  };
+  
+  const createClassForDate = async (
+    baseDate: Date,
+    card: { day: string; time: string; id: string },
+    groupList: string[],
+    subject_id: string,
+    teacher_id: string
+  ) => {
+    const [startTimeStr, endTimeStr] = card.time.split(' - ');
+    const [startHours, startMinutes] = startTimeStr.split(':').map(Number);
+    
+    const start_time = new Date(baseDate);
+    start_time.setHours(startHours, startMinutes, 0, 0);
+    start_time.setMinutes(start_time.getMinutes() - start_time.getTimezoneOffset());
+    
+    const [endHours, endMinutes] = endTimeStr.split(':').map(Number);
+    const end_time = new Date(start_time);
+    end_time.setHours(endHours, endMinutes, 0, 0);
+    end_time.setMinutes(end_time.getMinutes() - end_time.getTimezoneOffset());
+    
+    if (isNaN(start_time.getTime()) || isNaN(end_time.getTime())) {
+      console.error('Невалидное время');
+      return;
+    }
+    
+    try {
+      await axios.post(
+        'http://localhost:8000/api/v1/classes/',
+        {
+          name: selectedOption,
+          description: 'Описание пары',
+          start_time: start_time.toISOString(),
+          end_time: end_time.toISOString(),
+          place: place,
+          subject_id,
+          teacher_id,
+          study_groups: groupList.join(', '),
+        },
+        {
+          headers: { 'Content-Type': 'application/json' },
+        }
+      );
+    } catch (error) {
+      console.error('Ошибка при создании пары:', error);
+    }
   };
   
   const createClass = async () => {
@@ -87,66 +137,40 @@ const CreateClass: React.FC = () => {
     const subject_id = '5100f637-ec07-4cf0-afbd-49a3efed2ee7';
     const teacher_id = '94b30151-089b-48fc-a85a-620a4ce4831c';
     
-    // Парсинг групп: удаление лишних пробелов и фильтрация пустых значений
     const groupList = groups
       .trim()
-      .split(/\s+/) // Разделение по пробелам
-      .filter((group) => group !== ''); // Удаление пустых значений
+      .split(/\s+/)
+      .filter((group) => group !== '');
     
     if (groupList.length === 0) {
       console.error("Необходимо указать хотя бы одну группу");
       return;
     }
     
-    const createRequests = cards.map(async (card) => {
-      const [startTimeStr, endTimeStr] = card.time.split(' - ');
-      
-      const [startHours, startMinutes] = startTimeStr.split(':').map(Number);
-      
-      const nextDate = getNextDate(card.day);
-      const start_time = new Date(nextDate);
-      start_time.setHours(startHours, startMinutes, 0, 0);
-      start_time.setMinutes(start_time.getMinutes() - start_time.getTimezoneOffset());
-      
-      if (isNaN(start_time.getTime())) {
-        console.error(`Невалидная дата: ${startTimeStr}`);
-        return;
-      }
-      
-      const [endHours, endMinutes] = endTimeStr.split(':').map(Number);
-      const end_time = new Date(start_time);
-      end_time.setHours(endHours, endMinutes, 0, 0);
-      end_time.setMinutes(end_time.getMinutes() - end_time.getTimezoneOffset());
-      
-      if (isNaN(end_time.getTime())) {
-        console.error(`Невалидная дата: ${endTimeStr}`);
-        return;
-      }
-      
-      try {
-        await axios.post(
-          'http://localhost:8000/api/v1/classes/',
-          {
-            name: selectedOption,
-            description: 'Описание пары',
-            start_time: start_time.toISOString(),
-            end_time: end_time.toISOString(),
-            place: place,
-            subject_id,
-            teacher_id,
-            study_groups: groupList.join(', '), // Преобразуем массив обратно в строку
-          },
-          {
-            headers: { 'Content-Type': 'application/json' },
-          }
-        );
-        
-      } catch (error) {
-        console.error('Ошибка при создании пары:', error);
-      }
-    });
+    // Создаем массив недель для генерации пар
+    const weekOffsets = [];
+    switch (repeatFrequency) {
+      case 'everyWeek':
+        // Каждую неделю на 5 недель вперед
+        weekOffsets.push(0, 1, 2, 3, 4);
+        break;
+      case 'evenWeeks':
+        // Четные недели (0-based, поэтому начинаем с 1)
+        weekOffsets.push(1, 3, 5, 7, 9);
+        break;
+      case 'oddWeeks':
+        // Нечетные недели
+        weekOffsets.push(0, 2, 4, 6, 8);
+        break;
+    }
     
-    await Promise.all(createRequests);
+    // Создаем пары для каждой карточки на все необходимые недели
+    for (const card of cards) {
+      for (const weekOffset of weekOffsets) {
+        const baseDate = getNextDate(card.day, weekOffset);
+        await createClassForDate(baseDate, card, groupList, subject_id, teacher_id);
+      }
+    }
   };
   
   

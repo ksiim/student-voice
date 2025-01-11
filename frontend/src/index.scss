@@ -6,4 +6,30 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  outline: none;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: none;
+}
+
+/* Убираем рамку для элементов при клике (для Chrome) */
+*:focus {
+  outline: none;
+}
+
+/* Убираем рамку для кнопок в Firefox */
+button::-moz-focus-inner {
+  border: 0;
+}
+
+/* Добавляем стиль при наведении для интерактивных элементов */
+a:hover,
+button:hover {
+  opacity: 0.9;
+  transition: opacity 0.2s ease;
 }

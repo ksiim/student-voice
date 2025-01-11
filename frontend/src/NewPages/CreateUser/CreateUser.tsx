@@ -23,6 +23,44 @@ const CreateUser: React.FC = () => {
     setIsChecked((prevState) => !prevState);
   };
   
+  const resetForm = () => {
+    setSurname('');
+    setName('');
+    setPatronymic('');
+    setEmail('');
+    setPassword('');
+    setRole('1f472826-cf79-4ea9-a194-c5880ec8817a'); // По умолчанию "Преподаватель"
+    setIsChecked(true); // Возвращаем состояние чекбокса
+    setEmailError(null);
+    setPasswordError(null);
+  };
+  
+  
+  const handleGeneratePassword = async () => {
+    try {
+      const response = await axios.get('http://localhost:8000/api/v1/users/generate_password/');
+      console.log(response.data);
+      const generatedPassword = response.data['password']; // Извлекаем значение из объекта
+      setPassword(generatedPassword); // Устанавливаем пароль как строку
+    } catch (error) {
+      console.error('Ошибка при генерации пароля:', error);
+    }
+  };
+  
+  
+  const sendPasswordEmail = async (userEmail: string, userPassword: string) => {
+    try {
+      const params = new URLSearchParams();
+      params.append('email', userEmail);
+      params.append('password', userPassword);
+      params.append('title', 'Доступ к системе');
+      
+      await axios.get('http://localhost:8000/api/v1/users/send_new_password_on_mail', { params });
+    } catch (error) {
+      console.error('Ошибка при отправке пароля на почту:', error);
+    }
+  };
+  
   const handleRoleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setRole(e.target.value);
   };
@@ -60,6 +98,8 @@ const CreateUser: React.FC = () => {
         role_id: role,
       };
       
+      console.log('Проверка пароля перед отправкой:', password);
+      
       const response = await axios.post(
         'http://localhost:8000/api/v1/users',
         userData,
@@ -72,6 +112,14 @@ const CreateUser: React.FC = () => {
       
       console.log('Пользователь создан:', response.data);
       alert('Пользователь успешно создан');
+      
+      // Отправляем письмо с паролем
+      await sendPasswordEmail(email, password);
+      
+      console.log('Письмо с паролем отправлено');
+      
+      // Сбрасываем форму
+      resetForm();
     } catch (error: any) {
       console.error('Ошибка при создании пользователя:', error);
       
@@ -84,6 +132,8 @@ const CreateUser: React.FC = () => {
       }
     }
   };
+  
+  
   
   return (
     <div className={styles.wrapper}>
@@ -162,11 +212,12 @@ const CreateUser: React.FC = () => {
             <div className={styles.inputGrid__element}>
               <InputField
                 label="Пароль"
-                type="password"
+                type="generatedPassword"  // Используем новый тип
                 placeholder=""
                 onChange={(e) => setPassword(e.target.value)}
                 error={passwordError}
                 value={password}
+                onGeneratePassword={handleGeneratePassword}
               />
             </div>
             <div className={styles.inputGrid__element}>

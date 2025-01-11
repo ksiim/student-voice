@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { ChevronLeft, ChevronRight, Edit, Eye } from 'lucide-react';
+import {
+  ChevronLeft,
+  ChevronRight,
+  Edit,
+  MessageSquare
+} from 'lucide-react';
 import styles from './Schedule.module.scss';
+import Button from '../Button/Button.tsx';
+import { useNavigate } from 'react-router-dom';
 
 interface ScheduleProps {
   days: DaySchedule[];
@@ -34,10 +41,9 @@ const Schedule: React.FC<ScheduleProps> = ({
     end: new Date(),
   });
   
+  const navigate = useNavigate();
+  
   useEffect(() => {
-    console.log("Schedule props:", days); // Логирование данных в компоненте
-    
-    // Устанавливаем начальную неделю при загрузке
     setInitialWeek();
   }, []);
   
@@ -87,17 +93,25 @@ const Schedule: React.FC<ScheduleProps> = ({
   };
   
   const formatTime = (time: string): string => {
-    return time.slice(0, 5); // Оставляем только часы и минуты
+    return time.slice(0, 5);
   };
   
-  // Фильтруем дни, которые входят в текущую неделю
-  const filteredDays = days.filter((day) => {
-    const [dayNum, month, year] = day.date.split('.').map(Number);
-    const dayDate = new Date(year, month - 1, dayNum); // создаем дату в формате YYYY-MM-DD
-    return dayDate >= currentWeek.start && dayDate <= currentWeek.end;
-  });
+  const parseDate = (dateStr: string): Date => {
+    const [day, month, year] = dateStr.split('.').map(Number);
+    return new Date(year, month - 1, day);
+  };
   
-  // Сортировка пар внутри дня по времени
+  const filteredDays = days
+    .filter((day) => {
+      const dayDate = parseDate(day.date);
+      return dayDate >= currentWeek.start && dayDate <= currentWeek.end;
+    })
+    .sort((a, b) => {
+      const dateA = parseDate(a.date);
+      const dateB = parseDate(b.date);
+      return dateA.getTime() - dateB.getTime();
+    });
+  
   const sortedLessons = (lessons: Lesson[]) => {
     return lessons.sort((a, b) => {
       const [aStartHour, aStartMinute] = a.startTime.split(':').map(Number);
@@ -110,7 +124,6 @@ const Schedule: React.FC<ScheduleProps> = ({
     });
   };
   
-  // Определяем количество столбцов
   const columns = filteredDays.length === 6 ? 3 : filteredDays.length;
   
   return (
@@ -137,11 +150,17 @@ const Schedule: React.FC<ScheduleProps> = ({
             <ChevronRight size={36} />
           </button>
         </div>
+        
+        <Button
+          text={'Создать пару'}
+          onClick={() => navigate('/createClass')}
+          type={'button'}
+        />
       </div>
       
       <div
         className={styles.daysContainer}
-        style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` } as React.CSSProperties}
+        style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}
       >
         {filteredDays.map((day) => (
           <div key={day.date} className={styles.dayCard}>
@@ -158,18 +177,26 @@ const Schedule: React.FC<ScheduleProps> = ({
                   </div>
                   <div className={styles.lessonTitle}>{lesson.title}</div>
                   <div className={styles.actionButtons}>
-                    <button
-                      className={styles.actionButton}
-                      onClick={() => onViewLesson?.(lesson.id)}
-                    >
-                      <Eye size={16} />
-                    </button>
+                    <div className={styles.actionButtons}>
+                      <button
+                        className={styles.actionButton}
+                        onClick={() => onEditLesson?.(lesson.id)}
+                      >
+                        <Edit size={16}/>
+                      </button>
+                      <button
+                        className={styles.actionButton}
+                        onClick={() => onViewLesson?.(lesson.id)}
+                      >
+                        <MessageSquare size={16} onClick={() => navigate(`/createForm/${lesson.id}`)}/>
+                      </button>
+                    </div>
                     {lesson.isEditable && (
                       <button
                         className={styles.actionButton}
                         onClick={() => onEditLesson?.(lesson.id)}
                       >
-                        <Edit size={16} />
+                        <Edit size={16}/>
                       </button>
                     )}
                   </div>
@@ -184,4 +211,3 @@ const Schedule: React.FC<ScheduleProps> = ({
 };
 
 export default Schedule;
-
