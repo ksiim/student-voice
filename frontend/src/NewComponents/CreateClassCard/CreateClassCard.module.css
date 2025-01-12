@@ -7,15 +7,15 @@
 
 .wrapper {
   display: flex;
-  width: 47.5vw;
+  width: 912px;
   justify-content: space-between;
 }
 .wrapper__dropdown {
-  width: 15.3125vw;
+  width: 294px;
 }
 
 .dateDropdown {
-  width: 15.365vw;
+  width: 295px;
 }
 
 /*# sourceMappingURL=CreateClassCard.module.css.map */

@@ -19,6 +19,7 @@ from sqlmodel import select, func
 
 router = APIRouter()
 
+
 @router.post(
     "/",
     # dependencies=[Depends(get_current_active_superuser)],
@@ -36,6 +37,7 @@ async def create_class(*, session: SessionDep, class_in: ClassCreate) -> Any:
     await session.refresh(class_)
     return class_
 
+
 @router.get(
     "/",
     # dependencies=[Depends(get_current_active_superuser)],
@@ -50,11 +52,22 @@ async def read_classes(
     room_id: Optional[uuid.UUID] = Query(None),
     teacher_id: Optional[uuid.UUID] = Query(None),
 ) -> Any:
+
+
+async def read_classes(
+    session: SessionDep,
+    skip: int = 0,
+    limit: int = 100,
+    start_time: Optional[datetime] = Query(None),
+    end_time: Optional[datetime] = Query(None),
+    room_id: Optional[uuid.UUID] = Query(None),
+    teacher_id: Optional[uuid.UUID] = Query(None),
+) -> Any:
     """
     Retrieve classes.
     """
     statement = select(Class)
-    
+
     if start_time:
         statement = statement.where(Class.start_time >= start_time)
     if end_time:
@@ -63,14 +76,27 @@ async def read_classes(
         statement = statement.where(Class.room_id == room_id)
     if teacher_id:
         statement = statement.where(Class.teacher_id == teacher_id)
-    
+
+    count_statement = select(func.count()).select_from(statement.subquery())
+    statement = select(Class)
+
+    if start_time:
+        statement = statement.where(Class.start_time >= start_time)
+    if end_time:
+        statement = statement.where(Class.end_time <= end_time)
+    if room_id:
+        statement = statement.where(Class.room_id == room_id)
+    if teacher_id:
+        statement = statement.where(Class.teacher_id == teacher_id)
+
     count_statement = select(func.count()).select_from(statement.subquery())
     count = (await session.execute(count_statement)).scalar()
-    
+
     statement = statement.offset(skip).limit(limit)
     classes = (await session.execute(statement)).scalars().all()
 
     return ClassesPublic(data=classes, count=count)
+
 
 @router.get(
     '/{class_id}',
@@ -91,6 +117,7 @@ async def read_class(
         )
     return class_
 
+
 @router.get(
     '/info/{class_id}',
 )
@@ -109,6 +136,7 @@ async def read_class_info(
         )
     return class_
 
+
 @router.delete(
     "/{class_id}",
     # dependencies=[Depends(get_current_active_superuser)],
@@ -123,7 +151,7 @@ async def delete_class(session: SessionDep, class_id: uuid.UUID) -> Any:
             status_code=404,
             detail="The class with this id does not exist in the system.",
         )
-    
+
     await session.execute(delete(Class).where(Class.id == class_id))
     await session.commit()
     return {"message": "Class deleted successfully."}
@@ -148,14 +176,14 @@ async def update_class(
             status_code=404,
             detail="The class with this id does not exist in the system.",
         )
-    
+
     class_ = await crud.update_class(session=session, class_=class_, class_in=class_in)
-    return class_    
+    return class_
 
 
 @router.get(
     '/get_class_groups',
-    
+
 )
 async def read_class_groups(
     session: SessionDep,
@@ -208,16 +236,19 @@ async def download_class_report(
         )
     class_ = class_[-1]
     print(class_)
-    
+
     attendances = class_.attendances
     reviews = class_.reviews
-    event_quality = sum(review.event_quality for review in reviews) / len(reviews)
-    material_clarity = sum(review.material_clarity for review in reviews) / len(reviews)
-    teaching_quality = sum(review.teaching_quality for review in reviews) / len(reviews)
+    event_quality = sum(
+        review.event_quality for review in reviews) / len(reviews)
+    material_clarity = sum(
+        review.material_clarity for review in reviews) / len(reviews)
+    teaching_quality = sum(
+        review.teaching_quality for review in reviews) / len(reviews)
     comments = [review.comment for review in reviews if review.comment]
-    
+
     data_list, data_statistics, data_comments = [], [], []
-    
+
     for attendance in attendances:
         data_list.append({
             "Группа": attendance.study_group,
@@ -235,19 +266,20 @@ async def download_class_report(
         "Статистика": "Качество проведения мероприятия",
         "Значение": event_quality,
     })
-    
+
     for comment in comments:
         data_comments.append({
             "Комментарий": comment,
         })
-        
+
     df_list = pd.DataFrame(data_list)
     df_statistics = pd.DataFrame(data_statistics)
     df_comments = pd.DataFrame(data_comments)
-    
+
     empty_df = pd.DataFrame(columns=[''])
-    df_combined = pd.concat([df_list, empty_df, df_statistics, empty_df, df_comments], axis=1)
-    
+    df_combined = pd.concat(
+        [df_list, empty_df, df_statistics, empty_df, df_comments], axis=1)
+
     output = io.BytesIO()
     with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
         df_combined.to_excel(writer, index=False, sheet_name='Вместе')
@@ -260,12 +292,11 @@ async def download_class_report(
     # Формирование имени файла
     start_time = class_.start_time.strftime('%H:%M')
     end_time = class_.end_time.strftime('%H:%M')
-    filename = f"отчет_{class_.name}_{start_time}-{end_time}_{class_.start_time.date()}.xlsx"
+    filename = f"отчет_{class_.name}_{
+        start_time}-{end_time}_{class_.start_time.date()}.xlsx"
     encoded_filename = quote(filename)
 
     # Возврат файла в виде ответа
     return StreamingResponse(output, media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', headers={
         "Content-Disposition": f"attachment; filename*=UTF-8''{encoded_filename}"
     })
-
-    

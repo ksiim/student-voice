@@ -1,5 +1,6 @@
 import uuid
 from typing import Any, Optional
+from typing import Any, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy import or_
@@ -39,6 +40,12 @@ router = APIRouter()
     dependencies=[Depends(get_current_active_superuser)],
     response_model=UsersPublic,
 )
+async def read_users(
+    session: SessionDep,
+    skip: int = 0,
+    limit: int = 100,
+    role_name: Optional[str] = Query(None)
+) -> Any:
 async def read_users(
     session: SessionDep,
     skip: int = 0,

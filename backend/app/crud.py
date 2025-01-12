@@ -142,13 +142,14 @@ async def update_class(*, session: AsyncSession, class_: Class, class_in: ClassU
 
 
 async def get_class_info(session: AsyncSession, class_id: uuid.UUID) -> Class | None:
-    class_query = select(Class).where(Class.id == class_id).options(joinedload(Class.backform))
+    class_query = select(Class).where(
+        Class.id == class_id).options(joinedload(Class.backform))
     class_ = (await session.execute(class_query)).unique().scalar_one_or_none()
-    
+
     additional_question_1 = class_.backform.additional_question_1,
     additional_question_2 = class_.backform.additional_question_2,
     additional_question_3 = class_.backform.additional_question_3,
-        
+
     reviews = await get_reviews_by_class_id(session, class_id)
 
     avg_event_quality, avg_material_clarity, avg_teaching_quality, answers_to_questions = await asyncio.gather(
@@ -249,6 +250,7 @@ async def get_backform_by_class_id(session: AsyncSession, class_id: uuid.UUID) -
     statement = select(BackForm).where(BackForm.class_id == class_id)
     backform = (await session.execute(statement)).scalars().first()
     return backform
+
 
 async def update_backform(session: AsyncSession, class_id: uuid.UUID, backform_in: BackFormCreate) -> Any:
     backform = await get_backform_by_class_id(session=session, class_id=class_id)
