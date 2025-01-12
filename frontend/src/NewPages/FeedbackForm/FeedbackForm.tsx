@@ -141,7 +141,7 @@ const FeedbackForm: React.FC = () => {
             <>
             <h2 className={styles.feedbackForm__title}>
               Отзыв на пару:
-              <br/> {classData.class_theme === 'Описание пары' ? `“${className}”` : `“${className}: ${classData.class_theme}”`}
+              <br/> {(classData.class_theme === 'Описание пары' || classData.class_theme === null ) ? `“${className}”` : `“${className}: ${classData.class_theme}”`}
             </h2>
             <InputField
               type="input"
