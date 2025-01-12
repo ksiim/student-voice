@@ -1,0 +1,141 @@
+@charset "UTF-8";
+.wrapper {
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.67vw;
+  margin: 0 auto;
+  border-radius: 0.5rem;
+  font-family: Montserrat, sans-serif;
+}
+
+.section__title {
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 28.8px;
+  text-align: left;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+  color: #222222;
+  margin-bottom: 1.67vw;
+}
+
+.rating {
+  display: flex;
+  flex-direction: column;
+  gap: 1.67vw;
+}
+.rating__row {
+  width: 39.43vw;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.rating__label {
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 28.8px;
+  text-align: left;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+  color: #222222;
+}
+.rating__stars {
+  display: flex;
+  align-items: center;
+}
+.rating__value {
+  margin-left: 0.5rem;
+  font-size: 0.875rem;
+  color: #4B5563;
+}
+
+.star {
+  width: 2.4vw;
+  height: 2.4vw;
+  margin-right: 0.25rem;
+}
+.star_filled {
+  fill: #1E4391;
+  color: #222222;
+}
+.star_half {
+  fill: rgba(30, 67, 145, 0.55);
+  color: rgba(34, 34, 34, 0.5);
+}
+.star_empty {
+  color: #D1D5DB;
+}
+
+.comments__list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.comments__rating {
+  margin-bottom: 0.5rem;
+}
+.comments__text {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 22.4px;
+  text-align: left;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+  color: #222222;
+}
+
+.items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4.84vw;
+  justify-content: space-between;
+}
+.items ul {
+  width: 100%;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  column-count: 3;
+  column-gap: 4.84vw;
+}
+.items ul li {
+  display: flex;
+  gap: 1.25vw;
+  align-items: center;
+  break-inside: avoid;
+  font-size: 0.9375vw;
+  font-weight: 600;
+  line-height: 1.125vw;
+  text-align: left;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+  margin-bottom: 1.67vw;
+}
+.items ul li:last-child {
+  margin-bottom: 0;
+}
+
+.comments__list {
+  /* Убедитесь, что контейнер списка имеет правильную ширину */
+  width: 100%;
+}
+
+.summary {
+  margin-top: 2rem;
+  padding: 1rem;
+  background-color: #EFF6FF;
+  border-radius: 0.5rem;
+}
+.summary__title {
+  font-weight: 500;
+  color: #1E3A8A;
+  margin-bottom: 0.5rem;
+}
+.summary__stat {
+  font-size: 0.875rem;
+  color: #1E40AF;
+  margin-bottom: 0.25rem;
+}
+
+/*# sourceMappingURL=FeedbackResults.module.css.map */

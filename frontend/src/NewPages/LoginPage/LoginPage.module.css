@@ -6,31 +6,32 @@
 
 .wrapper {
   display: flex;
-  height: 1080px;
+  height: 100vh;
   width: 100%;
   overflow: hidden;
   background-color: #F6F6F6;
+  font-family: Montserrat, sans-serif;
 }
 
 .leftSection {
   width: 50%;
   height: 100%;
-  padding: 51.5px 161px 0 195px;
+  padding: 2.68vw 8.38vw 0 10.16vw;
   display: flex;
   flex-direction: column;
-  gap: 181.5px;
+  gap: 9.45vw;
   justify-content: start;
 }
 
 .form {
   display: flex;
   flex-direction: column;
-  gap: 60px;
+  gap: 3.125vw;
 }
 .form__heading {
-  font-size: 52px;
+  font-size: 2.708vw;
   font-weight: 600;
-  line-height: 57.2px;
+  line-height: 2.98vw;
   text-align: left;
   text-underline-position: from-font;
   text-decoration-skip-ink: none;
@@ -39,12 +40,12 @@
 .form__inputs {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 1.67vw;
 }
 .form__forgot {
-  font-size: 18px;
+  font-size: 0.9375vw;
   font-weight: 600;
-  line-height: 21.6px;
+  line-height: 1.125vw;
   text-align: left;
   text-underline-position: from-font;
   text-decoration-skip-ink: none;
@@ -55,10 +56,45 @@
   width: 50%;
   height: 100%;
   background-image: url("frontend/public/assets/images/login_bg.jpg");
-  background-size: contain;
+  background-size: 50vw 100vh;
   background-repeat: no-repeat;
   background-position: center;
   overflow: hidden;
+}
+
+.pattern__image {
+  height: 100%;
+  width: 100%;
+}
+
+.popup {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: 1px solid #f5c6cb;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  animation: popupAnim 5s ease-out forwards;
+}
+
+@keyframes popupAnim {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-20px);
+  }
+  50% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
 }
 
 /*# sourceMappingURL=LoginPage.module.css.map */

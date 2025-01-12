@@ -1,7 +1,9 @@
 import uuid
 from typing import Any, Optional
+from typing import Any, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
+from sqlalchemy import or_
 from sqlmodel import col, delete, func, select
 
 from app import crud
@@ -16,6 +18,7 @@ from app.models import (
     Item,
     Message,
     Role,
+    SendToAdminEmailIn,
     UpdatePassword,
     User,
     UserCreate,
@@ -25,7 +28,7 @@ from app.models import (
     UserUpdate,
     UserUpdateMe,
 )
-from app.utils import generate_new_password_email, send_email
+from app.utils import generate_new_password_email, generate_text_email, send_email
 
 import secrets
 
@@ -37,6 +40,12 @@ router = APIRouter()
     dependencies=[Depends(get_current_active_superuser)],
     response_model=UsersPublic,
 )
+async def read_users(
+    session: SessionDep,
+    skip: int = 0,
+    limit: int = 100,
+    role_name: Optional[str] = Query(None)
+) -> Any:
 async def read_users(
     session: SessionDep,
     skip: int = 0,
@@ -58,6 +67,48 @@ async def read_users(
     users = (await session.execute(statement)).scalars().all()
 
     return UsersPublic(data=users, count=count)
+
+
+@router.get(
+    '/search/',
+    # dependencies=[Depends(get_current_active_superuser)],
+    response_model=UsersPublic,
+)
+async def search_users(
+    session: SessionDep,
+    query: str = Query(..., description="Search query"),
+    skip: int = 0,
+    limit: int = 100,
+) -> Any:
+    """
+    Search users.
+    """
+    
+    if not query:
+        raise HTTPException(
+            status_code=400,
+            detail="Query cannot be empty",
+        )
+    
+    words = query.split()
+
+    conditions = []
+    for word in words:
+        conditions.append(User.name.ilike(f"%{word}%"))
+        conditions.append(User.surname.ilike(f"%{word}%"))
+        conditions.append(User.patronymic.ilike(f"%{word}%"))
+
+    statement = select(User).where(or_(*conditions))
+
+    count_statement = select(func.count()).select_from(statement.subquery())
+    count = (await session.execute(count_statement)).scalar()
+
+    statement = statement.offset(skip).limit(limit)
+
+    users = (await session.execute(statement)).scalars().all()
+
+    return UsersPublic(data=users, count=count)
+
 
 
 @router.post(
@@ -247,6 +298,25 @@ async def send_new_password_on_mail(
     )
     await send_email(
         email_to=email,
+        subject=email_data.subject,
+        html_content=email_data.html_content,
+    )
+    return {"message": "Email sent successfully"}
+
+
+@router.post(
+    '/send_to_admin',
+)
+async def send_to_admin(
+    send_to_admin_email_in: SendToAdminEmailIn
+):
+    email_data = await generate_text_email(
+        name=send_to_admin_email_in.name,
+        text=send_to_admin_email_in.text,
+        email=send_to_admin_email_in.email
+    )
+    await send_email(
+        email_to=settings.EMAILS_FROM_EMAIL,
         subject=email_data.subject,
         html_content=email_data.html_content,
     )

@@ -1,0 +1,61 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+h2 {
+  font-family: Montserrat, sans-serif;
+  font-size: 2.708vw;
+  font-weight: 600;
+  line-height: 2.98vw;
+  text-align: left;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+  color: #1e4391;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 3.125vw;
+}
+
+.innerWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 5.2083vw;
+  padding: 0 10.156vw;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 3.125vw;
+
+
+  &__controls {
+    display: flex;
+    flex-direction: column;
+    gap: 1.67vw;
+
+    &__buttons {
+      display: flex;
+      gap: 0.521vw;
+    }
+  }
+}
+
+.selectors {
+  display: flex;
+  width: 100%;
+  gap: 4.844vw;
+}
+
+
+.report {
+  display: flex;
+  flex-direction: column;
+  gap: 3.125vw;
+}
+

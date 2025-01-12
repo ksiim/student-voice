@@ -4,6 +4,7 @@ from app.api.routes import (
     backforms, items, login, qr,
     reviews, rooms, users, utils,
     roles, classes, subjects, attendances,
+    modeus, metrics
 )
 
 api_router = APIRouter()
@@ -25,3 +26,7 @@ api_router.include_router(
     qr.router, prefix="/qr", tags=["qr"])
 api_router.include_router(
     backforms.router, prefix="/backforms", tags=["backforms"])
+api_router.include_router(
+    modeus.router, prefix="/modeus", tags=["modeus"])
+api_router.include_router(
+    metrics.router, prefix="/metrics", tags=["metrics"])

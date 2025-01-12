@@ -1,0 +1,82 @@
+@charset "UTF-8";
+.classListContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.67vw;
+}
+
+.selectors {
+  width: 100%;
+  display: flex;
+  gap: 4.922vw;
+}
+
+.filter {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.tableWrapper {
+  padding: 48px 80px;
+  background-color: white;
+  border-radius: 24px;
+}
+
+.classTable {
+  width: 100%;
+  border-spacing: 0; /* Убираем border-spacing, чтобы не было лишних отступов */
+}
+
+.classTable th,
+.classTable td {
+  text-align: center;
+}
+
+.classTable td svg {
+  display: flex; /* Включаем flexbox для значков */
+  justify-content: center; /* Центрируем по горизонтали */
+  align-items: center; /* Центрируем по вертикали */
+  margin: 0 auto; /* Центрирование по горизонтали */
+}
+
+.classTable th {
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 28.8px;
+  text-align: center;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+  border-bottom: 60px solid transparent; /* Добавляем отступ после заголовков */
+}
+
+.classTable tr {
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 21.6px;
+  text-align: center;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+}
+
+.classTable tr + tr {
+  border-top: 42.91px solid transparent; /* Отступ между строками */
+}
+
+.editButton,
+.feedbackButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.editButton:hover {
+  color: #1e90ff;
+}
+
+.feedbackButton:hover {
+  color: #32cd32;
+}
+
+/*# sourceMappingURL=ClassList.module.css.map */

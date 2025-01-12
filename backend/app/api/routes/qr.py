@@ -12,13 +12,14 @@ from app.api.deps import (
     SessionDep
 )
 from app.core.config import settings
-from app.models import Class, QRCode
+from app.models import BackForm, Class, QRCode
+from app.models import BackForm, Class, QRCode
 
 router = APIRouter()
 
 async def generate_and_save_qr_code(session: SessionDep, base_url: str, class_id: uuid.UUID) -> bytes:
     qr_code = await session.get(QRCode, class_id)
-    if not qr_code:
+    if qr_code:
         raise HTTPException(status_code=400, detail="QR code already exists")
     
     class_url = f'{base_url}/{class_id}'
@@ -39,8 +40,11 @@ async def generate_and_save_qr_code(session: SessionDep, base_url: str, class_id
     
     qr_code_data = img_bytes.getvalue()
 
-    # Создание экземпляра модели QRCodeModel
-    qr_code_record = QRCode(class_id=class_id, qr_code=qr_code_data)
+    backform = await crud.get_backform_by_class_id(session, class_id)
+    if not backform:
+        raise HTTPException(status_code=404, detail="Backform not found")
+    # Создание экземпляра модели QRCode
+    qr_code_record = QRCode(qr_code=qr_code_data, backform_id=backform.id)
 
     # Сохранение записи в базу данных
     session.add(qr_code_record)
@@ -54,7 +58,7 @@ async def generate_qr_code(
     class_id: uuid.UUID,
     session: SessionDep
 ) -> StreamingResponse:
-    base_url = "http://localhost:5173/class"
+    base_url = "http://localhost:5173/feedback"
     qr_code_data = await generate_and_save_qr_code(session, base_url, class_id)
     
     img_bytes = BytesIO(qr_code_data)
@@ -68,7 +72,6 @@ async def download_qr_code(
     session: SessionDep
 ) -> StreamingResponse:
     
-    base_url = "https://localhost:5173/class"
     qr_code_data = (await crud.get_qr_code_by_class_id(class_id, session)).qr_code
     
     img_bytes = BytesIO(qr_code_data)

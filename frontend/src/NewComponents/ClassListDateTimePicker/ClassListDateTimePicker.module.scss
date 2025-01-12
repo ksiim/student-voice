@@ -1,0 +1,129 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.wrapper {
+  width: 40.21vw;
+  height: 2.5vw;
+  font-family: Arial, sans-serif;
+  display: flex;
+  align-items: center;
+  gap: 2.24vw;
+  font-family: Montserrat, sans-serif;
+}
+
+.label {
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 28.8px;
+  text-align: left;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+}
+
+.inputs {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.inputGroup {
+  display: flex;
+  gap: 6px;
+}
+
+.inputWrapper {
+  font-family: Montserrat, sans-serif;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #1E4391;
+  border-radius: 8px;
+  border: 2px solid #1E4391;
+
+  .icon {
+    color: #1E4391;
+    z-index: 2;
+  }
+
+  &:has(.dateInput) {
+    width: 9.22vw;
+  }
+
+  &:has(.timeSelect) {
+    width: 5.83vw;
+  }
+}
+
+.timeSelect,
+.dateInput {
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  height: 2.083vw;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 28.8px;
+  text-align: center;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+  color: #1E4391;
+  background-color: transparent;
+
+  &:focus {
+    outline: none;
+    border-color: #1E4391;
+  }
+}
+
+.timeSelect {
+  appearance: none;
+  cursor: pointer;
+  align-content: center;
+}
+
+.dateInput {
+  width: 6.354vw;
+  cursor: pointer;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 28.8px;
+  text-align: center;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+
+  appearance: none; /* Скрыть системную иконку */
+
+  &::-webkit-calendar-picker-indicator {
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    cursor: pointer;
+    left: 0;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: #1E4391;
+  }
+}
+
+
+.separator {
+  color: #1E4391;
+  font-size: 24px;
+  font-weight: 600;
+  padding: 0 4px;
+}
+
+.error {
+  color: red;
+  font-size: 12px;
+  margin-top: 4px;
+}
+

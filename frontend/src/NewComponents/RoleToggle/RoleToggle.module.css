@@ -4,6 +4,7 @@
   display: flex;
   justify-content: space-between;
   gap: 8px;
+  font-family: Montserrat, sans-serif;
 }
 
 .roleButton {
@@ -13,7 +14,7 @@
   padding: 8px 16px;
   background-color: transparent;
   border: 2px solid #CCCCCC;
-  border-radius: 8px;
+  border-radius: 4px;
   cursor: pointer;
   font-size: 24px;
   font-weight: 600;

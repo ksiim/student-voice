@@ -34,7 +34,9 @@ async def init(db_engine: Engine) -> None:
 
 async def main() -> None:
     logger.info("Initializing service")
+    
     await init(async_engine)
+    
     logger.info("Service finished initializing")
 
 
