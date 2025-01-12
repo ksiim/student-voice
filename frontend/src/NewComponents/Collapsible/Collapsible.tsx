@@ -6,14 +6,17 @@ interface CollapsibleProps {
   title: string;
   children: React.ReactNode;
   className?: string;
+  defaultOpen?: boolean; // Новый пропс
 }
 
 const Collapsible: React.FC<CollapsibleProps> = ({
                                                    title,
                                                    children,
-                                                   className
+                                                   className,
+                                                   defaultOpen = false,
+  
                                                  }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(defaultOpen);
   
   const toggleCollapsible = () => {
     setIsOpen(!isOpen);

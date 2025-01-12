@@ -76,7 +76,14 @@ const FeedbackForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!name || !group || !comment || Object.values(ratings).includes(0)) {
+    if (
+      !name ||
+      !group ||
+      Object.values(ratings).includes(0) ||
+      (classData?.additional_question_1 && !additionalAnswers.question1) ||
+      (classData?.additional_question_2 && !additionalAnswers.question2) ||
+      (classData?.additional_question_3 && !additionalAnswers.question3)
+    ) {
       setError('Пожалуйста, заполните все обязательные поля и поставьте все оценки.');
       return;
     }

@@ -97,6 +97,8 @@
   list-style-type: none;
   padding: 0;
   margin-top: 0.2vw;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .option {
@@ -107,6 +109,10 @@
   font-weight: 600;
   line-height: 1.5vw;
   border-bottom: 0.1042vw solid #ccc;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 22.76vw;
 }
 .option:hover {
   background-color: #f2f2f2;

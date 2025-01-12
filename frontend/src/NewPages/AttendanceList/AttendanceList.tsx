@@ -37,6 +37,7 @@ const AttendanceList: React.FC = () => {
   const [attendances, setAttendances] = useState<Attendance[]>([]);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [questions, setQuestions] = useState<Backform | null>(null);
+  const [classData, setClassData] = useState<null | Record<string, any>>(null);
   const [loading, setLoading] = useState(true);
   
   useEffect(() => {
@@ -45,10 +46,11 @@ const AttendanceList: React.FC = () => {
     const fetchData = async () => {
       try {
         // Запросы к API
-        const [attendanceResponse, reviewsResponse, backformResponse] = await Promise.all([
+        const [attendanceResponse, reviewsResponse, backformResponse, classResponse] = await Promise.all([
           axios.get(`http://localhost:8000/api/v1/attendances/${class_id}/`),
           axios.get(`http://localhost:8000/api/v1/reviews/`, { params: { class_id } }),
-          axios.get(`http://localhost:8000/api/v1/backforms/by_class_id/${class_id}`)
+          axios.get(`http://localhost:8000/api/v1/backforms/by_class_id/${class_id}`),
+          axios.get(`http://localhost:8000/api/v1/classes/${class_id}`)
         ]);
         
         if (isMounted) {
@@ -59,6 +61,7 @@ const AttendanceList: React.FC = () => {
             additional_question_2: backformResponse.data.additional_question_2,
             additional_question_3: backformResponse.data.additional_question_3,
           });
+          setClassData(classResponse.data); // Сохраняем данные класса
         }
       } catch (error) {
         console.error('Ошибка при загрузке данных:', error);
@@ -82,6 +85,32 @@ const AttendanceList: React.FC = () => {
     navigate(-1);
   };
   
+  const handleSave = async () => {
+    if (!classData) {
+      alert('Данные класса ещё не загружены.');
+      return;
+    }
+    
+    const requestBody = {
+      start_time: classData.start_time,
+      end_time: classData.end_time,
+      teacher_id: classData.teacher_id,
+      subject_id: classData.subject_id,
+      group: classData.study_groups,
+    };
+    
+    console.log(requestBody);
+    
+    try {
+      const response = await axios.post('http://localhost:8000/api/v1/classes/excel', requestBody);
+      console.log('Успешно сохранено:', response.data);
+      alert('Данные успешно сохранены!');
+    } catch (error) {
+      console.error('Ошибка при сохранении:', error);
+      alert('Ошибка при сохранении данных.');
+    }
+  };
+  
   // Преобразование данных для голосовавших
   const voters = attendances.map((attendance) => ({
     name: attendance.student_full_name,
@@ -90,9 +119,15 @@ const AttendanceList: React.FC = () => {
   
   // Преобразование данных для дополнительных вопросов
   const answers = [
-    { question: questions?.additional_question_1 || 'Ответ на вопрос 1', answers: reviews.map((r) => r.answer_to_question_1 || '—') },
-    { question: questions?.additional_question_2 || 'Ответ на вопрос 2', answers: reviews.map((r) => r.answer_to_question_2 || '—') },
-    { question: questions?.additional_question_3 || 'Ответ на вопрос 3', answers: reviews.map((r) => r.answer_to_question_3 || '—') },
+    questions?.additional_question_1
+      ? { question: questions.additional_question_1, answers: reviews.map((r) => r.answer_to_question_1 || '—') }
+      : { question: 'Вопрос 1 отсутствует', answers: ['—'] },
+    questions?.additional_question_2
+      ? { question: questions.additional_question_2, answers: reviews.map((r) => r.answer_to_question_2 || '—') }
+      : { question: 'Вопрос 2 отсутствует', answers: ['—'] },
+    questions?.additional_question_3
+      ? { question: questions.additional_question_3, answers: reviews.map((r) => r.answer_to_question_3 || '—') }
+      : { question: 'Вопрос 3 отсутствует', answers: ['—'] },
   ];
   
   if (loading) {
@@ -103,7 +138,7 @@ const AttendanceList: React.FC = () => {
     <div className={styles.wrapper}>
       <Header />
       <div className={styles.content}>
-        <Collapsible title={'Список проголосовавших'}>
+        <Collapsible title={'Список проголосовавших'} defaultOpen={true}>
           <div className={styles.list}>
             <h2 className={styles.list__count}>Проголосовало {voters.length} человека</h2>
             <div className={styles.list__items}>
@@ -122,7 +157,7 @@ const AttendanceList: React.FC = () => {
               <Button
                 text={'Сохранить'}
                 type={'button'}
-                onClick={() => {}}
+                onClick={handleSave}
                 color={'#1E4391'}
               />
               <Button
