@@ -8,8 +8,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 5.208vw;
-  height: 56.25vw;
+  gap: 70px;
+  height: 1080px;
   width: 100%;
   overflow: hidden;
   z-index: -100;
@@ -18,42 +18,42 @@
 }
 
 .content {
-  width: 79.6875vw;
+  width: 1530px;
   display: flex;
   flex-direction: column;
-  gap: 3.125vw;
+  gap: 60px;
   justify-content: start;
 }
 .content__title {
   color: #1E4391;
-  font-size: 2.708vw;
+  font-size: 52px;
   font-weight: 600;
-  line-height: 2.98vw;
+  line-height: 57.2px;
   text-align: left;
   text-underline-position: from-font;
   text-decoration-skip-ink: none;
 }
 .content__form {
   width: 100%;
-  height: 17.1875vw;
+  height: 330px;
   display: flex;
-  gap: 8.8542vw;
+  gap: 170px;
 }
 
 .inputs {
-  width: 23.3vw;
-  height: 16.77vw;
+  width: 448px;
+  height: 322px;
 }
 .inputs__item {
   width: 100%;
-  height: 5.3125vw;
+  height: 102px;
 }
 
 .dateInfo__title {
   font-family: Montserrat, sans-serif;
-  font-size: 1.25vw;
+  font-size: 24px;
   font-weight: 600;
-  line-height: 1.5vw;
+  line-height: 28.8px;
   text-align: left;
   text-underline-position: from-font;
   text-decoration-skip-ink: none;
@@ -62,15 +62,15 @@
 .dayPicker {
   display: flex;
   flex-direction: column;
-  gap: 1.67vw;
+  gap: 32px;
   align-items: start;
 }
 
 .addButton {
   font-family: Montserrat, sans-serif;
-  font-size: 1.25vw;
+  font-size: 24px;
   font-weight: 600;
-  line-height: 1.5vw;
+  line-height: 28.8px;
   text-align: center;
   text-underline-position: from-font;
   text-decoration-skip-ink: none;
@@ -83,9 +83,9 @@
   justify-content: space-between;
 }
 .buttonGroup p {
-  font-size: 1.25vw;
+  font-size: 24px;
   font-weight: 600;
-  line-height: 1.5vw;
+  line-height: 28.8px;
   text-align: left;
   text-underline-position: from-font;
   text-decoration-skip-ink: none;
@@ -98,15 +98,15 @@
 
 .buttonGroup__radioButton {
   display: flex;
-  gap: 1.67vw;
+  gap: 32px;
   justify-content: space-between;
 }
 
 .buttonGroup__radioButton label {
   font-family: Montserrat, sans-serif;
-  font-size: 1.25vw;
+  font-size: 24px;
   font-weight: 600;
-  line-height: 1.5vw;
+  line-height: 28.8px;
   text-align: left;
   text-underline-position: from-font;
   text-decoration-skip-ink: none;
@@ -114,9 +114,9 @@
 
 .buttonGroup input[type=radio] {
   appearance: none;
-  width: 1.5625vw;
-  height: 1.5625vw;
-  border: 0.1042vw solid #000;
+  width: 30px;
+  height: 30px;
+  border: 2px solid #000;
   border-radius: 50%;
   background-color: #fff;
   cursor: pointer;
@@ -133,8 +133,8 @@
 .buttonGroup input[type=radio]:checked::before {
   content: "";
   position: absolute;
-  width: 1.0417vw;
-  height: 1.0417vw;
+  width: 20px;
+  height: 20px;
   background-color: #1E4391;
   border-radius: 50%;
 }
@@ -145,7 +145,7 @@
 }
 .bottomButtons__rightSection {
   display: flex;
-  gap: 0.78vw;
+  gap: 15px;
 }
 
 /*# sourceMappingURL=CreateClass.module.css.map */

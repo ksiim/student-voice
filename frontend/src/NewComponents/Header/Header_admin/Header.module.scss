@@ -1,19 +1,19 @@
 .wrapper{
   width: 100%;
-  height: 8.33vw;
-  padding: 2.68vw 10.16vw;
+  height: 160px;
+  padding: 51.5px 195px;
   display: flex;
   justify-content: space-between;
 }
 
 .navigation{
   display: flex;
-  gap: 6.22vw;
+  gap: 119.5px;
 
   &__link{
     align-content: center;
-    font-size: 1.25vw;
-    line-height: 1.5vw;
+    font-size: 24px;
+    line-height: 28.8px;
     font-family: inherit;
     font-weight: 600;
     cursor: pointer;
@@ -23,7 +23,7 @@
     }
 
     &:focus {
-      border: 0.05vw solid #3b82f6;
+      border: 1px solid #3b82f6;
     }
   }
 }

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
 import styles from './InputField.module.scss';
 
@@ -7,9 +7,8 @@ interface InputFieldProps {
   type: string;
   label: string;
   value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   error: string | null;
-  disabled?: boolean;
 }
 
 const InputField: React.FC<InputFieldProps> = ({
@@ -18,70 +17,23 @@ const InputField: React.FC<InputFieldProps> = ({
                                                  type,
                                                  value,
                                                  onChange,
-                                                 error,
-                                                 disabled = false
+                                                 error
                                                }) => {
   const [showPassword, setShowPassword] = useState(false);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
-  
-  const adjustHeight = () => {
-    const textarea = textareaRef.current;
-    if (textarea) {
-      // Сначала сбрасываем высоту
-      textarea.style.height = 'auto';  // Автоматически уменьшаем высоту
-      // Устанавливаем новую высоту по содержимому
-      textarea.style.height = `${textarea.scrollHeight}px`;
-    }
-  };
-  
-  // Подстраиваем высоту при изменении значения
-  useEffect(() => {
-    if (type === 'textarea') {
-      adjustHeight();
-    }
-  }, [value, type]);
-  
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    onChange(e);
-    if (type === 'textarea') {
-      adjustHeight();
-    }
-  };
-  
-  const inputType = type === 'password' ? (showPassword ? 'text' : 'password') : type;
   
   return (
     <div className={styles.wrapper}>
       <div className={styles.wrapper__content}>
         <label className={styles.label}>{label}</label>
         <div style={{ position: 'relative' }}>
-          {type === 'textarea' ? (
-            <textarea
-              ref={textareaRef}
-              className={`${styles.input} ${error ? styles.inputError : ''} ${
-                disabled ? styles.inputDisabled : ''
-              }`}
-              placeholder={placeholder}
-              value={value}
-              onChange={handleChange}
-              disabled={disabled}
-              rows={1}
-              style={{
-                resize: 'none',
-                overflow: 'hidden'
-              }}
-            />
-          ) : (
-            <input
-              type={inputType}
-              className={`${styles.input} ${error ? styles.inputError : ''}`}
-              placeholder={placeholder}
-              value={value}
-              onChange={handleChange}
-              autoComplete={type === 'password' ? 'new-password' : 'off'}
-              disabled={disabled}
-            />
-          )}
+          <input
+            type={type === 'password' ? (showPassword ? 'text' : 'password') : type}
+            className={`${styles.input} ${error ? styles.inputError : ''}`}
+            placeholder={placeholder}
+            value={value}
+            onChange={onChange}
+            autoComplete={type === 'password' ? 'new-password' : 'off'} // Отключение автозаполнения
+          />
           {type === 'password' && (
             <button
               type="button"
@@ -98,7 +50,6 @@ const InputField: React.FC<InputFieldProps> = ({
                 display: 'flex',
                 alignItems: 'center'
               }}
-              disabled={disabled}
             >
               {showPassword ? (
                 <EyeOff className={styles.icon} color="#CCCCCC" />

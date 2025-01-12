@@ -67,7 +67,8 @@ async def generate_text_email(name: str, text: str, email: str) -> EmailData:
     subject = f"{project_name} - Text email"
     html_content = await render_email_template(
         template_name="text_email.html",
-        context={"project_name": settings.PROJECT_NAME, "text": text, "name": name, "email": email},
+        context={"project_name": settings.PROJECT_NAME,
+                 "text": text, "name": name, "email": email},
     )
     return EmailData(html_content=html_content, subject=subject)
 
@@ -76,6 +77,7 @@ async def generate_new_password_email(
     email_to: str, username: str, password: str, title: str
 ) -> EmailData:
     project_name = settings.PROJECT_NAME
+    subject = f"{project_name} {title} {username}"
     subject = f"{project_name} {title} {username}"
     html_content = await render_email_template(
         template_name="new_account.html",
@@ -110,15 +112,19 @@ async def verify_password_reset_token(token: str) -> str | None:
         return str(decoded_token["sub"])
     except InvalidTokenError:
         return None
-    
+
+
 async def calculate_average_event_quality(reviews: list[Review]) -> float:
     return sum(review.event_quality for review in reviews) / len(reviews)
+
 
 async def calculate_average_material_clarity(reviews: list[Review]) -> float:
     return sum(review.material_clarity for review in reviews) / len(reviews)
 
+
 async def calculate_average_teaching_quality(reviews: list[Review]) -> float:
     return sum(review.teaching_quality for review in reviews) / len(reviews)
+
 
 async def get_answers_to_questions(reviews: list[Review]) -> list[dict[str, str]]:
     answers_to_questions = []

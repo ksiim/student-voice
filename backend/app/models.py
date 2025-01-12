@@ -7,6 +7,7 @@ from click import Option
 from networkx import null_graph
 
 from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr
 from sqlmodel import Field, Relationship, SQLModel
 
 
@@ -14,6 +15,9 @@ class UserBase(SQLModel):
     email: EmailStr = Field(unique=True, index=True, max_length=255)
     is_active: bool = True
     is_superuser: bool = False
+    name: str | None = Field(default=None, max_length=255)
+    surname: str | None = Field(default=None, max_length=255)
+    patronymic: str | None = Field(default=None, max_length=255)
     name: str | None = Field(default=None, max_length=255)
     surname: str | None = Field(default=None, max_length=255)
     patronymic: str | None = Field(default=None, max_length=255)
@@ -32,6 +36,9 @@ class UserRegister(SQLModel):
     name: str | None = Field(default=None, max_length=255)
     surname: str | None = Field(default=None, max_length=255)
     patronymic: str | None = Field(default=None, max_length=255)
+    name: str | None = Field(default=None, max_length=255)
+    surname: str | None = Field(default=None, max_length=255)
+    patronymic: str | None = Field(default=None, max_length=255)
     role_id: uuid.UUID = Field(
         foreign_key="role.id", nullable=True, ondelete="SET NULL"
     )
@@ -47,6 +54,9 @@ class UserUpdate(UserBase):
 
 
 class UserUpdateMe(SQLModel):
+    name: str | None = Field(default=None, max_length=255)
+    surname: str | None = Field(default=None, max_length=255)
+    patronymic: str | None = Field(default=None, max_length=255)
     name: str | None = Field(default=None, max_length=255)
     surname: str | None = Field(default=None, max_length=255)
     patronymic: str | None = Field(default=None, max_length=255)
@@ -76,6 +86,7 @@ class User(UserBase, table=True):
 
 class UserPublic(UserBase):
     id: uuid.UUID
+    role_id: uuid.UUID
     role_id: uuid.UUID
 
 
@@ -206,6 +217,7 @@ class Class(ClassBase, table=True):
     attendances: list["Attendance"] = Relationship(
         back_populates="class_", cascade_delete=True)
     backform: Optional["BackForm"] = Relationship(back_populates="class_")
+    backform: Optional["BackForm"] = Relationship(back_populates="class_")
     reviews: list["Review"] = Relationship(
         back_populates="class_", cascade_delete=True)
 
@@ -254,6 +266,7 @@ class SubjectsPublic(SQLModel):
 
 class RoomBase(SQLModel):
     number: str = Field(max_length=50)
+    number: str = Field(max_length=50)
     capacity: int
 
 
@@ -263,6 +276,7 @@ class RoomCreate(RoomBase):
 
 
 class RoomUpdate(RoomBase):
+    number: str | None = Field(default=None, max_length=50)
     number: str | None = Field(default=None, max_length=50)
     capacity: int | None = Field(default=None)
     updated_at: datetime = Field(default_factory=datetime.now)
@@ -327,6 +341,9 @@ class ReviewBase(SQLModel):
 class ReviewCreate(ReviewBase):
     created_at: datetime = Field(default_factory=datetime.now)
     updated_at: datetime = Field(default_factory=datetime.now)
+    class_id: uuid.UUID = Field(
+        foreign_key="class.id", nullable=False, ondelete="CASCADE"
+    )
     class_id: uuid.UUID = Field(
         foreign_key="class.id", nullable=False, ondelete="CASCADE"
     )

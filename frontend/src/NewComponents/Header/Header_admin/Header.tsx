@@ -7,8 +7,8 @@ const Header:React.FC= () => {
     <div className={styles.wrapper}>
       <Logo/>
       <div className={styles.navigation}>
-        <a href={'/users'} className={styles.navigation__link}>Пользователи</a>
-        <a href={'/metrics'} className={styles.navigation__link}>Отчёты и метрики</a>
+        <a className={styles.navigation__link}>Пользователи</a>
+        <a className={styles.navigation__link}>Отчёты и метрики</a>
       </div>
     </div>
   );

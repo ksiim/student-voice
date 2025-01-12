@@ -1,106 +1,77 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-.wrapper {
+.wrapper{
   display: flex;
   flex-direction: column;
-  gap: 0.21vw;
-  height: auto; // Изменено с height: 100%
+  gap: 4px;
+  height: 100%;
 
-  &__content {
-    min-height: 4.06vw; // Изменено с height на min-height
+  &__content{
+    height: 78px;
     display: flex;
     flex-direction: column;
-    gap: 0.42vw;
-
-    @media (max-width: 768px) {
-      min-height: 10.625vw;
-      font-size: 5vw;
-      line-height: 7.5vw;
-    }
+    gap: 8px;
   }
 }
 
-.label {
-  font-size: 1.25vw;
+.label{
+  font-size: 24px;
   font-weight: 600;
-  line-height: 1.5vw;
+  line-height: 28.8px;
   text-align: left;
   text-underline-position: from-font;
   text-decoration-skip-ink: none;
-
-  @media (max-width: 768px) {
-    font-size: 3.75vw;
-    font-weight: 600;
-    line-height: 4.5vw;
-    text-align: left;
-    text-underline-position: from-font;
-    text-decoration-skip-ink: none;
-  }
 }
 
 .input {
   width: 100%;
-  min-height: 2.135vw;
-  font-size: 1.25vw;
+  height: 41px;
+  font-size: 24px;
   font-weight: 600;
-  line-height: 1.6vw;
+  line-height: 28.8px;
   text-align: left;
-  padding-right: 1.875vw;
-  padding-bottom: 0.625vw;
+  padding: 0;
+  padding-right: 36px; // Добавлено место для иконки
   text-underline-position: from-font;
   text-decoration-skip-ink: none;
   border: none;
-  border-bottom: 0.104vw solid #CCCCCC;
+  border-bottom: 2px solid #CCCCCC;
   outline: none;
   background: none;
   margin: 0;
-  transition: height 0.2s ease; // Добавлена плавная анимация
+
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
 
   &:focus {
-    border-bottom: 0.104vw solid #1E4391;
+    border-bottom: 2px solid #1E4391;
   }
 
-  &::placeholder {
+  &::placeholder{
     color: #CCCCCC;
   }
 
   &:-webkit-autofill {
-    box-shadow: 0 0 0 52.08vw #F6F6F6 inset;
-    -webkit-text-fill-color: #000;
-  }
-
-  @media (max-width: 768px) {
-    min-height: 5.652vw;
-    font-size: 5vw;
-    line-height: 7.5vw;
+    box-shadow: 0 0 0px 1000px #F6F6F6 inset; // Убираем желтую подсветку
+    -webkit-text-fill-color: #000; // Цвет текста
   }
 }
 
-.icon {
-  width: 1.5vw;
-  height: 1.5vw;
+.icon{
+  width: 28px;
+  height: 28px;
 }
 
 .inputError {
-  border-bottom: 0.104vw solid red;
+  border-bottom: 2px solid red;
 }
 
-.errorText {
-  height: 1.04vw;
+.errorText{
+  height: 20px;
   color: red;
-  font-size: 0.73vw;
+  font-size: 14px;
   font-weight: 700;
-  line-height: 1.02vw;
+  line-height: 19.6px;
   text-align: left;
   text-underline-position: from-font;
   text-decoration-skip-ink: none;
-}
-
-.inputDisabled {
-  color: #CCCCCC;
-  cursor: not-allowed;
 }

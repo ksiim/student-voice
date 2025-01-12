@@ -1,38 +1,19 @@
 .button {
-  display: flex;
-  width: 15.31vw;
-  height: 4.17vw;
-  padding: 1.51vw 0;
-  gap: 0.52vw;
-  border-radius: 0.83vw;
+  width: 294px;
+  height: 80px;
+  padding: 29px 0;
+  gap: 10px;
+  border-radius: 16px;
   font-family: inherit;
   text-align: center;
-  align-items: center;
-  justify-content: center;
 }
 .button__text {
   color: #ffffff;
-  font-size: 0.9375vw;
-  line-height: 1.125vw;
+  font-size: 18px;
+  line-height: 21.6px;
 }
 .button:hover {
   background-color: #0F2B5E;
-}
-
-@media (max-width: 768px) {
-  .button {
-    width: 42.5vw;
-    height: 10vw;
-    padding: 2.34vw 0;
-    gap: 1.625vw;
-    border-radius: 3.75vw;
-    font-family: inherit;
-    text-align: center;
-  }
-  .button__text {
-    font-size: 3.75vw;
-    line-height: 5.25vw;
-  }
 }
 
 /*# sourceMappingURL=Button.module.css.map */
