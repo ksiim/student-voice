@@ -39,13 +39,66 @@ Student Voice — это веб-платформа для сбора и анал
 
 2. Убедитесь, что у вас установлены Docker и Docker Compose.
 
-3. Запустите проект:
+3. Создайте .env файл в корневой директории
+   Пример файла: 
+   ```# Domain
+   # This would be set to the production domain with an env var on deployment
+   # used by Traefik to transmit traffic and aqcuire TLS certificates
+   DOMAIN=localhost
+   # To test the local Traefik config
+   # DOMAIN=localhost.tiangolo.com
+   
+   # Used by the backend to generate links in emails to the frontend
+   FRONTEND_HOST=http://localhost:5173
+   # In staging and production, set this env var to the frontend host, e.g.
+   # FRONTEND_HOST=https://dashboard.example.com
+   
+   # Environment: local, staging, production
+   ENVIRONMENT=local
+   
+   PROJECT_NAME="Full Stack FastAPI Project"
+   STACK_NAME=full-stack-fastapi-project
+   
+   # Backend
+   BACKEND_CORS_ORIGINS="http://localhost,http://localhost:5173,https://localhost,https://localhost:5173,http://localhost.tiangolo.com"
+   SECRET_KEY=changethis
+   FIRST_SUPERUSER=admin@example.com
+   FIRST_SUPERUSER_PASSWORD=changethis
+   
+   # Emails
+   SMTP_HOST=
+   SMTP_USER=
+   SMTP_PASSWORD=
+   EMAILS_FROM_EMAIL=info@example.com
+   SMTP_TLS=True
+   SMTP_SSL=False
+   SMTP_PORT=587
+   
+   # Postgres
+   POSTGRES_SERVER=localhost
+   POSTGRES_PORT=5432
+   POSTGRES_DB=app
+   POSTGRES_USER=postgres
+   POSTGRES_PASSWORD=changethis
+   
+   SENTRY_DSN=
+   
+   # Configure these with your own Docker registry images
+   DOCKER_IMAGE_BACKEND=backend
+   DOCKER_IMAGE_FRONTEND=frontend
+   ```
+
+4. ```bash
+   docker-compose build
+   ```
+
+5. Запустите проект:
 
    ```bash
    docker-compose watch
    ```
 
-5. Откройте [http://localhost:5173](http://localhost:5173) для доступа к фронтенду.
+6. Откройте [http://localhost:5173](http://localhost:5173) для доступа к фронтенду.
 
 ## Примеры работы системы
 
