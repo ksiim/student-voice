@@ -33,7 +33,7 @@ Student Voice — это веб-платформа для сбора и анал
 1. Клонируйте репозиторий:
 
    ```bash
-   git clone https://github.com/your-username/student-voice.git
+   git clone https://github.com/ksiim/student-voice
    cd student-voice
    ```
 
