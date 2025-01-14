@@ -52,32 +52,9 @@ async def read_classes(
     room_id: Optional[uuid.UUID] = Query(None),
     teacher_id: Optional[uuid.UUID] = Query(None),
 ) -> Any:
-
-
-async def read_classes(
-    session: SessionDep,
-    skip: int = 0,
-    limit: int = 100,
-    start_time: Optional[datetime] = Query(None),
-    end_time: Optional[datetime] = Query(None),
-    room_id: Optional[uuid.UUID] = Query(None),
-    teacher_id: Optional[uuid.UUID] = Query(None),
-) -> Any:
     """
     Retrieve classes.
     """
-    statement = select(Class)
-
-    if start_time:
-        statement = statement.where(Class.start_time >= start_time)
-    if end_time:
-        statement = statement.where(Class.end_time <= end_time)
-    if room_id:
-        statement = statement.where(Class.room_id == room_id)
-    if teacher_id:
-        statement = statement.where(Class.teacher_id == teacher_id)
-
-    count_statement = select(func.count()).select_from(statement.subquery())
     statement = select(Class)
 
     if start_time:
@@ -292,8 +269,7 @@ async def download_class_report(
     # Формирование имени файла
     start_time = class_.start_time.strftime('%H:%M')
     end_time = class_.end_time.strftime('%H:%M')
-    filename = f"отчет_{class_.name}_{
-        start_time}-{end_time}_{class_.start_time.date()}.xlsx"
+    filename = f"отчет_{class_.name}_{start_time}-{end_time}_{class_.start_time.date()}.xlsx"
     encoded_filename = quote(filename)
 
     # Возврат файла в виде ответа

@@ -46,12 +46,6 @@ async def read_users(
     limit: int = 100,
     role_name: Optional[str] = Query(None)
 ) -> Any:
-async def read_users(
-    session: SessionDep,
-    skip: int = 0,
-    limit: int = 100,
-    role_name: Optional[str] = Query(None)
-) -> Any:
     """
     Retrieve users.
     """
