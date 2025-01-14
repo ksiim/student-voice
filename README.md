@@ -39,8 +39,8 @@ Student Voice — это веб-платформа для сбора и анал
 
 2. Убедитесь, что у вас установлены Docker и Docker Compose.
 
-3. Создайте .env файл в корневой директории
-   Пример файла: 
+3. Создайте .env файл в корневой директори, пример файла:
+   
    ```# Domain
    # This would be set to the production domain with an env var on deployment
    # used by Traefik to transmit traffic and aqcuire TLS certificates
@@ -88,17 +88,19 @@ Student Voice — это веб-платформа для сбора и анал
    DOCKER_IMAGE_FRONTEND=frontend
    ```
 
-4. ```bash
+5. Выполните:
+
+   ```bash
    docker-compose build
    ```
 
-5. Запустите проект:
+6. Запустите проект:
 
    ```bash
    docker-compose watch
    ```
 
-6. Откройте [http://localhost:5173](http://localhost:5173) для доступа к фронтенду.
+7. Откройте [http://localhost:5173](http://localhost:5173) для доступа к фронтенду.
 
 ## Примеры работы системы
 
