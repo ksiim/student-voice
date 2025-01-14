@@ -104,7 +104,8 @@ Student Voice — это веб-платформа для сбора и анал
 
 8. Доступ в аккаунт админа:
 
-   ```Почта: admin@studentvoice.com
+   ```
+   Почта: admin@studentvoice.com
    Пароль: qwerty123
    ```
 
