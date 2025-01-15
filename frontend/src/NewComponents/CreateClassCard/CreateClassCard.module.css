@@ -2,20 +2,19 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: Montserrat, sans-serif;
 }
 
 .wrapper {
   display: flex;
-  width: 912px;
+  width: 47.5vw;
   justify-content: space-between;
 }
 .wrapper__dropdown {
-  width: 294px;
+  width: 15.3125vw;
 }
 
 .dateDropdown {
-  width: 295px;
+  width: 15.365vw;
 }
 
 /*# sourceMappingURL=CreateClassCard.module.css.map */

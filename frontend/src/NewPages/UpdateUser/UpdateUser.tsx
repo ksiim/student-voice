@@ -72,27 +72,28 @@ const UpdateUser: React.FC = () => {
       return;
     }
     
-    if (!password) {
-      setPasswordError('Введите пароль');
-      return;
-    }
-    
     try {
       const token = getToken();
       if (token) {
         setAuthHeader(token);
       }
       
-      const userData = {
+      const userData: any = {
         email,
         is_active: isChecked,
         is_superuser: false, // Администратор
         name,
         surname,
         patronymic,
-        password,
         role_id: role,
       };
+      
+      // Убираем поле password, если оно пустое
+      if (!password) {
+        delete userData.password;
+      } else {
+        userData.password = password;
+      }
       
       const response = await axios.patch(
         `http://localhost:8000/api/v1/users/${id}`, // Используем PATCH вместо POST
@@ -118,6 +119,7 @@ const UpdateUser: React.FC = () => {
       }
     }
   };
+  
   
   return (
     <div className={styles.wrapper}>
@@ -197,10 +199,11 @@ const UpdateUser: React.FC = () => {
               <InputField
                 label="Пароль"
                 type="password"
-                placeholder=""
+                placeholder="********"
                 onChange={(e) => setPassword(e.target.value)}
                 error={passwordError}
                 value={password}
+                disabled={true}
               />
             </div>
             <div className={styles.inputGrid__element}>
