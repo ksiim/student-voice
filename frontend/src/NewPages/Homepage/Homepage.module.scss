@@ -8,7 +8,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap:80px; //TODO тут было 100пикс
+  gap: 4.17vw; //TODO тут было 5.208vw
   width: 100%;
   overflow: hidden;
   z-index: -100;
@@ -108,9 +108,9 @@
 
   &__title {
     color: #222222;
-    font-size: 40px;
+    font-size: 2.083vw;
     font-weight: 600;
-    line-height: 48px;
+    line-height: 2.5vw;
     text-align: left;
     text-underline-position: from-font;
     text-decoration-skip-ink: none;
@@ -134,9 +134,9 @@
       list-style: none;
       gap: 1.25vw;
 
-      font-size: 16px;
+      font-size: 0.83vw;
       font-weight: 400;
-      line-height: 22.4px;
+      line-height: 1.167vw;
       text-align: left;
       text-underline-position: from-font;
       text-decoration-skip-ink: none;
@@ -170,9 +170,9 @@
       height: 13.75vw;
 
       h3 {
-        font-size: 14px;
+        font-size: 0.73vw;
         font-weight: 700;
-        line-height: 19.6px;
+        line-height: 1.02vw;
         text-align: left;
         text-underline-position: from-font;
         text-decoration-skip-ink: none;
@@ -195,9 +195,9 @@
 
   &__title {
     color: #222222;
-    font-size: 40px;
+    font-size: 2.08vw;
     font-weight: 600;
-    line-height: 48px;
+    line-height: 2.5vw;
     text-align: left;
     text-underline-position: from-font;
     text-decoration-skip-ink: none;
@@ -233,25 +233,25 @@
       h3 {
         font-size: 1.25vw;
         font-weight: 600;
-        line-height: 28.8px;
+        line-height: 1.5vw;
         text-align: left;
         text-underline-position: from-font;
         text-decoration-skip-ink: none;
       }
 
       p {
-        font-size: 16px;
+        font-size: 0.83vw;
         font-weight: 400;
-        line-height: 22.4px;
+        line-height: 1.167vw;
         text-align: left;
         text-underline-position: from-font;
         text-decoration-skip-ink: none;
       }
 
       b {
-        font-size: 14px;
+        font-size: 0.73vw;
         font-weight: 700;
-        line-height: 19.6px;
+        line-height: 1.02vw;
         text-align: left;
         text-underline-position: from-font;
         text-decoration-skip-ink: none;
@@ -269,9 +269,9 @@
 
   &__title {
     color: #222222;
-    font-size: 40px;
+    font-size: 2.08vw;
     font-weight: 600;
-    line-height: 48px;
+    line-height: 2.5vw;
     text-align: left;
     text-underline-position: from-font;
     text-decoration-skip-ink: none;

@@ -17,22 +17,22 @@
   width: 47.5vw;
   background: white;
   padding: 2.5vw;
-  border-radius: 8px;
+  border-radius: 0.417vw;
   text-align: center;
 }
 
 .title {
-  font-size: 52px;
+  font-size: 2.708vw;
   font-weight: 600;
-  line-height: 57.2px;
+  line-height: 2.98vw;
   text-align: left;
   color: #1E4391;
 }
 
 .desc {
-  font-size: 24px;
+  font-size: 1.25vw;
   font-weight: 600;
-  line-height: 28.8px;
+  line-height: 1.5vw;
   text-align: left;
   text-underline-position: from-font;
   text-decoration-skip-ink: none;
@@ -45,8 +45,8 @@
   background-color: #1e4391;
   color: white;
   border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
+  padding: 0.5208vw 1.04vw;
+  border-radius: 0.26vw;
   cursor: pointer;
 }
 

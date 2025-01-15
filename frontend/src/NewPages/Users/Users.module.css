@@ -9,8 +9,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 70px;
-  height: 1080px;
+  gap: 3.646vw;
+  height: 56.25vw;
   width: 100%;
   overflow: hidden;
   z-index: -100;
@@ -23,14 +23,14 @@
   flex-direction: column;
   justify-content: center;
   width: 100%;
-  gap: 60px;
-  padding: 0 195px;
+  gap: 3.125vw;
+  padding: 0 10.156vw;
 }
 .content__title {
   color: #1E4391;
-  font-size: 52px;
+  font-size: 2.71vw;
   font-weight: 600;
-  line-height: 57.2px;
+  line-height: 2.98vw;
   text-align: left;
   text-underline-position: from-font;
   text-decoration-skip-ink: none;
@@ -38,51 +38,51 @@
 .content__form {
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 1.67vw;
 }
 
 .search {
-  width: 757px;
-  height: 40px;
-  padding: 0 24px 0 24px;
+  width: 39.427vw;
+  height: 2.08vw;
+  padding: 0 1.25vw 0 1.25vw;
   gap: 0;
-  border-radius: 8px;
-  border: 2px solid #1E4391;
+  border-radius: 0.417vw;
+  border: 0.104vw solid #1E4391;
   background-color: transparent;
   display: flex;
   justify-content: space-between;
   font-family: Montserrat, sans-serif;
-  font-size: 24px;
+  font-size: 1.25vw;
   font-weight: 600;
-  line-height: 28.8px;
+  line-height: 1.5vw;
   text-underline-position: from-font;
   text-decoration-skip-ink: none;
 }
 
 .userList {
-  width: 1221px;
-  height: 408px;
-  padding: 48px 80px;
-  gap: 38.5px;
-  border-radius: 24px;
+  width: 63.59vw;
+  height: 21.25vw;
+  padding: 2.5vw 4.17vw;
+  gap: 2vw;
+  border-radius: 1.25vw;
   display: flex;
   justify-content: space-between;
   align-items: center;
   background-color: white;
 }
 .userList__content {
-  width: 912px;
-  height: 280px;
+  width: 47.5vw;
+  height: 14.58vw;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(10, 1fr);
   grid-auto-flow: column;
-  column-gap: 16px;
+  column-gap: 0.833vw;
 }
 .userList__button {
-  width: 36px;
-  height: 36px;
-  font-size: 48px;
+  width: 1.875wv;
+  height: 1.875vw;
+  font-size: 2.5vw;
   display: flex;
   justify-content: center;
   align-items: center;

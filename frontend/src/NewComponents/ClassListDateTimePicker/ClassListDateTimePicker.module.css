@@ -8,16 +8,16 @@
 .wrapper {
   width: 40.21vw;
   height: 2.5vw;
-  font-family: Arial, sans-serif;
+  font-family: Montserrat, sans-serif;
   display: flex;
   align-items: center;
   gap: 2.24vw;
 }
 
 .label {
-  font-size: 24px;
+  font-size: 1.25vw;
   font-weight: 600;
-  line-height: 28.8px;
+  line-height: 1.5vw;
   text-align: left;
   text-underline-position: from-font;
   text-decoration-skip-ink: none;
@@ -26,12 +26,12 @@
 .inputs {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 0.5208vw;
 }
 
 .inputGroup {
   display: flex;
-  gap: 6px;
+  gap: 0.3125vw;
 }
 
 .inputWrapper {
@@ -40,10 +40,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 0.417vw;
   color: #1E4391;
-  border-radius: 8px;
-  border: 2px solid #1E4391;
+  border-radius: 0.417vw;
+  border: 0.104vw solid #1E4391;
 }
 .inputWrapper .icon {
   color: #1E4391;
@@ -62,9 +62,9 @@
   justify-content: center;
   align-items: center;
   height: 2.083vw;
-  font-size: 24px;
+  font-size: 1.25vw;
   font-weight: 600;
-  line-height: 28.8px;
+  line-height: 1.5vw;
   text-align: center;
   text-underline-position: from-font;
   text-decoration-skip-ink: none;
@@ -86,9 +86,9 @@
 .dateInput {
   width: 6.354vw;
   cursor: pointer;
-  font-size: 24px;
+  font-size: 1.25vw;
   font-weight: 600;
-  line-height: 28.8px;
+  line-height: 1.5vw;
   text-align: center;
   text-underline-position: from-font;
   text-decoration-skip-ink: none;
@@ -109,15 +109,15 @@
 
 .separator {
   color: #1E4391;
-  font-size: 24px;
+  font-size: 1.25vw;
   font-weight: 600;
-  padding: 0 4px;
+  padding: 0 0.208vw;
 }
 
 .error {
   color: red;
-  font-size: 12px;
-  margin-top: 4px;
+  font-size: 0.625vw;
+  margin-top: 0.208vw;
 }
 
 /*# sourceMappingURL=ClassListDateTimePicker.module.css.map */

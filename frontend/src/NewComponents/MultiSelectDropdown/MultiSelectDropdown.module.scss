@@ -1,6 +1,7 @@
 .container {
   position: relative;
   width: 100%;
+  font-family: Montserrat, sans-serif;
 }
 
 .label {
@@ -30,7 +31,7 @@
   border-radius: 0.417vw;
   padding: 0.3vw 0.6vw;
   margin-right: 0.3vw;
-  border: 2px solid #1E4391;
+  border: 0.104vw solid #1E4391;
   color: #1e4391;
 
   &Text {
@@ -129,9 +130,9 @@
 
 .placeholder {
   color: #CCCCCC;
-  font-size: 24px;
+  font-size: 1.25vw;
   font-weight: 600;
-  line-height: 28.8px;
+  line-height: 1.5vw;
   text-align: left;
   text-underline-position: from-font;
   text-decoration-skip-ink: none;

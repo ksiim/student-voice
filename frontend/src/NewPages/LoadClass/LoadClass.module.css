@@ -6,9 +6,9 @@
 
 h2 {
   color: #1E4391;
-  font-size: 52px;
+  font-size: 2.708vw;
   font-weight: 600;
-  line-height: 57.2px;
+  line-height: 2.98vw;
   text-align: left;
   text-underline-position: from-font;
   text-decoration-skip-ink: none;
@@ -18,7 +18,7 @@ h2 {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 70px;
+  gap: 3.65vw;
   width: 100%;
   overflow: hidden;
   z-index: -100;
@@ -27,10 +27,10 @@ h2 {
 }
 
 .content {
-  width: 1530px;
+  width: 79.69vw;
   display: flex;
   flex-direction: column;
-  gap: 60px;
+  gap: 3.125vw;
   justify-content: start;
 }
 .content__bottomButtons {
@@ -44,9 +44,9 @@ h2 {
   justify-content: space-between;
 }
 .buttonGroup p {
-  font-size: 24px;
+  font-size: 1.25vw;
   font-weight: 600;
-  line-height: 28.8px;
+  line-height: 1.5vw;
   text-align: left;
   text-underline-position: from-font;
   text-decoration-skip-ink: none;
@@ -59,15 +59,15 @@ h2 {
 
 .buttonGroup__radioButton {
   display: flex;
-  gap: 32px;
+  gap: 1.67vw;
   justify-content: space-between;
 }
 
 .buttonGroup__radioButton label {
   font-family: Montserrat, sans-serif;
-  font-size: 24px;
+  font-size: 1.25vw;
   font-weight: 600;
-  line-height: 28.8px;
+  line-height: 1.5vw;
   text-align: left;
   text-underline-position: from-font;
   text-decoration-skip-ink: none;
@@ -75,9 +75,9 @@ h2 {
 
 .buttonGroup input[type=radio] {
   appearance: none;
-  width: 30px;
-  height: 30px;
-  border: 2px solid #000;
+  width: 1.5625vw;
+  height: 1.5625vw;
+  border: 0.104vw solid #000;
   border-radius: 50%;
   background-color: #fff;
   cursor: pointer;
@@ -94,8 +94,8 @@ h2 {
 .buttonGroup input[type=radio]:checked::before {
   content: "";
   position: absolute;
-  width: 20px;
-  height: 20px;
+  width: 1.04vw;
+  height: 1.04vw;
   background-color: #1E4391;
   border-radius: 50%;
 }
@@ -104,9 +104,9 @@ h2 {
   margin-top: 2rem;
 }
 .list__table {
-  width: 1530px;
-  padding: 48px 80px 48px 80px;
-  border-radius: 24px;
+  width: 79.6875vw;
+  padding: 2.5vw 4.167vw 2.5vw 4.167vw;
+  border-radius: 1.25vw;
   justify: space-between;
 }
 .list__table th, .list__table td {

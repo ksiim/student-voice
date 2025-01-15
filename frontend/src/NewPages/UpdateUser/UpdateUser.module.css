@@ -9,8 +9,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 100px;
-  height: 1080px;
+  gap: 5.208vw;
+  height: 56.25vw;
   width: 100%;
   overflow: hidden;
   z-index: -100;
@@ -23,14 +23,14 @@
   flex-direction: column;
   justify-content: center;
   width: 100%;
-  gap: 60px;
-  padding: 0 195px;
+  gap: 3.125vw;
+  padding: 0 10.156vw;
 }
 .content__title {
   color: #1E4391;
-  font-size: 52px;
+  font-size: 2.71vw;
   font-weight: 600;
-  line-height: 57.2px;
+  line-height: 2.98vw;
   text-align: left;
   text-underline-position: from-font;
   text-decoration-skip-ink: none;
@@ -38,12 +38,12 @@
 .content__form {
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 1.67vw;
 }
 
 .buttonGroup {
   display: flex;
-  width: 602px;
+  width: 31.35vw;
   justify-content: space-between;
 }
 .buttonGroup div {
@@ -52,21 +52,21 @@
 }
 .buttonGroup__radioButton {
   display: flex;
-  width: 262px;
+  width: 13.65vw;
   justify-content: space-between;
 }
 .buttonGroup__radioButton label {
-  font-size: 24px;
+  font-size: 1.25vw;
   font-weight: 600;
-  line-height: 28.8px;
+  line-height: 1.5vw;
   text-align: left;
-  letter-spacing: 1.2px;
+  letter-spacing: 0.0625vw;
 }
 .buttonGroup input[type=radio] {
   appearance: none; /* Убираем стандартный вид радио-кнопки */
-  width: 30px; /* Размер внешнего круга */
-  height: 30px; /* Размер внешнего круга */
-  border: 2px solid #000; /* Цвет внешней границы */
+  width: 1.5625vw; /* Размер внешнего круга */
+  height: 1.5625vw; /* Размер внешнего круга */
+  border: 0.104vw solid #000; /* Цвет внешней границы */
   border-radius: 50%; /* Круглая форма */
   background-color: #fff; /* Цвет фона в невыбранном состоянии */
   cursor: pointer;
@@ -83,8 +83,8 @@
 .buttonGroup input[type=radio]:checked::before {
   content: "";
   position: absolute;
-  width: 20px; /* Размер внутреннего круга */
-  height: 20px; /* Размер внутреннего круга */
+  width: 1.04vw; /* Размер внутреннего круга */
+  height: 1.04vw; /* Размер внутреннего круга */
   background-color: #1E4391; /* Синий цвет внутреннего круга */
   border-radius: 50%; /* Круглая форма внутреннего круга */
 }
@@ -93,11 +93,11 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(2, 1fr);
-  grid-column-gap: 91.5px;
-  grid-row-gap: 32px;
+  grid-column-gap: 4.77vw;
+  grid-row-gap: 1.67vw;
 }
 .inputGrid__element {
-  height: 78px;
+  height: 4.06vw;
 }
 .inputGrid__element:last-child {
   display: flex;
@@ -106,19 +106,19 @@
 
 .formControl {
   display: flex;
-  font-size: 24px;
+  font-size: 1.25vw;
   font-weight: 600;
-  line-height: 28.8px;
+  line-height: 1.5vw;
   text-align: left;
   gap: 0.5em;
 }
 
 .formControl input[type=checkbox] {
   appearance: none; /* Убираем стандартный вид чекбокса */
-  width: 30px; /* Размер чекбокса */
-  height: 30px; /* Размер чекбокса */
-  border: 2px solid #000; /* Цвет границы чекбокса */
-  border-radius: 4px; /* Скругление углов */
+  width: 1.56vw; /* Размер чекбокса */
+  height: 1.56vw; /* Размер чекбокса */
+  border: 0.104vw solid #000; /* Цвет границы чекбокса */
+  border-radius: 0.208vw; /* Скругление углов */
   background-color: #fff; /* Цвет фона */
   cursor: pointer;
   position: relative;
@@ -133,13 +133,13 @@
 .formControl input[type=checkbox]:checked::after {
   content: "";
   position: absolute;
-  width: 6px; /* Толщина галочки */
-  height: 15px; /* Длина вертикального элемента галочки */
+  width: 0.3125vw; /* Толщина галочки */
+  height: 0.78vw; /* Длина вертикального элемента галочки */
   border: solid #fff;
-  border-width: 0 3px 3px 0; /* Формируем угловые линии */
+  border-width: 0 0.156vw 0.156vw 0; /* Формируем угловые линии */
   transform: rotate(45deg); /* Поворот для формирования галочки */
-  top: 5px; /* Позиция сверху */
-  left: 9px; /* Позиция слева */
+  top: 0.26vw; /* Позиция сверху */
+  left: 0.469vw; /* Позиция слева */
 }
 
 .controls {
@@ -151,12 +151,12 @@
   display: flex;
   justify-content: start;
   align-content: center;
-  gap: 32px;
+  gap: 1.67vw;
 }
 .reviewsCheckbox label {
-  font-size: 24px;
+  font-size: 1.25vw;
   font-weight: 600;
-  line-height: 28.8px;
+  line-height: 1.5vw;
   text-align: left;
   text-underline-position: from-font;
   text-decoration-skip-ink: none;

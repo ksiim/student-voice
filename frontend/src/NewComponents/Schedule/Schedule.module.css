@@ -27,9 +27,9 @@
 }
 
 .dateSeparator {
-  font-size: 40px;
+  font-size: 2.08vw;
   font-weight: 600;
-  line-height: 48px;
+  line-height: 2.5vw;
   text-align: center;
   text-underline-position: from-font;
   text-decoration-skip-ink: none;
@@ -37,12 +37,12 @@
 
 .dateBox {
   color: #1E4391;
-  padding: 8px;
-  border-radius: 8px;
-  border: 2px solid #1E4391;
-  font-size: 24px;
+  padding: 0.417vw;
+  border-radius: 0.417vw;
+  border: 0.104vw solid #1E4391;
+  font-size: 1.25vw;
   font-weight: 600;
-  line-height: 28.8px;
+  line-height: 1.5vw;
   text-align: center;
   text-underline-position: from-font;
   text-decoration-skip-ink: none;

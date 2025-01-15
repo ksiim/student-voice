@@ -3,6 +3,7 @@
   display: flex;
   flex-direction: column;
   gap: 1.67vw;
+  font-family: Montserrat, sans-serif;
 }
 
 .selectors {
@@ -14,13 +15,13 @@
 .filter {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 0.833vw;
 }
 
 .tableWrapper {
-  padding: 48px 80px;
+  padding: 2.5vw 4.17vw;
   background-color: white;
-  border-radius: 24px;
+  border-radius: 1.25vw;
 }
 
 .classTable {
@@ -41,26 +42,26 @@
 }
 
 .classTable th {
-  font-size: 24px;
+  font-size: 1.25vw;
   font-weight: 600;
-  line-height: 28.8px;
+  line-height: 1.5vw;
   text-align: center;
   text-underline-position: from-font;
   text-decoration-skip-ink: none;
-  border-bottom: 60px solid transparent; /* Добавляем отступ после заголовков */
+  border-bottom: 3.125vw solid transparent; /* Добавляем отступ после заголовков */
 }
 
 .classTable tr {
-  font-size: 18px;
+  font-size: 0.9375vw;
   font-weight: 400;
-  line-height: 21.6px;
+  line-height: 1.125vw;
   text-align: center;
   text-underline-position: from-font;
   text-decoration-skip-ink: none;
 }
 
 .classTable tr + tr {
-  border-top: 42.91px solid transparent; /* Отступ между строками */
+  border-top: 2.235vw solid transparent; /* Отступ между строками */
 }
 
 .editButton,
@@ -68,7 +69,7 @@
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 0.833vw;
 }
 
 .editButton:hover {

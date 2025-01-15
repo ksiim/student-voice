@@ -118,8 +118,8 @@ html, body {
 
 .errorMessage {
   color: red;
-  margin-top: 10px;
-  font-size: 14px;
+  margin-top: 0.52vw;
+  font-size: 0.73vw;
 }
 
 /*# sourceMappingURL=FeedbackForm.module.css.map */

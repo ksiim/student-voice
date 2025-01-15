@@ -74,15 +74,15 @@
 
 .popup {
   position: fixed;
-  top: 20px;
+  top: 1.04vw;
   left: 50%;
   transform: translateX(-50%);
   background-color: #f8d7da;
   color: #721c24;
-  padding: 10px 20px;
+  padding: 0.521vw 1.04vw;
   border-radius: 5px;
-  border: 1px solid #f5c6cb;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border: 0.0521vw solid #f5c6cb;
+  box-shadow: 0 0.201vw 0.4167vw rgba(0, 0, 0, 0.1);
   z-index: 1000;
   animation: popupAnim 5s ease-out forwards;
 }

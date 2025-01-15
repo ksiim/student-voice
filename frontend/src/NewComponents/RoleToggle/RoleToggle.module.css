@@ -4,20 +4,21 @@
   display: flex;
   justify-content: space-between;
   gap: 8px;
+  font-family: Montserrat, sans-serif;
 }
 
 .roleButton {
   color: #CCCCCC;
   display: flex;
-  width: 293px;
-  padding: 8px 16px;
+  width: 15.26vw;
+  padding: 0.417vw 0.833vw;
   background-color: transparent;
-  border: 2px solid #CCCCCC;
-  border-radius: 8px;
+  border: 0.104vw solid #CCCCCC;
+  border-radius: 0.208vw;
   cursor: pointer;
-  font-size: 24px;
+  font-size: 1.25vw;
   font-weight: 600;
-  line-height: 28.8px;
+  line-height: 1.5vw;
   text-align: center;
   align-items: center;
   justify-content: center;
