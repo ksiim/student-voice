@@ -17,23 +17,38 @@ const CreateClass: React.FC = () => {
   ]);
   const [repeatFrequency, setRepeatFrequency] = useState<string>('everyWeek');
   const [subjects, setSubjects] = useState<{ name: string; id: string }[]>([]);
+  const [teacherId, setTeacherId] = useState<string>('');
   
-  // Получение данных из API
+  // Add a function to reset form data
+  const resetFormData = () => {
+    setSelectedOption('');
+    setPlace('');
+    setGroups('');
+    setCards([{ id: crypto.randomUUID(), day: '', time: '' }]);
+    setRepeatFrequency('everyWeek');
+  };
+  
   useEffect(() => {
-    const fetchSubjects = async () => {
+    const fetchData = async () => {
       try {
         const token = getToken();
         if (token) {
           setAuthHeader(token);
         }
-        const response = await axios.get('http://localhost:8000/api/v1/subjects/');
-        setSubjects(response.data.data);
+        
+        const [subjectsResponse, teacherResponse] = await Promise.all([
+          axios.get('http://localhost:8000/api/v1/subjects/'),
+          axios.get('http://localhost:8000/api/v1/users/me'),
+        ]);
+        
+        setSubjects(subjectsResponse.data.data);
+        setTeacherId(teacherResponse.data.id);
       } catch (error) {
-        console.error('Ошибка при загрузке списка предметов:', error);
+        console.error('Ошибка при загрузке данных:', error);
       }
     };
     
-    fetchSubjects();
+    fetchData();
   }, []);
   
   const handleOptionSelect = (option: string) => {
@@ -69,7 +84,6 @@ const CreateClass: React.FC = () => {
       daysDifference += 7;
     }
     
-    // Добавляем смещение недель
     daysDifference += weekOffset * 7;
     
     const nextDate = new Date(today);
@@ -120,6 +134,7 @@ const CreateClass: React.FC = () => {
       );
     } catch (error) {
       console.error('Ошибка при создании пары:', error);
+      throw error; // Propagate the error
     }
   };
   
@@ -134,8 +149,11 @@ const CreateClass: React.FC = () => {
       setAuthHeader(token);
     }
     
-    const subject_id = '5100f637-ec07-4cf0-afbd-49a3efed2ee7';
-    const teacher_id = '94b30151-089b-48fc-a85a-620a4ce4831c';
+    const selectedSubject = subjects.find(subject => subject.name === selectedOption);
+    if (!selectedSubject) {
+      console.error("Не выбран корректный предмет");
+      return;
+    }
     
     const groupList = groups
       .trim()
@@ -147,32 +165,32 @@ const CreateClass: React.FC = () => {
       return;
     }
     
-    // Создаем массив недель для генерации пар
     const weekOffsets = [];
     switch (repeatFrequency) {
       case 'everyWeek':
-        // Каждую неделю на 5 недель вперед
         weekOffsets.push(0, 1, 2, 3, 4);
         break;
       case 'evenWeeks':
-        // Четные недели (0-based, поэтому начинаем с 1)
         weekOffsets.push(1, 3, 5, 7, 9);
         break;
       case 'oddWeeks':
-        // Нечетные недели
         weekOffsets.push(0, 2, 4, 6, 8);
         break;
     }
     
-    // Создаем пары для каждой карточки на все необходимые недели
-    for (const card of cards) {
-      for (const weekOffset of weekOffsets) {
-        const baseDate = getNextDate(card.day, weekOffset);
-        await createClassForDate(baseDate, card, groupList, subject_id, teacher_id);
+    try {
+      for (const card of cards) {
+        for (const weekOffset of weekOffsets) {
+          const baseDate = getNextDate(card.day, weekOffset);
+          await createClassForDate(baseDate, card, groupList, selectedSubject.id, teacherId);
+        }
       }
+      // Reset form data after successful creation
+      resetFormData();
+    } catch (error) {
+      console.error("Ошибка при создании пар:", error);
     }
   };
-  
   
   return (
     <div className={styles.wrapper}>
@@ -186,7 +204,7 @@ const CreateClass: React.FC = () => {
               <DropdownMenu
                 label="Название предмета"
                 placeholder="Выберите"
-                options={subjects.map((subject) => subject.name)} // Подставляем названия предметов
+                options={subjects.map((subject) => subject.name)}
                 selectedOption={selectedOption}
                 onOptionSelect={handleOptionSelect}
               />

@@ -119,7 +119,7 @@ const LoginPage: React.FC = () => {
   };
   
   if (isAuthenticated) {
-    if (userRole === 'd9a799c6-60e1-4e6f-9853-4c0ec13f12ab') {
+    if (userRole === 'ae5f0d8a-f385-4253-9a14-99c12cf0feb0') {
       return <Navigate to="/users" />;
     }
     return <Navigate to="/profile" />;

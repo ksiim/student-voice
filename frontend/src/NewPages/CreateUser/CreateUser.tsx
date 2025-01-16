@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './CreateUser.module.scss';
 import Header from './../../NewComponents/Header/Header_admin/Header.tsx';
 import InputField from '../../NewComponents/InputField/InputField.tsx';
 import Button from '../../NewComponents/Button/Button.tsx';
 import axios from 'axios';
-import {setAuthHeader, getToken } from '../../../public/serviceToken.js';
-import {useNavigate} from 'react-router-dom';
+import { setAuthHeader, getToken } from '../../../public/serviceToken.js';
+import { useNavigate } from 'react-router-dom';
 
 const CreateUser: React.FC = () => {
+  const [roles, setRoles] = useState<{ admin: string; teacher: string } | null>(null);
   const [surname, setSurname] = useState('');
   const [name, setName] = useState('');
   const [patronymic, setPatronymic] = useState('');
@@ -15,9 +16,30 @@ const CreateUser: React.FC = () => {
   const [emailError, setEmailError] = useState<string | null>(null);
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState<string | null>(null);
-  const [role, setRole] = useState('1f472826-cf79-4ea9-a194-c5880ec8817a'); // По умолчанию "Преподаватель"
+  const [role, setRole] = useState('');
   const [isChecked, setIsChecked] = useState(true);
   const navigate = useNavigate();
+  
+  useEffect(() => {
+    const fetchRoles = async () => {
+      try {
+        const adminRoleResponse = await axios.get('http://localhost:8000/api/v1/roles/name/admin');
+        const teacherRoleResponse = await axios.get('http://localhost:8000/api/v1/roles/name/teacher');
+        
+        setRoles({
+          admin: adminRoleResponse.data.id,
+          teacher: teacherRoleResponse.data.id,
+        });
+        
+        // Устанавливаем роль по умолчанию (teacher)
+        setRole(teacherRoleResponse.data.id);
+      } catch (error) {
+        console.error('Ошибка при получении ролей:', error);
+      }
+    };
+    
+    fetchRoles();
+  }, []);
   
   const handleCheckboxChange = () => {
     setIsChecked((prevState) => !prevState);
@@ -29,24 +51,20 @@ const CreateUser: React.FC = () => {
     setPatronymic('');
     setEmail('');
     setPassword('');
-    setRole('1f472826-cf79-4ea9-a194-c5880ec8817a'); // По умолчанию "Преподаватель"
-    setIsChecked(true); // Возвращаем состояние чекбокса
+    setRole(roles?.teacher || ''); // Сбрасываем роль к "Преподавателю"
+    setIsChecked(true);
     setEmailError(null);
     setPasswordError(null);
   };
   
-  
   const handleGeneratePassword = async () => {
     try {
       const response = await axios.get('http://localhost:8000/api/v1/users/generate_password/');
-      console.log(response.data);
-      const generatedPassword = response.data['password']; // Извлекаем значение из объекта
-      setPassword(generatedPassword); // Устанавливаем пароль как строку
+      setPassword(response.data['password']);
     } catch (error) {
       console.error('Ошибка при генерации пароля:', error);
     }
   };
-  
   
   const sendPasswordEmail = async (userEmail: string, userPassword: string) => {
     try {
@@ -90,7 +108,7 @@ const CreateUser: React.FC = () => {
       const userData = {
         email,
         is_active: true,
-        is_superuser: false, // Администратор
+        is_superuser: false,
         name,
         surname,
         patronymic,
@@ -98,42 +116,26 @@ const CreateUser: React.FC = () => {
         role_id: role,
       };
       
-      console.log('Проверка пароля перед отправкой:', password);
+      await axios.post('http://localhost:8000/api/v1/users', userData, {
+        headers: { 'Content-Type': 'application/json' },
+      });
       
-      const response = await axios.post(
-        'http://localhost:8000/api/v1/users',
-        userData,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-      
-      console.log('Пользователь создан:', response.data);
       alert('Пользователь успешно создан');
-      
-      // Отправляем письмо с паролем
       await sendPasswordEmail(email, password);
-      
-      console.log('Письмо с паролем отправлено');
-      
-      // Сбрасываем форму
       resetForm();
     } catch (error: any) {
       console.error('Ошибка при создании пользователя:', error);
-      
       if (error.response) {
-        console.error('Ответ от сервера:', error.response.data);
         alert('Ошибка: ' + (error.response.data.detail || 'Не удалось создать пользователя'));
       } else {
-        console.error('Ошибка подключения:', error.message);
         alert('Ошибка подключения: ' + error.message);
       }
     }
   };
   
-  
+  if (!roles) {
+    return <div>Загрузка данных ролей...</div>;
+  }
   
   return (
     <div className={styles.wrapper}>
@@ -148,8 +150,8 @@ const CreateUser: React.FC = () => {
                 type="radio"
                 id="teacher"
                 name="role"
-                value="1f472826-cf79-4ea9-a194-c5880ec8817a"
-                checked={role === '1f472826-cf79-4ea9-a194-c5880ec8817a'}
+                value={roles.teacher}
+                checked={role === roles.teacher}
                 onChange={handleRoleChange}
               />
               <label htmlFor="teacher">Преподаватель</label>
@@ -160,8 +162,8 @@ const CreateUser: React.FC = () => {
                 type="radio"
                 id="admin"
                 name="role"
-                value="d9a799c6-60e1-4e6f-9853-4c0ec13f12ab"
-                checked={role === 'd9a799c6-60e1-4e6f-9853-4c0ec13f12ab'}
+                value={roles.admin}
+                checked={role === roles.admin}
                 onChange={handleRoleChange}
               />
               <label htmlFor="admin">Администратор</label>
@@ -173,51 +175,51 @@ const CreateUser: React.FC = () => {
               <InputField
                 label="Фамилия"
                 type="text"
-                placeholder=""
                 onChange={(e) => setSurname(e.target.value)}
                 error=""
                 value={surname}
+                placeholder={''}
               />
             </div>
             <div className={styles.inputGrid__element}>
               <InputField
                 label="Имя"
                 type="text"
-                placeholder=""
                 onChange={(e) => setName(e.target.value)}
                 error=""
                 value={name}
+                placeholder={''}
               />
             </div>
             <div className={styles.inputGrid__element}>
               <InputField
                 label="Отчество"
                 type="text"
-                placeholder=""
                 onChange={(e) => setPatronymic(e.target.value)}
                 error=""
                 value={patronymic}
+                placeholder={''}
               />
             </div>
             <div className={styles.inputGrid__element}>
               <InputField
                 label="Email"
                 type="email"
-                placeholder="IvanovIvan@urfu.me"
                 onChange={(e) => setEmail(e.target.value)}
                 error={emailError}
                 value={email}
+                placeholder={'IvanovIvan@urfu.me'}
               />
             </div>
             <div className={styles.inputGrid__element}>
               <InputField
                 label="Пароль"
-                type="generatedPassword"  // Используем новый тип
-                placeholder=""
+                type="generatedPassword"
                 onChange={(e) => setPassword(e.target.value)}
                 error={passwordError}
                 value={password}
                 onGeneratePassword={handleGeneratePassword}
+                placeholder={''}
               />
             </div>
             <div className={styles.inputGrid__element}>
@@ -233,7 +235,7 @@ const CreateUser: React.FC = () => {
             </div>
           </div>
           <div className={styles.controls}>
-            <Button type="button" text="Назад" color="#CCCCCC" onClick={() => navigate(-1)}/>
+            <Button type="button" text="Назад" color="#CCCCCC" onClick={() => navigate(-1)} />
             <Button type="submit" text="Создать" color="#1E4391" />
           </div>
         </form>
