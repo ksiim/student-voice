@@ -12,7 +12,7 @@ jobs:
       contents: write
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
       with:
         ref: ${{ github.head_ref }}
         token: ${{ secrets.FULL_STACK_FASTAPI_TEMPLATE_REPO_TOKEN }}
